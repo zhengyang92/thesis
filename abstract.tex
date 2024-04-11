@@ -10,22 +10,71 @@
 %%%
 %%% The text of this file should be about 350 words or less.
 
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
+The rapid evolution of computer hardware introduces novel
+architectures that demand efficient utilization for optimal performance.
+These innovative architectures enhance the capabilities of processors,
+enabling them to perform more complex tasks and improve overall efficiency.
+%
+For example, GPUs achieve high performance by utilizing specialized hardware
+features specifically designed to optimize parallel processing and
+computational tasks, and the Vector Processing Units (VPUs) within CPUs
+are designed to handle vector operations efficiently,
+making them particularly well-suited to applications
+ such as video encoding, compression,
+and image processing applications.
+%
+These cutting-edge new architectures are gathering significant interest
+from software developers and researchers.
 
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
+Programs running on top of these new architectures are either
+optimized manually by human experts, or optimized by optimizing compilers.
+However, both approaches struggle to keep pace
+with innovations in architecture, as
+the features in those new architectures may not be fully supported
+or understood by existing compilers and experts;
+%
+additionally, optimizing compilers and experts usually rely on heuristics
+to determine the best optimization strategies.
+%
+These heuristics might not be tailored to the specific features
+of novel architectures, leading to suboptimal performance.
+%
+Consequently, efficiently optimizing programs for new architectures remains
+a challenging endeavor.
 
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
+Program synthesis is a promising approach to address the challenge.
+%
+At its core, program synthesis searches for programs
+that meet a specified set of requirements.
+%
+Nowadays, the advances in SMT solvers and increased computation power
+have made program synthesis a more viable choice for code generation.
+%
+There are several reasons why program synthesis can help address the challenge:
 
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
+\begin{itemize}
+\item \textbf{Adaptability}: Unlike optimizing compilers or human experts,
+program synthesis can generate code specifically tailored to the
+target architecture.
+%minotaur
+For example, in superoptimizers,
+once the semantics of an instruction is fed into the refinement checker,
+it can automatically generate code that takes advantage of the instruction.
+
+\item \textbf{Domain-specific optimizations}: Program synthesis can take
+into account the unique characteristics of a specific domain,
+such as collective algorithms in parallel computation,
+to create highly optimized code.
+%sccl
+This domain-aware optimization further enhances the
+performance of applications on new architectures.
+
+\item \textbf{Continuous improvement}: As an architecture evolves and
+new features are introduced, program synthesis techniques can be updated
+to incorporate these advancements, ensuring that the generated code remains
+optimized over time.
+\end{itemize}
+
+This proposal focuses on developing program synthesizers
+that aim to efficiently optimize software for emerging architectures.
+The thesis statement of my dissertation is
