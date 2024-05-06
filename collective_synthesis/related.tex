@@ -1,22 +1,74 @@
 
 \section{Related Work}
-The message passing interface (MPI)~\cite{dongarra2013mpi} is a widely-used standardized abstraction for communication primitives in a multi processor system. Implementations of MPI provide reliable and portable implementations of collective primitives. Efficient algorithms for implementing these primitives is a long-studied research area~\cite{pjevsivac2007performance, chan2007collective, thakur2005optimization}, including optimized algorithms for specific architectures like mesh, hypercube, or fat-tree\cite{scott1991efficient,bokhari1992complete,barnett1993global} and for clusters of shared-memory processors~\cite{sistare1999optimization,traff2002improved,sanders2002hierarchical,tipparaju2003fast}. The class of $k$-synchronous algorithms studied in this paper is designed to include many of the algorithms proposed in these works and implemented in popular MPI implementations such as MPICH~\cite{thakur2005optimization} and OpenMPI~\cite{gabriel2004open}.
+The message passing interface (MPI)~\cite{dongarra2013mpi} is a
+widely-used standardized abstraction for communication primitives in a
+multi processor system. Implementations of MPI provide reliable and
+portable implementations of collective primitives. Efficient
+algorithms for implementing these primitives is a long-studied
+research area~\cite{pjevsivac2007performance, chan2007collective,
+thakur2005optimization}, including optimized algorithms for specific
+architectures like mesh, hypercube, or
+fat-tree\cite{scott1991efficient,bokhari1992complete,barnett1993global}
+and for clusters of shared-memory
+processors~\cite{sistare1999optimization,traff2002improved,sanders2002hierarchical,tipparaju2003fast}.
+The class of $k$-synchronous algorithms studied in this paper is
+designed to include many of the algorithms proposed in these works and
+implemented in popular MPI implementations such as
+MPICH~\cite{thakur2005optimization} and
+OpenMPI~\cite{gabriel2004open}.
 
-We evaluated OpenMPI, either through builtin CUDA capability or through Unified Communication X~(UCX)~\cite{ucx}.
-They lack custom implementations for architectures such as the \dgxone{}, and result in subpar performance compared with our NCCL baselines.
-NCCL~\cite{nccl} is a library for multi NVIDIA GPU systems and it utilizes the underlying hardware transport such as NVLink, NVSwitch or Infiniband for an efficient implementation of collective primitives. RCCL~\cite{rccl} is a port of NCCL for AMD GPUs and the HIP compiler suite. While these libraries provide efficient implementations for a limited set of algorithms, \tool{} is able to synthesize a wide range of algorithms suitable for different input sizes and generate collective primitives that are not even a part of standard MPI set.
+We evaluated OpenMPI, either through builtin CUDA capability or
+through Unified Communication X~(UCX)~\cite{ucx}. They lack custom
+implementations for architectures such as the \dgxone{}, and result in
+subpar performance compared with our NCCL baselines. NCCL~\cite{nccl}
+is a library for multi NVIDIA GPU systems and it utilizes the
+underlying hardware transport such as NVLink, NVSwitch or Infiniband
+for an efficient implementation of collective primitives.
+RCCL~\cite{rccl} is a port of NCCL for AMD GPUs and the HIP compiler
+suite. While these libraries provide efficient implementations for a
+limited set of algorithms, \tool{} is able to synthesize a wide range
+of algorithms suitable for different input sizes and generate
+collective primitives that are not even a part of standard MPI set.
 
-There are also hybrid algorithms~\cite{barnett1994building, chan2007collective} that switch between latency- and bandwidth-optimal algorithm along each dimension of a mesh network. However, to the best of our knowledge, these prior works do not seek to identify algorithms that are Pareto-optimal for a given topology. In contrast to these prior works, the goal of this paper is to automatically synthesize Pareto-optimal algorithms for a given topology.  
+There are also hybrid algorithms~\cite{barnett1994building,
+chan2007collective} that switch between latency- and bandwidth-optimal
+algorithm along each dimension of a mesh network. However, to the best
+of our knowledge, these prior works do not seek to identify algorithms
+that are Pareto-optimal for a given topology. In contrast to these
+prior works, the goal of this paper is to automatically synthesize
+Pareto-optimal algorithms for a given topology.
 
-There are also hierarchical approaches to implement collective primitives in distributed systems. Horovod~\cite{alex2018horovod} implements collective primitives by using NCCL locally in node and MPI across nodes. Others such as BlueConnect~\cite{blueconnect} and PLink~\cite{plink} exploit the hierarchical network topology of a cloud system or a data center to improve the performance of collective primitives. In this paper, we focus on synthesizing algorithms for a single node with multiple GPU, while the above approaches are beneficial on multi node systems.
+There are also hierarchical approaches to implement collective
+primitives in distributed systems. Horovod~\cite{alex2018horovod}
+implements collective primitives by using NCCL locally in node and MPI
+across nodes. Others such as BlueConnect~\cite{blueconnect} and
+PLink~\cite{plink} exploit the hierarchical network topology of a
+cloud system or a data center to improve the performance of collective
+primitives. In this paper, we focus on synthesizing algorithms for a
+single node with multiple GPU, while the above approaches are
+beneficial on multi node systems.
 
-Motivated by recent resurgence in machine-learning workloads, recent research has focused on optimizing the communication of distributed machine learning. Blink~\cite{wang2020blink}, the closest to our work, automatically synthesizes bandwidth-efficient collective primitives for a given topology. This work is based on packing spanning trees and is suitable for one-to-many collective primitives such as broadcast and reduce, and implements \allreduce as a reduce followed by a broadcast. Blink is not guaranteed to generate bandwidth-optimal algorithms as it heuristically selects a few trees based on an approximate spanning-tree packing algorithm. Moreover, Blink's focus is not on generating latency-optimal algorithms. In contrast, this work generates latency- and bandwidth-optimal algorithms for a given topology. There are also other works~\cite{zhang2017poseidon,hashemi2019tictac,jayarajan2019priority,peng2019generic} on optimizing distributed machine learning that do so by overlapping computation and communication and are orthogonal to this work. 
+Motivated by recent resurgence in machine-learning workloads, recent
+research has focused on optimizing the communication of distributed
+machine learning. Blink~\cite{wang2020blink}, the closest to our work,
+automatically synthesizes bandwidth-efficient collective primitives
+for a given topology. This work is based on packing spanning trees and
+is suitable for one-to-many collective primitives such as broadcast
+and reduce, and implements \allreduce as a reduce followed by a
+broadcast. Blink is not guaranteed to generate bandwidth-optimal
+algorithms as it heuristically selects a few trees based on an
+approximate spanning-tree packing algorithm. Moreover, Blink's focus
+is not on generating latency-optimal algorithms. In contrast, this
+work generates latency- and bandwidth-optimal algorithms for a given
+topology. There are also other
+works~\cite{zhang2017poseidon,hashemi2019tictac,jayarajan2019priority,peng2019generic}
+on optimizing distributed machine learning that do so by overlapping
+computation and communication and are orthogonal to this work.
 
-%\todo{Compare to related work on synthesizing compute kernels. Orthogonal.}
+%\todo{Compare to related work on synthesizing compute kernels.
+%Orthogonal.}
 
-%\todo{Compareasd to related work on pipelining compute and communication. Orthogonal.} 
+%\todo{Compareasd to related work on pipelining compute and
+%communication. Orthogonal.}
 
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "paper"
-%%% End:
+%%% Local Variables: %% mode: latex %% TeX-master: "paper" %% End:
