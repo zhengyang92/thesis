@@ -1,0 +1,186 @@
+\section{Supporting Vector Intrinsics in Alive2}
+
+In order for \minotaur{} to use Alive2 as a verification backend, we had
+to modify Alive2 to support a number of Intel-architecture-specific
+vector intrinsics.
+
+\subsection{Background: Vectors in LLVM}
+
+LLVM uses a typed, SSA-based intermediate representation (IR).
+%
+It supports a derived \emph{vector type}; for example, a vector with
+eight lanes, where each element is a 64-bit integer, would have type
+\texttt{<8 x i64>}.
+%
+Many LLVM instructions, such as arithmetic operations, logical operations,
+and pointer arithmetic, can operate on vectors as well as scalars.
+%
+IR-level vectors are target-independent; backends attempt to lower
+vector operations to native SIMD instructions, if available.
+
+
+Beyond the vertical ALU instructions that are element-wise vector
+versions of scalar instructions, LLVM supports a variety of horizontal
+vector reduction intrinsics and an assortment of memory intrinsics
+such as vector load and store, strided load and store, and
+scatter/gather.
+%
+Additionally, there are three vector-specific data movement
+instructions:
+%
+\textit{extractelement} retrieves the element at a specified index from
+a vector;
+%
+\textit{insertelement} non-destructively creates a new vector where
+one element of an old vector has been replaced with a specified value;
+%
+and, \textit{shufflevector} returns a new vector that is a permutation
+of two input vectors using elements whose indices are specified by a
+constant mask vector.
+%
+Finally, to provide direct access to platform-specific vector
+instructions, LLVM provides numerous intrinsic functions such as
+\texttt{@llvm.x86.avx512.mask.cvttps2dq.512}, aka ``convert with
+truncation packed single-precision floating-point values to packed
+signed doubleword integer values.''
+
+
+\renewcommand\algorithmicdo{}
+\begin{algorithm}[tbp]
+  \small
+    \caption{semantics of \texttt{@llvm.x86.\{avx|avx2|avx512\}.pavg.\{b|w\}}}
+    \label{semantic:pavg}
+    \begin{algorithmic}[1]
+    \State{\textsc{pavg<lanes, bits, masked>}($S_{a}$, $S_{b}$, PassThrough, Mask)}
+    \For{each $i$ in range [0 to \textsc{lanes} - 1]}
+    \If {\textsc{masked} $\wedge \neg$ Mask[$i$] }
+        \State {$S_{ret}$[$i$].val $\gets$ PassThrough[$i$].val}
+        \State {$S_{ret}$[$i$].poison $\gets$ PassThrough[$i$].poison}
+    \Else
+        \State {$S_{ret}$[$i$].val $\gets$ ($S_{a}$[$i$].val $+_\textsc{\tiny{bits}}$ $S_{b}$[$i$].val $+_\textsc{\tiny{bits}}$ 1) /$_\textsc{\tiny{bits}}$ 2}
+        \State {$S_{ret}$[$i$].poison $\gets S_{a}$[$i$].poison $\vee$  $S_{b}$[$i$].poison}
+    \EndIf
+    \EndFor
+%    \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[tbp]
+  \small
+    \caption{semantics of \texttt{@llvm.x86.\{sse2|avx2|avx512\}.pmadd.wd}}
+    \label{semantic:pmadd}
+    \begin{algorithmic}[1]
+    \State{\textsc{pmadd.wd<lanes, masked>}($S_{a}$, $S_{b}$, PassThrough, Mask)}
+    \For{each $i$ in range [0 to \textsc{lanes}  - 1]}
+    \If {\textsc{masked} $\wedge \neg$ Mask[$i$] }
+        \State {$S_{ret}$[$i$].val $\gets$ PassThrough[$i$].val}
+        \State {$S_{ret}$[$i$].poison $\gets$ PassThrough[$i$].poison}
+    \Else
+	\State {$S_{ret}$[$i$].val$\gets$sext($S_{a}$[2$\cdot i$].val $\times_\textsc{\tiny{16}}$ $S_{b}$[2$\cdot i$].val) $+_\textsc{\tiny{32}}$  sext($S_{a}$[2$\cdot i+1$].val $\times_\textsc{\tiny{16}}$ $S_{b}$[2$\cdot i +1$].val)}
+	\State {$S_{ret}$[$i$].poison$\gets$$S_{a}$[2$\cdot i$].poison $\vee$  $S_{b}$[2$\cdot i$].poison $\vee$ $S_{a}$[2$\cdot i + 1$].poison $\vee$  $S_{b}$[2$\cdot i + 1$].poison}
+    \EndIf
+    \EndFor
+    % \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Assigning a Formal Semantics to Vector Intrinsics}
+
+The version of Alive2 that we started with supports most of the core
+LLVM intermediate representation, including its target-independent
+vector operations.
+%
+However, Alive2 did not have a semantics for any of the numerous
+LLVM-level intrinsic functions that provide predictable, low-level
+access to target-specific vector instructions.
+
+
+We added semantics for 165 x86-64 vector intrinsics to Alive2; these
+come from the SSE, AVX, AVX2, and AVX512 ISA extensions.
+%
+The resulting version of Alive2 supports the x86 vector intrinsics
+that are widely used and that an SMT solver can reason about fairly
+efficiently.
+%
+This includes special vertical operations that do not overlap with
+LLVM's platform-independent vector instructions (such as
+\texttt{@llvm.x86.avx2.psign.b}), special data movement intrinsics that
+operate differently than LLVM's \texttt{shufflevector} (such as
+\texttt{@llvm.x86.avx512.packsswb.512}), and special horizontal
+operations that are only available in x86 processors (such as
+\texttt{@llvm.x86.avx512.vpdpbusd.512}). We have excluded the
+intrinsics that are not commonly seen in practice, like those altering
+control registers, that those such as dedicated cryptographic
+operations, that an SMT solver is unlikely to be able to make use of
+within a reasonable amount of CPU time.
+
+
+There is significant overlapping functionality between vector
+instructions; for example, there are eight different variants of the
+\texttt{pavg} instruction that computes a vertical (element-wise)
+average of two input vectors.
+%
+To exploit this overlap, our implementation is parameterized by vector
+width, vector element size, and by the presence of a masking feature
+that, when present, uses a bitvector to suppress the output of vector
+results in some lanes.
+%
+Algorithms~\ref{semantic:pavg} and~\ref{semantic:pmadd} show our
+implementations of the \texttt{pavg} (packed average) and
+\texttt{pmadd.wd} (packed multiply and add) families of instructions.
+%
+This parameterized implementation enabled a high level of code reuse,
+and our implementation of these semantics is only 660 lines of C++.
+%
+Note in particular that the semantics here differ from the semantics of
+the corresponding processor instruction because at the LLVM level, we
+must account for poison values---a form of deferred undefined
+behavior.
+%
+Our strategy for dealing with poison follows the one used by existing
+LLVM vector instructions: poison propagates lane-wise, but does not
+contaminate non-dependent vector elements.
+
+
+\subsection{Validating our Changes to Alive2}
+
+We made heavy use of randomized differential testing to ensure that
+our new intrinsics correctly implement the intended semantics.
+%
+Each iteration of our tester randomly chooses constant inputs to a
+single vector intrinsic and then:
+%
+\begin{enumerate}
+\item
+  Creates a small LLVM function passing the chosen inputs to the
+  intrinsic.
+\item
+  Evaluates the effect of the function using LLVM's JIT compilation
+  infrastructure~\cite{orc}. The effect is always to produce a
+  concrete value, since the inputs are concrete.
+\item
+  Converts the LLVM function into Alive2 IR and then asks Alive2
+  whether this is refined by the output of the JITted code.
+\end{enumerate}
+%
+Any failure of refinement indicates a bug.
+%
+When we fielded this tester, it rapidly found $11$ cases
+where our semantics produced an incorrect result, usually for
+some edge case.
+%
+For example, the semantics for \texttt{pavg} were incorrect when the
+sum overflowed.
+%
+It also found three cases where \minotaur{} generated SMT queries that
+failed to typecheck.
+%
+For example, we set the wrong lane size when parameterizing the
+semantics for \texttt{psra.w} and \texttt{psra.d}, causing the solver
+to reject our malformed queries.
+%
+After we fixed these $14$ bugs, extensive testing failed to find
+additional defects.
+
+

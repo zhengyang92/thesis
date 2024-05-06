@@ -1,0 +1,26 @@
+\begin{abstract}
+  %
+  Although an optimizing compiler often produces a fast program, we
+  cannot expect it to produce an optimal program.
+  %
+  Moreover, the amount of headroom between the program we get and the
+  optimally fast program is usually unknown.
+  %
+  A superoptimizing compiler---that performs a meaningful search of
+  the program space---can help narrow this gap.
+  %
+  We created \tool{}, a superoptimizing LLVM pass that uses program
+  synthesis to improve the quality of its code generation, with a
+  specific focus on integer and floating-point SIMD code.
+  %
+  It discovers many profitable optimizations that are missing
+  from LLVM, some of which have been implemented in LLVM as a result
+  of our work.
+  %
+  On an Intel Cascade Lake processor, \tool{} achieves an average
+  speedup of 7.3\% on the GNU Multiple Precision library (GMP)'s benchmark
+  suite, with a maximum speedup of 13\%.
+  %
+  On SPEC CPU 2017, \tool{} produces an average speedup of 1.5\%, with
+  a maximum speedup of 4.5\% for 638.imagick.
+\end{abstract}
