@@ -54,7 +54,7 @@ We also run synthesis on this platform.
 
 \subsubsection{Gigabyte Z52: 8 AMD MI50 GPUs}
 A Gigabyte Z52 system is a consumer grade multi-GPU system.
-It has two 64-core AMD EPYC 7002 processors with 1 TB DRAM split across the two sockets, as well as 
+It has two 64-core AMD EPYC 7002 processors with 1 TB DRAM split across the two sockets, as well as
 8 AMD MI50 GPUs, each with 32 GB of HBM2 memory. 4 GPUs are connected to each socket with PCIe links, denoted by a box in Figure~\ref{fig:amd-topo}.
 Like NVIDIA, AMD also provides a proprietary high-speed
 interconnect called xGMI that links GPUs together.  Each blue line is
@@ -125,7 +125,8 @@ Collective &$\chunk$ & $\steps$ & $\rounds$ \\
 %\reducescatter & 48 & 7 & $7 \cdot \alpha + 7/48\cdot L \cdot \beta$ \\ % ring
 \bottomrule
 \end{tabular}
-\caption{NCCL hand-written collectives and their chunks and steps. For \reducescatter $\chunk$ should be multiplied by 8.}
+\caption{NCCL hand-written collectives and their chunks and steps. }
+%For \reducescatter $\chunk$ should be multiplied by 8.
 \label{table:nccl}
 \end{table}
 
@@ -145,7 +146,7 @@ and they get closer to bandwidth optimality as $m$ gets larger.
 
 As we show in the next section, \tool{} is able to synthesize all
 these NCCL collectives and more, including \scatter, \gathercoll, and
-\alltoall.  
+\alltoall.
 %Further, for each collective, \tool{} synthesizes many
 %more Pareto-optimal algorithms.
 
@@ -160,26 +161,26 @@ various algorithms we synthesize for NVIDIA \dgxone and Gigabyte's
 bandwidth optimal implementation, along with others that exist at
 various points along the latency-bandwidth curve. The first column
 combines collectives which are the inverse of each other (i.e.,
-\scatter and \gathercoll) and those that can be reduced to the 
+\scatter and \gathercoll) and those that can be reduced to the
 \broadcasting collective using the reduction explained in
 Section~\ref{sec:reduction} (e.g. \reduce to \broadcast).
 
 \subsubsection{Optimality}
 Note we find many latency and bandwidth optimal algorithms
-for each collective, as we search over $k$-synchronous algorithms for different values of $k$. 
+for each collective, as we search over $k$-synchronous algorithms for different values of $k$.
 Consider the \allgather collective: we find many algorithms with various numbers
 of steps. However, the latency optimal algorithms (2 steps) dominate all others
 in the $\alpha$ term of the cost model.  Likewise, the bandwidth optimal
 algorithms dominate all others with their low ratio of rounds to chunks ($7/6$).
-We synthesized algorithms in the $0$-synchronous class ($\rounds = \chunk$) as 
-the code generation is much easier. 
+We synthesized algorithms in the $0$-synchronous class ($\rounds = \chunk$) as
+the code generation is much easier.
 
 %There are various reasons to synthesize more than the lowest latency
 %bandwidth-optimal and highest bandwidth latency-optimal algorithms: for example,
 %any algorithm with $R == S$ is straightforward to implement as each step has a
 %logical barrier between them.
 
-Note that NCCL's \allgather algorithm is bandwidth optimal, 
+Note that NCCL's \allgather algorithm is bandwidth optimal,
 and while it is also the lowest latency algorithm that NCCL provides, it is not latency optimal. We
 are able to synthesize both a bandwidth optimal algorithm with better latency
 (6-chunks 3-steps 7-rounds), as well as a latency optimal algorithm.
@@ -236,7 +237,8 @@ Collective & Topology & $\chunk$ & $\steps$ & $\rounds$ & Optimality & Running T
   & \dgxone & 24 & 2 & 8 &Both&$2 \cdot \alpha + 1/3\cdot L \cdot \beta$& 24.3 s\\
 \bottomrule
 \end{tabularx}
-\caption{\dgxone collectives with chunks ($\chunk$), steps ($\steps$) and rounds ($\rounds$). Time includes both encoding and solving. For \reducescatter and \scatter $\chunk$ should be multiplied by 8.}
+\caption{\dgxone collectives with chunks ($\chunk$), steps ($\steps$) and rounds ($\rounds$). Time includes both encoding and solving. }
+%For \reducescatter and \scatter $\chunk$ should be multiplied by 8.
 \label{fig:dgxone:syn}
 \end{table}
 
@@ -265,7 +267,8 @@ Collective & Topology & $\chunk$ & $\steps$ & $\rounds$ & Optimality & Running T
 \alltoall & \amd & 8 & 4 & 8 &Both&$4 \cdot \alpha + 1\cdot L \cdot \beta$& 8.2 s\\
 \bottomrule
 \end{tabularx}
-\caption{\amd collectives with chunks ($\chunk$), steps ($\steps$) and rounds ($\rounds$). Time includes both encoding and solving. For \reducescatter and \scatter $\chunk$ should be multiplied by 8.}
+\caption{\amd collectives with chunks ($\chunk$), steps ($\steps$) and rounds ($\rounds$). Time includes both encoding and solving.}
+%For \reducescatter and \scatter $\chunk$ should be multiplied by 8.
 \label{fig:amd:syn}
 \end{table}
 
@@ -288,19 +291,19 @@ for achieving these fast synthesis times. As a point of comparison, synthesizing
 the 24-chunk 8-step bandwidth-optimal \alltoall algorithm with a more direct
 encoding with a Boolean variable for each tuple $(c, n, n', s) \in \sends$ did
 not finish within 60 minutes. With the better encoding the synthesis finishes in
-just over 2 minutes.  
+just over 2 minutes.
 
 \subsection{Performance Evaluation}
 In this section, we compare \tool's generated algorithms with NCCL and
-RCCL on the NVIDIA and AMD hardware.  Our code generation uses a protocol similar to 
-the simple protocol (i.e., NCCL\_PROTO=Simple). Thus, we use NCCL with the simple protocol as our baseline. 
+RCCL on the NVIDIA and AMD hardware.  Our code generation uses a protocol similar to
+the simple protocol (i.e., NCCL\_PROTO=Simple). Thus, we use NCCL with the simple protocol as our baseline.
 We investigate the performance of \allgather, \allreduce, and \alltoall
 as they are popular primitives in different workloads including machine learning. For each
 hardware platform and collective, we generate multiple algorithms; for
-each algorithm, we lower using (1) a single kernel-launch, or (2) 
+each algorithm, we lower using (1) a single kernel-launch, or (2)
 multiple \texttt{cudaMemcpy} calls with one per step. Each algorithm uses a push model for copying and
 when \tool{} is compared with NCCL, we exhaustively search the size and the number of thread blocks and
-report the best performing combination for both \tool{} and NCCL. 
+report the best performing combination for both \tool{} and NCCL.
 See Section~\ref{sec:lowering} for more details.
 
 \begin{figure*}[h]
@@ -328,9 +331,9 @@ $(\chunk, \steps, \rounds)$ for respectively chunks, steps, and rounds as define
 To show the impact of our lowering, we plot two versions of a bandwidth
 optimal algorithm $(6,7,7)$ (which utilizes a push-copy) and $(6,7,7)$
 \texttt{cudaMemcpy}.  The latter of which shows the significant impact lowering
-can have on the performance. To simplify the figure, we only show algorithms that were faster on at least one input size we experimented with. 
+can have on the performance. To simplify the figure, we only show algorithms that were faster on at least one input size we experimented with.
 As it can be seen from the lines, \tool{} is up-to $2.2\times$ faster than NCCL's \allgather on small sizes and $1.14\times$ faster on larger sizes.
-It is possible for \tool{} to automatically switch between multiple implementations based on the input size. In which case, \tool{} will consistently outperform NCCL.  
+It is possible for \tool{} to automatically switch between multiple implementations based on the input size. In which case, \tool{} will consistently outperform NCCL.
 %In general, \tool{} picks the max of
 %these lines and is significantly faster than NCCL on all input sizes.
 
@@ -366,7 +369,7 @@ It is possible for \tool{} to automatically switch between multiple implementati
   \label{fig:dgx1-res-alltoall}
 \end{figure*}
 
-Likewise, Figure~\ref{fig:dgx1-res-allreduce} shows the running time in milliseconds (Figure~\ref{fig:dgx1-res-allreduce-avglat}) or speedup (Figure~\ref{fig:dgx1-res-allreduce-speedup}) 
+Likewise, Figure~\ref{fig:dgx1-res-allreduce} shows the running time in milliseconds (Figure~\ref{fig:dgx1-res-allreduce-avglat}) or speedup (Figure~\ref{fig:dgx1-res-allreduce-speedup})
 for \allreduce as a function of the receive input size.  Each line denotes
 $(\chunk, \steps, \rounds)$ for respectively chunks, steps, and rounds, respectively. With the exception of $4$ middle sizes,
 \tool{} beats NCCL's \allreduce with an 8-chunk algorithm for small input sizes by up-to $1.8\times$ and with a 48-chunk algorithm for large input sizes by up-to $1.06\times$.
@@ -447,7 +450,7 @@ hardware so as to be competitive with a hand optimized baseline.
 
 % \subsection{Gigabyte Z52: 8 AMD MI50 GPUs}
 % A Gigabyte Z52 system is a consumer grade deep learning distributed
-% system in a box.  It has 8 AMD MI50 GPUs with 4 GPUs per socket.  
+% system in a box.  It has 8 AMD MI50 GPUs with 4 GPUs per socket.
 % \begin{figure}
 % \includegraphics[page=2,width=\columnwidth]{figures/topos}
 % \caption{Topology of a Gigabyte MI50 8 GPU AMD System.}
@@ -461,7 +464,7 @@ hardware so as to be competitive with a hand optimized baseline.
 % while a lone GPU is on the \emph{other} socket (i.e., GPU 1 and 5).
 % The Gigabyte system uses PCIe gen 4 with measured bandwidth (~24 GB/S)
 % that approaches xGMIs' measured bandwidth (~33 GB/S). As such, to
-% connect the rings, we use PCIe. 
+% connect the rings, we use PCIe.
 
 % \paragraph{Modeling Bandwidth Constraints:} Unlike NVLink, xGMI
 % connections are not point-to-point and they transparently act as a

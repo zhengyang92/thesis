@@ -204,7 +204,6 @@ However, with a warm cache, it is only 3\% slower than baseline \texttt{clang}.
 
 \begin{table}[t]
   \centering
-  \Small
   \begin{tabular}{| r | r r  r | r r | r r r | r r |}
     \hline
     \multirow{2}{*}{}& \multicolumn{5}{c|}{Intel Cascade Lake} & \multicolumn{5}{c|}{AMD Zen3} \\
@@ -249,7 +248,7 @@ For this evaluation, we selected the C implementation, because \minotaur{}
 works on LLVM IR and cannot process assembly code at all.
 %
 The benchmark suite that we used is
-GMPbench.\footnote{\url{https://gmplib.org/gmpbench}}
+GMPbench.%\footnote{\url{https://gmplib.org/gmpbench}}
 %
 Figure~\ref{fig:gmp} summarizes the results.
 %
@@ -265,8 +264,7 @@ speeding up, for an overall mean speedup of 6.5\%.
 
 \paragraph{Optimizing libYUV with \minotaur{}}
 
-
-\begin{figure*}[tbp]
+\begin{figure}[tbp]
   \centering
   \subfloat[Speedups on Intel Cascade Lake, geomean = 1.022x\label{plot:libyuv-intel}]{
     \includegraphics[page=3,width=\linewidth]{figures/data.pdf}
@@ -277,7 +275,7 @@ speeding up, for an overall mean speedup of 6.5\%.
   }
   \caption{LibYUV speedups}
   \label{fig:yuv}
-\end{figure*}
+\end{figure}
 
 
 This library has an extensive test suite, part of which is explicitly
@@ -373,8 +371,9 @@ presenting some optimizations that it found while compiling benchmark
 programs.
 %
 None of these optimizations can be performed by the version of LLVM
-that \minotaur{} is based on,\footnote{\minotaur{} uses LLVM~18.1.0 for all
-results in this paper.}  at its \texttt{-O3} optimization level.
+that \minotaur{} is based on,
+%\footnote{\minotaur{} uses LLVM~18.1.0 for all results in this paper.}
+at its \texttt{-O3} optimization level.
 %
 We present optimizations in an SSA format that is close to LLVM IR,
 but we have edited it slightly for compactness and legibility.
@@ -431,7 +430,8 @@ of the operation from four to one.
 
 This code is from libYUV, ``... an open source project that includes
 YUV scaling and conversion
-functionality'':\footnote{\url{https://chromium.googlesource.com/libyuv/libyuv/}}
+functionality'':
+%m\footnote{\url{https://chromium.googlesource.com/libyuv/libyuv/}}
 
 {\small\begin{quote}\begin{verbatim}
 %0 = call @llvm.x86.avx2.pmadd.wd(%x, <0,1,0,1, ...>)
@@ -550,7 +550,8 @@ formal specification.
 This is an optimization discovered
 by \minotaur{} when it was used to compile GMP, the GNU Multiple Precision
 Arithmetic Library, a widely-used library for arbitrary precision
-integer computation:\footnote{\url{https://gmplib.org/}}
+integer computation:
+%q\footnote{\url{https://gmplib.org/}}
 
 % before 19 after 13
 

@@ -1,44 +1,44 @@
 \section{Conclusion}
 \label{sec:conc}
 
-We created \tool{} because we noticed that LLVM appeared to be missing
+We created \minotaur{} because we noticed that LLVM appeared to be missing
 relatively obvious optimizations in code containing both its portable
 vector instructions and also its platform-specific intrinsic
 functions that provide direct access to hardware-level primitives.
 %
-\tool{} cuts loop-free DAGs of instructions---including branches and
+\minotaur{} cuts loop-free DAGs of instructions---including branches and
 memory operations---out of LLVM functions and then attempts to
 synthesize better implementations for them.
 %
 When improved code is found, the optimization is performed and also
 the synthesis result is cached.
 %
-On the libYUV test suite, \tool{} gives speedups up to 1.64x,
+On the libYUV test suite, \minotaur{} gives speedups up to 1.64x,
 with an average speedup of 2.2\%.
 %
 We expect to see impact not by convincing application developers to
-use \tool, but rather by convincing compiler developers to implement
+use \minotaur, but rather by convincing compiler developers to implement
 useful optimizations that we can discover.
 
 
 
 
 \iffalse
-\paragraph{Who is supposed to use \tool{}, and how?}
+\paragraph{Who is supposed to use \minotaur{}, and how?}
 %
-Even with a warm cache, \tool{} is almost certainly too slow for
+Even with a warm cache, \minotaur{} is almost certainly too slow for
 developers to use during their day-to-day life.
 %
 It could instead be used to build final software releases, which are
 infrequent enough that long compile times might not be a big problem.
 %
-However, our guess is that the most likely users for \tool{} are
+However, our guess is that the most likely users for \minotaur{} are
 compiler developers, who would use it to discover optimizations and
 then cherry-pick the best of these and add them, by hand, to the LLVM
 implementation.
 
 
-\paragraph{Why does \tool{} sometimes make code run slower?}
+\paragraph{Why does \minotaur{} sometimes make code run slower?}
 %
 There are three main reasons why our
 superoptimizer sometimes performs transformations that make code
@@ -51,7 +51,7 @@ It could be the case that a locally profitable transformation is
 unprofitable in a larger context, for example because the optimized
 code relies on a processor port that is already highly contended.
 %
-Second, \tool{} runs in the middle of a long sequence of LLVM
+Second, \minotaur{} runs in the middle of a long sequence of LLVM
 transformation passes, and we do not attempt to model or predict how it
 might interact with them.
 %
@@ -77,7 +77,7 @@ We would love to synthesize floating point optimizations, but our
 experiments in that direction have so far not been promising; the
 solver is the bottleneck.
 \item
-In addition to a middle-end superoptimizer like \tool{}, LLVM should
+In addition to a middle-end superoptimizer like \minotaur{}, LLVM should
 have a backend superoptimizer that runs on, for example, its MIR
 (machine intermediate representation).
 \item

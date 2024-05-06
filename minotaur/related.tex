@@ -17,13 +17,13 @@ automated reasoning about program semantics.
 
 
 Souper~\cite{souper} is a synthesizing superoptimizer that works on
-LLVM IR; it is the most directly connected previous work to \tool{}.
+LLVM IR; it is the most directly connected previous work to \minotaur{}.
 %
-Souper's slicing strategy is similar to \tool's in that it extracts a
+Souper's slicing strategy is similar to \minotaur's in that it extracts a
 DAG of LLVM instructions that overapproximates how a given SSA value
 is computed.
 %
-However, unlike Souper, \tool{} extracts memory operations and
+However, unlike Souper, \minotaur{} extracts memory operations and
 multiple basic blocks, so it is capable of (we believe) strictly more
 transformations than Souper is able to perform.
 %
@@ -32,12 +32,12 @@ of the subtleties of undefined behavior in LLVM, whereas we reuse
 Alive2's model, which is probably the most widely used formalization
 of these semantics, and is generally recognized as being correct.
 %
-Finally, \tool{} focuses on vector-related transformations, whereas
+Finally, \minotaur{} focuses on vector-related transformations, whereas
 Souper supports neither LLVM's portable vector instruction set nor its
 platform-specific intrinsics.
 
 
-\tool{} is also strongly inspired by Bansal and Aiken's
+\minotaur{} is also strongly inspired by Bansal and Aiken's
 work~\cite{Bansal06}; their superoptimizer operated on x86 assembly
 code and was able to make interesting use of vector instructions.
 %
@@ -46,8 +46,8 @@ produce code competitive with higher optimization levels.
 %
 The overall structure of this superoptimizer, where program slices
 are extracted, canonicalized, checked against a cache, and then
-optimized in the case of a cache miss, is very similar to \tool{}, but
-there are many differences in the details, particularly in \tool's
+optimized in the case of a cache miss, is very similar to \minotaur{}, but
+there are many differences in the details, particularly in \minotaur's
 slice extractor which allows its synthesis specification to
 approximate the original code's effect much more closely.
 %
@@ -126,7 +126,7 @@ regular strided-access loops, by searching for a SIMD expression that
 is equivalent to a gather specification.
 %
 All of these works show good performance results, but they focus on
-relatively narrow tasks, whereas \tool{} attempts to improve SIMD
+relatively narrow tasks, whereas \minotaur{} attempts to improve SIMD
 programs in general.
 
 
@@ -139,7 +139,7 @@ weight and uses the weighted sum as the cost of a rewrite.
 This kind of cost model is not a very good predictor of performance
 on a modern out-of-order processor.
 %
-\tool{} and MACVETH~\cite{sparse} use the LLVM-MCA~\cite{llvmmca}
+\minotaur{} and MACVETH~\cite{sparse} use the LLVM-MCA~\cite{llvmmca}
 microarchitectural performance analyzer, which can still lead to
 mispredictions, but it is generally more accurate than simple
 approaches are.
