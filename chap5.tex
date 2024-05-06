@@ -1,10 +1,71 @@
 \chapter{Synthesizing Optimal Collective Algorithms}
 
+\newcommand{\CC}{C\nolinebreak\hspace{-.05em}\raisebox{.4ex}{\tiny\bf +}\nolinebreak\hspace{-.10em}\raisebox{.4ex}{\tiny\bf +}}
+\def\CC{{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\tiny\bf ++}}}
+
+\newcommand{\gathercoll}{Gather}
+\newcommand{\allgather}{Allgather}
+\newcommand{\scatter}{Scatter}
+\newcommand{\reduce}{Reduce}
+\newcommand{\broadcast}{Broadcast}
+\newcommand{\reducescatter}{Reducescatter}
+\newcommand{\allreduce}{Allreduce}
+\newcommand{\alltoall}{Alltoall}
+
+\newcommand{\dgxone}{DGX-1}
+\newcommand{\dgxtwo}{DGX-2}
+\newcommand{\amd}{AMD}
+
+\newcommand{\chunkstep}[2]{$#1$-chunk $#2$-step}
+
+
+\newcommand{\tool}{SCCL}
+\newcommand{\toollong}{Synthesized Collective Communication Library}
+
+\newcommand{\setwhere}{\;|\;} % the bar in middle of set builder notation
+\newcommand{\qst}{\;} % the "such that" symbol for quantifiers. Could also be . or :
+\newcommand{\powerset}{\mathcal{P}}
+\newcommand{\posint}{\mathbb{Z}_{\geq0}}
+\newcommand{\oftype}{\mathbin{:}}
+\newcommand{\range}[1]{\left[#1\right]}
+\newcommand{\dotscend}{\dotsc\hspace{-0.08em}}
+
+\newcommand{\Ite}[3]{\mathrm{ITE}(#1,#2,#3)}
+% \newcommand{\Ite}[3]{\text{if }#1\text{ then }#2\text{ else }#3}
+
+% Synthesis stuff
+\newcommand{\collectiveproblem}{\textsc{SynColl}}
+\newcommand{\bcastproblem}{\textsc{SynCollBcast}}
+\newcommand{\reducingproblem}{\textsc{SynCollReduce}}
+\newcommand{\size}{P}
+\newcommand{\ids}{I}
+\newcommand{\pre}{\mathit{pre}}
+\newcommand{\post}{\mathit{post}}
+\newcommand{\chunk}{C}
+\newcommand{\gchunk}{G}
+\newcommand{\toglobal}{\mathit{ToGlobal}}
+\newcommand{\steps}{S}
+\newcommand{\rounds}{R}
+\newcommand{\fb}{k}
+\newcommand{\bw}{B}
+\newcommand{\rparts}{Q}
+\newcommand{\sends}{T}
+\newcommand{\start}[2]{\mathit{time}_{#1,#2}}
+\newcommand{\send}[3]{\mathit{snd}_{#1,#2,#3}}
+\newcommand{\qouta}{\mathit{Q}}
+
+\newcommand{\broadcasting}{non-com\-bin\-ing}
+\newcommand{\broadcastingCap}{Non-com\-bin\-ing}
+\newcommand{\reducing}{com\-bin\-ing}
+\newcommand{\reducingCap}{Com\-bin\-ing}
+
+\newcommand{\etal}{\textit{et al}.}
+
 \input{collective_synthesis/macros.tex}
-% \input{collective_synthesis/introduction.tex}
-% \input{collective_synthesis/background.tex}
-% \input{collective_synthesis/synthesis.tex}
-% \input{collective_synthesis/lowering.tex}
-% \input{collective_synthesis/evaluation.tex}
-% \input{collective_synthesis/related.tex}
-% \input{collective_synthesis/conclusion.tex}
+\input{collective_synthesis/introduction.tex}
+\input{collective_synthesis/background.tex}
+\input{collective_synthesis/synthesis.tex}
+\input{collective_synthesis/lowering.tex}
+\input{collective_synthesis/evaluation.tex}
+\input{collective_synthesis/related.tex}
+m\input{collective_synthesis/conclusion.tex}

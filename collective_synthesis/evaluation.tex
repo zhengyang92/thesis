@@ -306,21 +306,21 @@ when \tool{} is compared with NCCL, we exhaustively search the size and the numb
 report the best performing combination for both \tool{} and NCCL.
 See Section~\ref{sec:lowering} for more details.
 
-\begin{figure*}[h]
-  \centering
-  \begin{subfigure}[h]{0.5\textwidth}
-    \includegraphics[page=1,width=\columnwidth]{figures/evals-camera-ready}
-    \caption{Average latency}
-    \label{fig:dgx1-res-allgather-avglat}
-  \end{subfigure}%
-  \begin{subfigure}[h]{0.5\textwidth}
-    \includegraphics[page=2,width=\columnwidth]{figures/evals-camera-ready}
-    \caption{Speedup}
-    \label{fig:dgx1-res-allgather-speedup}
-  \end{subfigure}%
-  \caption{\allgather performance comparison with NCCL}
-  \label{fig:dgx1-res-allgather}
-\end{figure*}
+% \begin{figure}[h]
+%   \centering
+%   \begin{subfigure}[h]{0.5\textwidth}
+%     \includegraphics[page=1,width=\columnwidth]{figures/evals-camera-ready}
+%     \caption{Average latency}
+%     \label{fig:dgx1-res-allgather-avglat}
+%   \end{subfigure}%
+%   \begin{subfigure}[h]{0.5\textwidth}
+%     \includegraphics[page=2,width=\columnwidth]{figures/evals-camera-ready}
+%     \caption{Speedup}
+%     \label{fig:dgx1-res-allgather-speedup}
+%   \end{subfigure}%
+%   \caption{\allgather performance comparison with NCCL}
+%   \label{fig:dgx1-res-allgather}
+% \end{figure}
 Figure~\ref{fig:dgx1-res-allgather} compares \tool's generated code for \allgather with NCCL's \allgather.
 A point on Figure~\ref{fig:dgx1-res-allgather-avglat} ($x$,$y$) shows the
 running time in $y$ milliseconds as a function of send input
@@ -337,37 +337,37 @@ It is possible for \tool{} to automatically switch between multiple implementati
 %In general, \tool{} picks the max of
 %these lines and is significantly faster than NCCL on all input sizes.
 
-\begin{figure*}[h]
-  \centering
-  \begin{subfigure}[h]{0.5\textwidth}
-    \includegraphics[page=3,width=\columnwidth]{figures/evals-camera-ready}
-    \caption{Average latency}
-    \label{fig:dgx1-res-allreduce-avglat}
-  \end{subfigure}%
-  \begin{subfigure}[h]{0.5\textwidth}
-    \includegraphics[page=4,width=\columnwidth]{figures/evals-camera-ready}
-    \caption{Speedup}
-    \label{fig:dgx1-res-allreduce-speedup}
-  \end{subfigure}%
-  \caption{\allreduce performance comparison with NCCL}
-  \label{fig:dgx1-res-allreduce}
-\end{figure*}
+% \begin{figure}[h]
+%   \centering
+%   \begin{subfigure}[h]{0.5\textwidth}
+%     \includegraphics[page=3,width=\columnwidth]{figures/evals-camera-ready}
+%     \caption{Average latency}
+%     \label{fig:dgx1-res-allreduce-avglat}
+%   \end{subfigure}%
+%   \begin{subfigure}[h]{0.5\textwidth}
+%     \includegraphics[page=4,width=\columnwidth]{figures/evals-camera-ready}
+%     \caption{Speedup}
+%     \label{fig:dgx1-res-allreduce-speedup}
+%   \end{subfigure}%
+%   \caption{\allreduce performance comparison with NCCL}
+%   \label{fig:dgx1-res-allreduce}
+% \end{figure}
 
-\begin{figure*}[h]
-  \centering
-  \begin{subfigure}[h]{0.5\textwidth}
-    \includegraphics[page=5,width=\columnwidth]{figures/evals-camera-ready}
-    \caption{Average latency}
-    \label{fig:dgx1-res-alltoall-avglat}
-  \end{subfigure}%
-  \begin{subfigure}[h]{0.5\textwidth}
-    \includegraphics[page=6,width=\columnwidth]{figures/evals-camera-ready}
-    \caption{Speedup}
-    \label{fig:dgx1-res-alltoall-speedup}
-  \end{subfigure}%
-  \caption{\alltoall performance comparison with NCCL}
-  \label{fig:dgx1-res-alltoall}
-\end{figure*}
+% \begin{figure}[h]
+%   \centering
+%   \begin{subfigure}[h]{0.5\textwidth}
+%     \includegraphics[page=5,width=\columnwidth]{figures/evals-camera-ready}
+%     \caption{Average latency}
+%     \label{fig:dgx1-res-alltoall-avglat}
+%   \end{subfigure}%
+%   \begin{subfigure}[h]{0.5\textwidth}
+%     \includegraphics[page=6,width=\columnwidth]{figures/evals-camera-ready}
+%     \caption{Speedup}
+%     \label{fig:dgx1-res-alltoall-speedup}
+%   \end{subfigure}%
+%   \caption{\alltoall performance comparison with NCCL}
+%   \label{fig:dgx1-res-alltoall}
+% \end{figure}
 
 Likewise, Figure~\ref{fig:dgx1-res-allreduce} shows the running time in milliseconds (Figure~\ref{fig:dgx1-res-allreduce-avglat}) or speedup (Figure~\ref{fig:dgx1-res-allreduce-speedup})
 for \allreduce as a function of the receive input size.  Each line denotes
@@ -393,21 +393,21 @@ significant speedup really shows off the power of \tool's automated
 approach to building algorithms tailored specifically to a hardware
 architecture.
 
-\begin{figure*}[h]
-  \centering
-  \begin{subfigure}[h]{0.5\textwidth}
-    \includegraphics[page=7,width=\columnwidth]{figures/evals-camera-ready}
-    \caption{Average latency}
-    \label{fig:amd-res-allgather-avglat}
-  \end{subfigure}%
-  \begin{subfigure}[h]{0.5\textwidth}
-    \includegraphics[page=8,width=\columnwidth]{figures/evals-camera-ready}
-    \caption{Speedup}
-    \label{fig:amd-res-allgather-speedup}
-  \end{subfigure}%
-  \caption{\allgather performance comparison with RCCL}
-  \label{fig:amd-res-allgather}
-\end{figure*}
+% \begin{figure}[h]
+%   \centering
+%   \begin{subfigure}[h]{0.5\textwidth}
+%     \includegraphics[page=7,width=\columnwidth]{figures/evals-camera-ready}
+%     \caption{Average latency}
+%     \label{fig:amd-res-allgather-avglat}
+%   \end{subfigure}%
+%   \begin{subfigure}[h]{0.5\textwidth}
+%     \includegraphics[page=8,width=\columnwidth]{figures/evals-camera-ready}
+%     \caption{Speedup}
+%     \label{fig:amd-res-allgather-speedup}
+%   \end{subfigure}%
+%   \caption{\allgather performance comparison with RCCL}
+%   \label{fig:amd-res-allgather}
+% \end{figure}
 Lastly, we demonstrate \allgather on the Gigabyte AMD workstation.
 Like the other plots, a point on Figure~\ref{fig:amd-res-allgather}
 ($x$,$y$) shows the latency or speedup $y$ for \allgather as a function
