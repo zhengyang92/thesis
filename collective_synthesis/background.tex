@@ -1,0 +1,111 @@
+\section{Overview}
+This section provides an overview of synthesizing latency- and bandwidth-optimal algorithms, using \allgather for the 
+\dgxone topology~(Figure~\ref{fig:dgx1-topo}) as the running example. 
+
+\subsection{Collective Communication Primitives}
+\label{sec:background-collectives}
+Collective communication primitives allow nodes in a networked system to perform operations on shared data. As an example, if each node has some input data, the \allgather primitive transfers these data to all of the nodes.  One way to implement this is for each node to independently send its data to all other nodes. But, an algorithm in which the nodes collectively work together can be more efficient. The efficiency of such algorithms depends on the network topology. 
+
+\begin{comment}
+    For instance, given a set of nodes each having an array of data, the \allreduce primitive computes the sum (or some specified associative operation) of all these arrays and stores the result in each of these arrays. 
+
+Computing the primitives such as \allreduce requires the nodes to communicate. This communication usually happens in smaller chunks of the input array. Given $N$ nodes, say we split the input array into $N$ chunks, where $c_{i,j}$ represents the $i$th chunk at node $j$. One way to compute \allreduce is as follows. First, we compute at node $i$, a partial sum $d_i = \sum_j c_{i,j}$. These reductions can be performed by arranging $N$ nodes in a spanning tree and communicating chunks $c_{i,j}$ along the tree. Note, there are $N$ parallel reductions each possibly using a different spanning tree. This arrangement of reduced data is called the \reducescatter primitive. Once we have the chunks $d_i$, we can perform an \allgather operation by ensuring each node has a copy of $d_i$. In essence, \allgather involves $N$ simultaneous broadcasts of $d_i$ from node $i$. Thus, we have implemented \allreduce by performing an \reducescatter followed by an \allgather.
+\todo{I think the ``$N$ parallel reductions each possibly using a different spanning tree'' makes this confusing---is this describing an approach where each node reduces $1/N$ of the chunks?}
+\todo{say "compute at node $i$, a partial sum" of chunk $i$.}
+\todo{they're are a part of the sum of arrays. they are not really partial sums, in the sense that, e.g., only data from half of the nodes are added.}
+\todo{"there are $N$ parallel reductions"=>these $N$ parallel reductions}
+
+Implementing a collective communication primitive depends on the topology. For instance, when executing parallel reductions or broadcasts in the implementation above, the algorithm has to choose different spanning trees to utilize the bandwidth on all links in the topology. Similarly, the algorithm has to choose the ideal chunk size to use for communication. We will demonstrate these choices for the \dgxone topology described below. 
+\todo{"Implementing" $\ldots$ efficiently}
+\todo{"has to chose ": might have to choose}
+\end{comment}
+
+\subsection{Topology}
+The network topology specifies how the nodes are connected with each other and the latency and bandwidth constraints on the links connecting them. Consider the \dgxone topology shown in Figure~\ref{fig:dgx1-topo}. It consists of $8$ GPUs (or nodes, in the above formalism) split into two groups $\{0,1,2,3\}$ and $\{4,5,6,7\}$. The nodes in each group are fully connected. In addition, there are four inter-group links as shown in the figure. These nodes are connected through 
+NVLinks, with some nodes connected with two parallel NVLinks as shown in Figure~\ref{fig:dgx1-topo}.  
+
+%There are two kinds of links shown in two different colors. The fast links, such as the one connecting nodes $0$ and $1$ have twice the bandwidth as the (relatively) slow links, such as the one connecting nodes $0$ and $2$. The figure represents the fast links with two arrows. Each link is bidirectional allowing concurrent sends and receives at full bandwidth.
+%\todo{Remove the colors and the double arrow should make it clear}
+%\todo{Also just mention that they are called nv2 and nv1 links}
+%\todo{"split into two" groups, each associated with one CPU socket.}
+%\todo{"All the nodes within a socket": all the GPUs in the same group}
+%\todo{"inter-socket links" sound like QPI: maybe inter-group?}
+%\todo{also check the usage in latency-optimal algorithm}
+%\todo{I recommend talking about these in terms of groups rather than sockets to avoid the NVLink/PCIe/QPI confusion too -jn}
+%\todo{I also recommend not talking about ``fast'' and ``slow'' links, since the diagram shows a fast link as 2 slow links (which is indeed what it is), and we then talk about using 6 logical rings; better to just say 6 links and 6 rings}
+
+The \dgxone's design was heavily influenced by the need to do gradient reduction for machine learning workloads. Specifically, this topology forms two non-overlapping rings: one connecting nodes $\{0,1,4,5,6,7,2,3\}$ with two NVLinks per edge and another connecting $\{0,2,1,3,6,4,7,5\}$ with one NVLink per edge. These rings are bidirectional and thus form $6$ logical single-NVLink rings. The NCCL library implements \allgather by running $6$ simultaneous ring algorithms as we discuss below.  
+
+%Given the fast ring has twice the bandwidth and each ring is bidirectional, this allows the implementation to utilize $6$ logical rings with the same bandwidth %to implement collection primitives 
+%(2 from the slow ring and 4 from the fast ring).
+
+\subsection{Cost Model}
+%\todo{I think we need to define bandwidth and latency optimality here. My understanding is that a bandwidth-optimal algorithm is one that sends the minimal amount of data necessary to complete its operation, and a latency-optimal one uses the fewest number of communication rounds possible to complete its operation. Is that what we mean?}
+  
+%Before discussing how to build bandwidth- and latency-optimal algorithms for this topology, we will introduce a simple cost model. 
+We will characterize the communication cost using the $(\alpha, \beta)$ model~\cite{hockney1994communication}. That is, sending a message of size $L$ along a link costs $\alpha + L\cdot\beta$ time. 
+Here, $\alpha$ is the latency of communication and captures the {\em fixed} costs, such as the overhead of initiating a transfer or invoking a GPU kernel, 
+and $\beta$ is the inverse bandwidth of the link and captures {\em per-byte} costs, such as copying data into system buffers. Li \etal{} extensively studies the transfer time of buffers with 
+different sizes over numerous GPU interconnections\cite{alphabeta}. Their result show that with NVLinks, the transfer time stays almost constant up-to a large buffer size and only then it start to increase linearly. 
+These results confirm that the $(\alpha,\beta)$ model is suitable for characterizing communication cost over NVLinks.
+
+The cost of a collective algorithm for an input of size $L$ will be of the form $a\cdot\alpha + b \cdot L \cdot \beta$. We call $a$ the {\em latency cost} of the algorithm and $b$ the {\em bandwidth cost} of the algorithm. Given a class of algorithms that implement a collective on a given topology, an algorithm is {\em latency-optimal} ({\em bandwidth-optimal}) if no other algorithm in the class has a lower latency (bandwidth) cost. Usually, there is a tradeoff between the latency cost and the bandwidth cost when designing collective algorithms.  An algorithm with latency cost $a$ and bandwidth cost $b$ is said to be {\em Pareto-optimal} with respect to a class of algorithms if for every algorithm in the class with latency cost $a'$ and bandwidth cost $b'$, we have $a = a' \Rightarrow b' \geq b$ and $b = b' \Rightarrow  a' \geq a$.
+
+%The $\alpha$ term represents the {\em fixed} cost of sending a message from the overhead of invoking a GPU kernel to the latency across the network. The $beta$ term represents from the cost of copying data across system buffers to the time taken to transmit the bytes at a given network bandwidth. For small message sizes, the cost is determined by the fixed cost $\alpha$, while for large message sizes, the cost is determined by the per-byte cost $\beta$. 
+%\todo{we are going to have a single kernel launch, so many not the kernel launch cost?}
+%\todo{give our estimation of $\alpha$ and $\beta$ cost for DGX1 and NVLinks.}
+%\todo{the from $\ldots$ to $\ldots$ in a long sentence is confusing: consider "such as"}
+%\todo{note: I replaced ``packet'' with ``message'', since alpha is more about the cost to initiate a transfer rather than to send a single 256-byte NVLink packet}
+
+\subsection{Bandwidth-Optimal Algorithm for \dgxone}
+\label{sec:motivation:bw-optimal}
+As described above, the \dgxone topology has $6$ logical rings. \allgather for one ring can be implemented as follows. Each node simultaneously sends its data to the next node in the ring. In subsequent steps, each node stores the received data and sends it to the next node in the ring. In $7$ steps all nodes will have received data from all of the other $7$ GPUs. The $6$-ring algorithm is a generalization of this algorithm. Each node splits its data into $6$ chunks and executes the ring algorithm along each of the $6$ rings, with one chunk per ring. If $L$ is the size of the input data, each ring algorithm takes $7$ steps and communicates $\frac{L}{6}$ bytes. Thus, the cost of the $6$-ring algorithm is  
+$$7\cdot \alpha + \frac{7}{6}\cdot L \cdot \beta$$
+
+Each node has to receive at least $7 \cdot L$ amount of data, and it has an agglomerated incoming per-byte cost of $\beta/6$ (6 incoming NVLinks). Thus, any algorithm for \allgather has to take at least $\frac{7}{6}\cdot L \cdot \beta$ amount of time. Thus, this algorithm is bandwidth-optimal for the \dgxone topology. But can we do better with the latency cost? 
+
+Using the techniques described in this paper, we have automatically synthesized an algorithm~(Section~\ref{fig:dgxone:syn}) with cost $$3\cdot \alpha + \frac{7}{6}\cdot L \cdot \beta$$ To the best of our knowledge, this algorithm was not previously known. Moreover, we prove that this algorithm is Pareto-optimal with respect to the class of algorithms we call $k$-synchronous algorithms~(Section~\ref{sec:ksync}).  
+
+\subsection{Latency-Optimal Algorithm for \dgxone}
+The next question is whether we can improve upon the latency cost of the synthesized algorithm. If each node communicates its data along a binary tree instead of a ring, it would take at least $3$ steps. Using the techniques described in this paper, we have automatically synthesized a better algorithm~(Section~\ref{fig:dgxone:syn}) with cost $$2\cdot \alpha + \frac{3}{2}\cdot L \cdot \beta$$
+Since the \dgxone topology has a diameter of $2$, this algorithm is latency-optimal. To the best of our knowledge, a latency-optimal algorithm for the \dgxone was not previously known. This algorithm is Pareto-optimal with respect to the class of $k$-synchronous algorithms.  
+
+\begin{comment}
+While bandwidth optimal algorithms are suitable for large inputs $D \gg \alpha / \beta$, they are wasteful for small inputs. In such cases, we seek a latency-optimal algorithm. NCCL is 
+capable of creating trees but on a \dgxone, the created trees are always a line graph and
+therefore, they have the same latency as a ring.
+\todofor{Saeed}{Does NCCL have a tree based allgather? If not, what's the tree like in allreduce? Is it binary? from saemal: no it does not. For allgather it doesn't even have
+any other implementation other than a ring and for allreduce on DGX1, it only creates a ring with the tree. It is safe to say that on DGX-1 they use a ring always even though they have the capability of doing a tree}
+\todo{"they are wasteful for small inputs"=>they might not give the smallest possible latency for small inputs}
+
+The technique discussed in this paper synthesized a better algorithm that takes $2$ steps! To the best of our knowledge, this algorithm is not previously known. The algorithm works as follows. In the first step, each node sends its chunk to all its neighbors. For instance, node $0$ sends its chunk to its intra-socket neighbors $1$, $2$, and $3$ as well to its inter-socket neighbor $5$. Since each link is bidirectional communication from nodes do not conflict. At the end of step 1, each node has received chunks from all its intra-socket neighbors and one chunk from its inter-socket neighbor. In the second step, each node sends the chunk from its inter-socket neighbor to all its intra-socket neighbors. That is, node $0$ sends the chunk from $5$ to nodes $1$, $2$, $3$. 
+
+This two-step algorithm does not subdivide its input data of size $D$. So, we will call this algorithm a \chunkstep{1}{2} algorithm. The time taken by this algorithm is 
+$$2\cdot \alpha + 2\cdot D\cdot\beta$$
+Since the diameter of this topology is $2$ and each node has to communicate with every other node, one cannot implement an \allgather in one step. Thus, for $D \ll \alpha / \beta$, this algorithm is optimal. We call such algorithms latency optimal. 
+
+A natural question, again, is whether a faster latency optimal algorithms exist that can use the bandwidth more efficiently. For instance, the \chunkstep{1}{2} does not make use of fast bandwidth links as it only sends one chunk between a pair of nodes at each step. This paper shows that such an algorithm exist.
+\todo{Not true, with rounds, we have a better algorithm.}
+
+\subsection{Pareto Frontier}
+\label{sec:pareto}
+
+While the bandwidth-optimal algorithm is suitable for large input sizes and the latency-optimal algorithm is for small input sizes, many interesting inputs might be of sizes in between the two limits. How do design optimal algorithms in such cases? Let us assume that a \chunkstep{c}{s} algorithm implementing a collective on a given topology exists. Using a similar reasoning as above, this algorithm will take time 
+$$ s\cdot \alpha + \frac{s\cdot D \cdot \beta}{c}$$
+Intuitively, we need to reduce $s$ to improve the latency of the algorithm and increase $c$ to improve the bandwidth utilization of the algorithm, while the constraints of the topology and the implemented collective will restrict the feasible pairs $(c,s)$. For instance, as argued above, $s \geq 2$ and $\frac{s}{c} \geq \frac{7}{6}$ when implementing \allgather on the \dgxone topology. In other words, for a given $s$, $c \leq \left\lfloor\frac{6 \cdot s}{7} \right\rfloor$. 
+\todo{maybe need to justify why all algorithms can be expressed as \chunkstep{c}{s} performance-wise. Suppose different ranks have different number of steps, which takes different durations. Even though you can find the smallest time slice and the corresponding greatest common divisor logical chunk size, the steps now are "logical" steps, and you don't always pay the $\alpha$ cost.}
+\todo{our algorithms are BSP. With the concept of rounds, each step might take different amount
+of time. Since 1 bw and 2 bw have 2 as their lcm, having equal chunks makes sense. Maybe we should have this in Section 2?}
+
+
+By trading latency by increasing $s$, one can search for the largest $c$ for which a feasible \chunkstep{c}{s} exists. Each such algorithm maximizes the bandwidth utilization for a given latency. We can increase $s$ till we reach a bandwidth-optimal algorithm. Together, these form a {\em Pareto frontier} of feasible algorithms. Which of these algorithms to use will depend on the size of the input data $D$, the latency $\alpha$ of the network, and the bandwidth $\beta$ of the network. 
+
+\subsection{Summary of the Paper}
+In this paper, we propose a systematic method to synthesize algorithms in the Pareto-frontier spanning form the latency-optimal algorithm to the bandwidth-optimal algorithm for a given collective on an input topology. We characterize a class of algorithms that captures a broad set of known algorithms and prove Pareto-optimality of both known algorithms and synthesized new algorithms. We automatically generate an implementation of these algorithms that is competitive with manually hand-tuned communication kernels in use today. 
+
+\end{comment}
+
+
+%\subsection{Synthesizing Optimal Algorithms}
+%\todofor{Olli}{Summarize our approach to synthesizing algorithms on the pareto frontier.}
+%Given a topology, we automatically optimal algorithms in the pareto frontier.  Essentially a summary of the paper. 

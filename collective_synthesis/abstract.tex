@@ -1,0 +1,23 @@
+Collective communication algorithms are an important component of
+distributed computation.  Indeed, in the case of deep-learning,
+collective communication is the Amdahl's bottleneck of data-parallel
+training.   
+
+This paper introduces \tool{} (for Synthesized Collective
+Communication Library), a systematic approach to synthesizing collective
+communication algorithms that are explicitly tailored to a particular
+hardware topology.  \tool{} synthesizes algorithms along the
+Pareto-frontier spanning from latency-optimal to bandwidth-optimal
+implementations of a collective.  The paper demonstrates how to encode
+the synthesis problem as a quantifier-free SMT formula which can be
+discharged to a theorem prover. We show how our carefully built encoding enables
+\tool{} to scale.
+%We further demonstrate how to scale
+%our synthesis by exploiting symmetries in topologies and collectives.
+
+We synthesize novel latency and bandwidth optimal
+algorithms not seen in the literature on two popular hardware
+topologies. We also show how \tool{} efficiently lowers algorithms to
+implementations on two hardware architectures (NVIDIA and AMD) and
+demonstrate competitive performance with hand optimized collective
+communication libraries. 

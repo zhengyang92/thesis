@@ -1,0 +1,79 @@
+\section{Code Generation}
+\label{sec:lowering}
+The prior section described a synthesis procedure for generating Pareto-optimal algorithms.
+This section describes a tool called \tool{} that implements this procedure and generates 
+high-performance collective implementations for both NVIDIA and AMD GPUs. 
+
+
+Every synthesized algorithm, at its core, is a sequence of commands that
+describe \emph{what} data needs to be sent (i.e., which chunk),
+\emph{where} it needs to be sent (i.e., a source and destination),
+\emph{when} it needs to be sent (i.e., during which synchronous step), and \emph{with} which chunk(s) it needs to be reduced. 
+\tool{} generates SPMD multi-process \CC{} code combined with CUDA kernels that implement these commands. 
+
+Each GPU involved in the computation has its own code as part of a top-level switch statement. Communication between GPUs is enabled using CUDA IPC
+memory handles, which allows a GPU to access a remote GPU's memory using shared pointers. Thus, communication between GPUs simply involves 
+writing data to appropriate buffers. However, there are a few crucial choices that impact the communication performance.   
+
+%This mechanism chooses the fastest available hardware transport when there are multiple connections available. 
+%For example, on a \dgxone, NVLink will be used by default to communicate between GPUs; 
+%otherwise PCIe may be used. 
+%On the Gigabyte Z52 consisting of AMD GPUs, xGMI will be used for GPUs in the same ring; otherwise PCIe will be used. Section~\ref{sec:evaluation} describes the details.
+
+%\subsection{Hardware Interconnects and the Software that uses them}
+% Before we discuss how we generate code, we first enumerate the possible ways for GPUs to communicate with each other in modern hardware.
+
+%\subsection{Interconnect usage details}
+
+%Once the memory handles between connected GPUs are exchanged, there are multiple ways to enable data transfers.
+
+\paragraph{DMA engines and kernel copies:} Data may be moved either by executing load or store instructions through a kernel, or by using a specialized DMA engine via \texttt{cudaMemcpy}. A kernel copy allows data movement and computation to be fused in a kernel while a DMA engine has a higher initial $\alpha$ cost but may have higher bandwidth, leading to a lower $\beta$ cost. On NVLink, DMA engine bandwidth is about 10\% better than kernel copy bandwidth, due to details of the wire-level protocol. Transfers are packetized, with each packet including a header (containing address, error correction data, etc.) and a variable-length payload. DMA engines are able to emit maximum-sized packets, but kernel copy packets are limited to the 128-byte cache line size.
+
+\paragraph{Push and pull models:} Each DMA engine is located on a particular GPU. Data movement between two GPUs can be executed by either the receiver's DMA engine (a {\em pull} model) or by the sender's DMA engine (a {\em push} model). Kernel copies have the same two approaches. This may have performance implications due to the link protocol: the push model only needs to send write request packets with a payload, whereas a pull model first sends request packets and then receives response packets with data. When communicating bidirectionally, the request packets reduce the bandwidth available for the response packets. Thus, even though the push model may require extra memory, we have found it to be up to 10\% faster than the pull model.
+
+%Furthermore, when a \reducing collective receives chunks, it can reduce immediately after the receiver pulls the data whereas in the push model, the reduction can be computed lazily right before the reduced chunk is sent. Thus, 
+
+%Our experiments suggest that the push model is faster than pull. 
+
+\paragraph{Single and multiple kernels:} One way to implement a synthesized algorithm is by emitting several kernels, one per step, which forces a global synchronization between steps and, as a consequence, introduces large overheads.
+Alternatively, \tool{} fuses all steps into one kernel and thus we implement the synchronizations between GPUs as a fine-grained signal and wait mechanism with shared flags. In our single kernel implementation, each chunk for each connection has a dedicated flag; a chunk on a GPU is valid 
+only when the associated flag is set. There is a \texttt{\_\_threadfence\_system()} between the data movement operations and the operation to set the flag on the remote GPU signals that the transfer is complete. 
+
+\paragraph{Size and Number of Thread Blocks:} \tool{} dedicates a given number of thread blocks to each link and for each step, it uses the same number of thread blocks to communicate through that link. 
+For different input sizes, the number of thread blocks significantly affects performance and in later sections we show how we empirically search for the fastest configuration for various input sizes.
+
+% \paragraph{CPU or GPU?} Data movement between the CPU's memory and the GPU's memory may be done either by the GPU or the CPU. Using the GPU is common: the same tradeoffs discussed above apply. The CPU's memory is mapped into the GPU's address space; when a DMA engine or load/store instruction accesses that region, the GPU's memory system generates read or write operations over the PCIe bus. It is also possible to map the GPU's memory into the CPU's address space and use load/store instructions on the CPU to access the GPU's memory; this is the goal of the GDRCopy library~\cite{gdrcopy}. Since these transfers do not need to pay the GPU kernel invocation cost, their latency can be lower than GPU-initiated transfers; however, because the GPU cannot be prefetched, the bandwidth is low compared to GPU-managed transfers.
+
+% \paragraph{Framing overhead} One challenge in determining whether a communication scheme is using a link efficiently is determining what data transfer bandwidth to expect. Manufacturers often report link speeds in terms of raw bit rate, but once link framing overhead is taken into account, the rate at which user data is transferred will be lower.
+
+% For instance, an NVLink 2.0 link as found on the V100 has a raw unidirectional bandwidth of just over 25 GB/s~\cite{nvlink2}. However, NVLink communication is structured in terms of 16-byte flits; each packet contains between one and three header flits (containing address, operation, acknowledgment, error correction, and other information), and up to 16 data flits~\cite{nvlink1}. Thus, the user-visible bandwidth will always be lower than 25 GB/s. The choice between using DMA engines or kernel copies affects this: the DMA engines are able to emit maximum-sized packets and thus we see a user-visible bandwidth of about 22 GB/s; for kernel copies the packets are limited to the 128-byte cache line size, leading to a user-visible bandwidth of about 20 GB/s.
+
+% The other interconnects found in our configurations have similar properties. We omit the protocol details here. AMD's xGMI (Infinity Fabric) interconnect on the MI50 has a raw bit rate of 46 GB/s~\cite{mi50}, and the peak link bandwidth we observe is approximately 33 GB/s. The PCIe 3.0 x16 links on the NVIDIA configurations have a raw bandwidth of 16 GB/s, but we measure a peak bandwidth of about 14 GB/s. The PCIe 4.0 links on the AMD configuration has a raw bandwidth of 32 GB/s, and we measure a peak bandwidth of about 27.5 GB/s.
+
+% \todofor{Todd}{Explain general code generation approach, producing CUDA C++, general structure of generated code}
+% \subsection{GPU to GPU Communication Methods}
+
+% \todofor{Jacob}{Enumerate and explain all the different ways to communicate between GPUs. cudaMemcpy, kernel pull/push, gdrcopy etc. Performance considerations and tradeoffs between these.}
+
+% \todofor{Saeed}{Explain which GPU to GPU communication methods we chose and how we implemented them.}
+
+% \subsection{Lowering}
+
+% \paragraph{Targeting PCIe}: \tool{} generates code driven by the CPU.
+% Memory involved in a collective is pinned.  When possible, we exploit
+% NUMA effects to register pinned memory on the socket that owns it.  We
+% exploit gdrcopy\cite{gdrcopy} for low-latency transfers over PCIe of
+% this pinned memory.  We extend gdrcopy to also enable reduction
+% operations as the current codebase only supports send/recv and not
+% addition as required in, for example, an Allreduce.  Because pinning
+% memory is expensive, we cache pointers to buffers used in collectives.
+
+
+% \subsection{Lessons in Low-level Communication Optimizations}
+
+% \todofor{Zhengyang}{Enumerate all the system hacks that went in.}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:

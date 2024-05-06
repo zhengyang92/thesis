@@ -1,0 +1,92 @@
+\section{Artifact Appendix}
+\subsection{Abstract}
+This artifact contains the source files for \tool. \tool{} has two parts; a synthesizer for synthesizing the optimal communication schedules 
+for a given topology and a code generator that lowers the synthesized schedule to CUDA code. 
+The synthesizer and the code generator can be executed on any modern x86-64 computers but
+the evaluation of lowered code requires a system with CUDA-enabled GPUs and peer-to-peer access. The lowered code
+in this paper was evaluated on an NVIDIA \dgxone and a Gigabyte Z52 system. 
+
+This artifact provides instructions on 
+how to set up the environment, build and launch the docker image and do a test run of \tool{}. 
+It will also give the command lines to reproduce the results in paper, and finally, it will discuss
+how to use \tool{} to synthesize schedules for custom topologies and parameters.
+
+\subsection{Artifact check-list (meta-information)}
+{\small
+\begin{itemize}
+\item {\bf Algorithm: } \tool
+\item {\bf Program: } \MakeLowercase{\tool.py} is a python script that automatically synthesizes communication schedules and
+	lowers them to CUDA source code.
+\item {\bf Compilation: } Each generated code comes with a Makefile which requires NVCC and 
+	MPICC for compilation.
+\item {\bf Run-time environment: } Linux operating system, CUDA run-time, and MPI run-time.
+\item {\bf Hardware: } An NVIDIA \dgxone with 8 V100 GPUs connected with NVLinks and a 
+	Gigabyte Z52 system with 8 MI50 GPUs connected with PCI and xGMI.
+\item {\bf Metrics: } Evaluating the synthesis time and the latency of generated collective 
+	communication primitives.
+\item {\bf Output: } A schedule for transferring buffers of data required for the desired collective communication
+	primitive along with the lowered CUDA code.
+\item {\bf Experiments: } Code generation for different versions of 
+	\allreduce, \allgather, and \alltoall on different topologies and executing them.
+\item {\bf Publicly available?: } The code is available per request.
+\end{itemize}
+
+\subsection{Description}
+\subsubsection{How delivered}
+The source code can be accessed through Github\footnote{\url{https://github.com/parasailteam/nccl/blob/synthesizer/ppopp-ae/sccl-artifact.tar.gz}}.
+
+\subsubsection{Hardware dependencies}
+Out experiments were evaluated on an NVIDIA \dgxone and a Gigabyte Z52 system. The \dgxone machine
+has 8 V100 NVIDIA GPUs with NVLink connection among them and has dual Intel Xeon E5-2698 v4 processors with a total of 512 GB host memory. 
+The Z52 system consists of 8 MI50 AMD GPUs connected via xGMI and PCI and runs with dual AMD EPYC 7002 processors with a total of
+1TB host memory.
+%The code can be executed on any CUDA capable GPUs with peer-to-peer communication capabilities. 
+%This includes systems with NVIDIA GPUs connected via PCI, NVLink, or NVSwitches or AMD GPUs connected with xGMI or PCI.
+
+\subsubsection{Software dependencies}
+Our experiments were evaluated on Ubuntu version 20.04, kernel version 4.19
+with NVIDIA Docker version 2.5.0, CUDA version 10.2, OpenMPI version 4.0.2, Python version 3.8.5 and Z3 version 4.8.8, and the performance of our generate code 
+are compared with NCCL version 2.7.8-1. CUDA, OpenMPI, Python, Z3 and NCCL are automatically installed when building the docker image.
+
+\subsection{Installation}
+The installation is done through docker. The \texttt{build\_docker.sh} in
+the downloaded tar file includes all of the required steps to get the docker container running.
+
+\subsection{Evaluation and expected result}
+
+\subsubsection{Evaluating the synthesizer}
+\tool{} can be queried to synthesize different collective communication primitives. For example,
+it can synthesize an \allgather algorithm with 6 chunks in 7 steps and 7 rounds on a \dgxone. 
+This will take a few seconds to execute and find the schedule for sending the chunks across
+the network. Command line for this example is given in the README.
+
+The output of \tool's shows the synthesized schedule which follows the following pattern
+\begin{verbatim}
+send 1 from 0 to 3 at step 0
+send 2 from 0 to 2 at step 0
+send 3 from 0 to 1 at step 0
+\end{verbatim}
+The output specifies when and what chunk is communicated between a pair of GPUs. GPU $i$'s chunks are identified by $[6i, 6i+5]$ (6 chunks per GPU)
+where $i\in[0,7]$ is one of the $8$ GPUs.
+
+An adjacency matrix is followed, displaying the topology of \dgxone where rows (columns) correspond to sources (destinations) and the value 
+represents the number of parallel chunks that can be transferred from the source GPU to the destination GPU in a round.
+
+The bandwidth utilities per step are displayed after the topology matrix. This corresponds to the schedule that \tool{} synthesizes for 
+each step. A value at row $s$ and column $d$ represents the number of chunks sent from GPU $s$ to GPU $d$ and 
+normalized by the number of rounds in that step. This is limited by the entry of the
+topology matrix at $(s,d)$. After the bandwidth utilization matrix, an overall link utilization is displayed.
+
+Once \tool{} synthesized the schedule for the communication, a CUDA implementation following the schedule is generated. 
+
+Table~\ref{fig:dgxone:syn} and \ref{fig:amd:syn} can be generated by following the README file.
+
+\subsubsection{Evaluating the generated CUDA code}
+This section describes the instructions for reproducing the numbers in Figures~\ref{fig:dgx1-res-allgather}, 
+ \ref{fig:dgx1-res-allreduce}, \ref{fig:dgx1-res-alltoall} and \ref{fig:amd-res-allgather}.
+The OSU Micro-Benchmarks (OMB) was adopted for the performance evaluation of the generated CUDA code. 
+The instructions for executing the generated CUDA code through OMB is given in the README file.
+
+\subsection{Experiment customization}
+\tool{} can synthesize collectives with customized topologies, chunks, steps and rounds by expressing
+the network topology and setting the command line arguments. The README file includes the instructions.
