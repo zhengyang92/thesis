@@ -1,4 +1,430 @@
 %%% -*-LaTeX-*-
 
-\chapter{The First}
+\chapter{Introduction}
 
+
+The rapid evolution of computer hardware introduces novel
+architectures that demand efficient utilization for optimal
+performance. These innovative architectures enhance the capabilities
+of processors, enabling them to perform more complex tasks and improve
+overall efficiency.
+%
+For example, GPUs achieve high performance by utilizing specialized
+hardware features specifically designed to optimize parallel
+processing and computational tasks, and the Vector Processing Units
+(VPUs) within CPUs are designed to handle vector operations
+efficiently, making them particularly well-suited to applications such
+as video encoding, compression, and image processing applications.
+%
+These cutting-edge new architectures are gathering significant
+interest from software developers and researchers.
+
+Programs running on top of these new architectures are either
+optimized manually by human experts, or optimized by optimizing
+compilers. However, both approaches struggle to keep pace with
+innovations in architecture, as the features in those new
+architectures may not be fully supported or understood by existing
+compilers and experts;
+%
+additionally, optimizing compilers and experts usually rely on
+heuristics to determine the best optimization strategies.
+%
+These heuristics might not be tailored to the specific features of
+novel architectures, leading to suboptimal performance.
+%
+Consequently, efficiently optimizing programs for new architectures
+remains a challenging endeavor.
+
+Program synthesis is a promising approach to address the challenge.
+%
+At its core, program synthesis searches for programs that meet a
+specified set of requirements.
+%
+Nowadays, the advances in SMT solvers and increased computation power
+have made program synthesis a more viable choice for code generation.
+%
+There are several reasons why program synthesis can help address the
+challenge:
+
+\begin{itemize}
+\item \textbf{Adaptability}: Unlike optimizing compilers or human
+experts, program synthesis can generate code specifically tailored to
+the target architecture.
+%minotaur
+For example, in superoptimizers, once the semantics of an instruction
+is fed into the refinement checker, it can automatically generate code
+that takes advantage of the instruction.
+
+\item \textbf{Domain-specific optimizations}: Program synthesis can
+take into account the unique characteristics of a specific domain,
+such as collective algorithms in parallel computation, to create
+highly optimized code.
+%sccl
+This domain-aware optimization further enhances the performance of
+applications on new architectures.
+
+\item \textbf{Continuous improvement}: As an architecture evolves and
+new features are introduced, program synthesis techniques can be
+updated to incorporate these advancements, ensuring that the generated
+code remains optimized over time.
+\end{itemize}
+
+This proposal focuses on developing program synthesizers that aim to
+efficiently optimize software for emerging architectures. The thesis
+statement of my dissertation is
+
+\hfill
+
+\noindent\fbox{%
+\parbox{\textwidth}{%
+Program synthesis can help developers to better utilize novel
+instructions and features on emerging architectures. By leveraging
+program synthesis techniques, we can synthesize optimal collective
+algorithms that are tailored to a specific topology, and we can also
+automatically generate peephole optimizations for vector instructions.
+} }
+
+\indent
+
+My dissertation will be organized as follows: the first part will
+discuss the work on \emph{SCCL}, which is a collective algorithm
+synthesizer, the second part will discuss the work on \emph{Minotaur},
+a synthesizing superoptimizer for vector instructions, and the third
+part will discuss the pruning techniques specifically for vector
+instructions that Minotaur can use to improve its synthesis
+performance.
+
+\section{Part 1, Synthesizing Optimal Collective Algorithms}
+
+\fbox{%
+\parbox{\textwidth}{%
+Note: This work was published in the attached paper
+\textit{Synthesizing Optimal Collective Algorithms}. The paper was
+presented at PPoPP'21 and got the best paper award. } }
+
+\indent
+
+The convergence of recent trends of training and deploying large
+models, and the stagnation of processors' performance due to Moore's
+Law, has prompted system designers to incorporate innovative
+high-bandwidth interconnect networks within and between nodes in
+distributed clusters. For example, the NVIDIA DGX-1 server features
+two x86 processors and eight GPUs, connected by NVIDIA's NVLink
+network. These network designs are driven not only by the need for
+efficient data transfer, but also by hardware factors such as signal
+integrity, cooling, and physical layout. These novel topologies
+require novel communication kernels to maximize performance.
+Currently, these kernels are created and optimized manually.
+
+
+In this work, I, with my collaborators, proposed a systematic approach
+to automatically synthesize high-performance communication kernels. We
+developed a program synthesizer, called \emph{SCCL}, that, given a
+topology, specified as a graph with bandwidth constraints on nodes and
+edges, and a communication primitive, specified as the pre- and post-
+condition on data locations, it generates a quantifier-free SMT
+formula that captures the set of all feasible algorithms that
+implement the primitive on the input topology.
+%
+Exploring this space to appropriately minimize the number of
+communication steps or decrease the granularity of communication at
+each step, is a computationally difficult problem.
+%
+The Z3 solver is invoked to synthesize algorithms that explore this
+tradeoff along the Pareto frontier between latency-optimality and
+bandwidth-optimality.
+%
+For every solution from the SMT solver, I implemented the code
+generator that lowers the solution into high-performance
+implementations.
+
+We synthesized novel latency and bandwidth optimal algorithms not seen
+in the literature on two popular hardware topologies. We also show how
+SCCL efficiently lowers algorithms to implementations on two systems
+(NVIDIA \mbox{DGX-1} and Gigabyte AMD Z52) and demonstrate competitive
+performance with hand-optimized collective communication libraries.
+
+\textbf{Proposal}: This work was finished when I was an intern at
+Microsoft Research. I am one of two co-first authors, and I
+contributed most of the heavy-lifting work. I have confirmed with the
+co-authors of the paper that this paper can be used as a section in my
+dissertation.
+
+\section{Part 2, Minotaur: A SIMD-Oriented Synthesizing Superoptimizer}
+
+\fbox{%
+\parbox{\textwidth}{%
+Note: The details of this work can be found in the attached paper
+\textit{Minotaur: A SIMD-Oriented Synthesizing Superoptimizer}. The
+paper will be submitted to ASPLOS'24. } }
+\hfill
+
+Generating high-quality code for vector instruction set extensions
+remains a challenge. Extracting parallelism and mapping source-level
+constructs onto semantically rich SIMD instructions can be difficult
+when dealing with programs written in high-level languages.
+Conversely, writing vector code in assembly is time-consuming and
+costly, and hinders compatibility with a wide variety of platforms.
+%
+A widely adopted compromise involves writing high-level code but using
+SIMD intrinsics in performance-critical loops. However, this approach
+has its own drawbacks, such as an impedance mismatch where mid-level
+compiler optimizations lack the necessary semantics for intrinsic
+functions and thus cannot optimize them effectively.
+
+I developed Minotaur, a synthesis-based superoptimizer for the LLVM
+intermediate representation (LLVM IR).
+%
+with an emphasis on supporting LLVM's portable vector operations and
+Intel-specific intrinsics.
+%
+The objective is to automatically identify valuable optimizations that
+LLVM is currently unable to perform.
+%
+Due to the significant compilation time required by Minotaur's
+search-based approach, the primary target audience is compiler
+developers, who can subsequently implement the discovered missing
+transformations.
+
+
+Minotaur builds on the Alive2~\cite{alive2} translation validation
+ tool for LLVM IR, to which I added support for 165 vector
+ instructions, and LLVM-MCA, which I  use to build a cost model.
+%
+On top of these foundations, I developed a synthesis engine that
+searches for improved code sequences, a cache that stores previously
+discovered optimizations, and an LLVM plugin that operates as a
+middle-end optimization pass.
+
+
+Minotaur finds many profitable optimizations that are missing from
+LLVM, and I am actively sending patches that implement those new
+optimizations to the LLVM community. Minotaur achieves speedups on
+various benchmarks and real-world applications, including the integer
+parts of SPEC CPU2017, GMP, and libYUV. Minotaur gets an average 4\%,
+0.5\% and 1.1\% speedups on GMP, libYUV and SPEC CPU17, respectively.
+The maximum speedup on real-world applications is 15\% in GMP.
+
+
+
+\textbf{Proposal}: I submitted a paper on this work (as mentioned
+above) to PLDI'23, and it got rejected. I am working on improving the
+paper.
+
+\section{Part 3, Speeding up Minotaur with Dataflow Analysis Pruning}
+
+This work is a continuation of the work in the previous section. This
+work aims to improve the scalability of Minotaur by pruning the search
+space using dataflow analysis.
+
+\subsection{Problem}
+
+Superoptimization is computationally hard due to several inherent
+ challenges associated with automatically discovering optimal code
+ sequences that are semantically equivalent to the input program but
+ have improved performance. Some of the primary reasons for the
+ complexity of superoptimization are:
+
+
+\begin{itemize}
+\item Exponential search space growth: As the depth of the search
+increases, the number of synthesis candidates grows exponentially.
+This exponential growth in the search space can make it
+computationally infeasible for superoptimizers to explore all
+potential optimizations within a reasonable time frame.
+\item The complexity of refinement check and constant synthesis
+ increases with the size and the complexity of the specification.
+\end{itemize}
+
+These limitations can make it difficult for synthesizing
+superoptimizers to effectively optimize large and complex codebases.
+In reality, I limit the Minotaur's search depth to 3 instructions, and
+Minotaur still takes days to finish optimizing real-world
+applications. This motivates us to explore ways to prune the search
+space.
+
+Mukherjee et al.~\cite{pruning} presents a novel approach to improve
+the efficiency and scalability of superoptimization by leveraging
+dataflow pruning techniques. The key idea is to compute dataflow facts
+of the specification and candidate with the goal of establishing a
+conflict between them. If a conflict is found, then the candidate is
+pruned from the search space.
+
+I experimented with the dataflow analysis pruning technique in
+Minotaur. In the experiment, I selected the known-bits analysis, which
+computes the known bits of an LLVM value; if any bit of the
+specification is known to be different from the candidate, then the
+candidate is pruned. I used the LLVM's implementation of known bits
+analysis. However, the known-bits analysis only discarded a tiny
+fraction of search space (14 pruned out of 1087).
+
+The reason for the poor pruning performance in Minotaur is that most
+of the vector instructions' transfer functions are missing from LLVM
+That is, LLVM always returns "unknown" for these vector instructions.
+And not only in the known bits analysis, transfer functions are overly
+conservative in other heavily-used dataflow analyses such as
+demanded-bits analysis. This motivates me to enhance the transfer
+functions for LLVM's vector instructions and intrinsics.
+
+\subsection{Proposed Solutions}
+
+Here is a list of my proposed solutions for improving the transfer
+functions of vector instructions.
+\begin{itemize}
+\item Implement transfer functions of known-bits and demanded-bits
+analysis for vector data movement instructions. An example here is the
+shufflevector instruction, which is used to shuffle the elements of a
+vector. The transfer function for shufflevector is similar with its
+concrete semantic: Instead of shuffling the elements of the input
+vectors, shuffling the data-flow fact.
+
+\item For vertical trivial vector instructions, I will use the
+transfer function of the corresponding scalar instruction and apply it
+to each element of the vector.
+
+\item For non-trivial vertical vector instructions, such as
+x86.avx2.pavg, which gets the average of two packed integers
+vertically.
+%
+I will compose each basic operations' transfer function to get the
+transfer function of the whole instruction.
+
+
+
+\end{itemize}.
+
+
+\subsection{Proposed Evaluation}
+
+I will evaluate the proposed solution by running Minotaur on
+real-world applications and macro benchmarks, showing how many
+candidates are pruned for every combination of abstract domains
+involved, and how many new optimizations are found by enabling
+data-flow based pruning.
+
+
+\section{Proposed Timeline}
+
+\begin{center}
+\begin{tabular}{| l | l|}
+     \hline
+     Proposed Work & Time  \\ %[0.5ex]
+     \hline\hline
+     Resubmit Minotaur paper to ASPLOS'24 & April, 2023  \\
+     \hline
+     Implement new transfer functions & May - June, 2023 \\
+     \hline
+     Generate transfer function by composition & Jun - July, 2023 \\
+     \hline
+     Write pruning paper & July - August, 2023 \\
+     \hline
+     Write dissertation & Sept, 2023 onwards \\
+     \hline
+     Thesis defense & Dec, 2023 onwards  \\ %[1ex]
+     \hline
+    \end{tabular}
+ \end{center}
+
+\section{Expected Research Contribution}
+
+\begin{itemize}
+\item A systematic approach to synthesizing collective communication
+algorithms that are explicitly tailored for a particular hardware
+topology.
+\item A SIMD-oriented superoptimizer that can automatically discover
+and implement missing optimizations for SIMD instructions in LLVM.
+\item A pruning method that can significantly improve the scalability
+of a SIMD-oriented superoptimizer.
+\end{itemize}
+
+\section{Literature Review}
+
+A \emph{superoptimizer} is a type of program optimizer that utilizes
+search techniques to generate more efficient code, setting it apart
+from traditional compilers that apply a predetermined (although
+potentially extensive) sequence of transformations.
+%
+The term \emph{superoptimizer} originated from Massalin's
+work~\cite{massalin}, which described an exhaustive generation of
+machine instruction sequences, employing various strategies to trim
+the search space and using testing to eliminate unsuitable candidates.
+Preceding contemporary solver-based approaches, Davidson and
+Fraser~\cite{peep84} developed peephole optimizations derived from
+machine description files.
+ %
+Modern superoptimizers, in contrast, leverage solvers for automated
+reasoning about program semantics, harnessing their capabilities to
+optimize code more effectively than earlier methods.
+
+Minotaur is heavily influenced by Bansal and Aiken~\cite{Bansal06},
+which presented a superoptimizer that operated on x86 assembly code
+and effectively utilized vector instructions.
+%
+Starting with unoptimized assembly code generated by GCC, their
+superoptimizer was able to produce code that competed with higher
+optimization levels.
+%
+The overall structure of this superoptimizer, which involved
+extracting program fragments, canonicalizing them, checking them
+against a cache, and optimizing them in case of a cache miss, is
+similar to Minotaur. However, there are significant differences in the
+details, especially in Minotaur's slice extractor, which enables the
+synthesis specification to more closely approximate the original
+code's effect.
+%
+STOKE~\cite{stoke}, another assembly superoptimizer, is not as closely
+related to my research. STOKE employs random perturbations on entire
+assembly-language functions to optimize the code.
+
+Several recent projects have shifted their focus from optimizing
+individual programs to generating program rewrite rules.
+%
+OptGen~\cite{optgen} discovers scalar peephole optimizations that
+conform to a specific syntactic form.
+%
+Even with small rewrite sizes, it identified numerous optimizations
+missing from the GCC and LLVM.
+%
+VeGen~\cite{vegen} generates SLP vectorization rules—an SLP vectorizer
+combines a set of scalar operations into vector instructions. VeGen
+parses the Intel Intrinsics Guide to construct pattern matchers for
+x86 vector instructions. It applies these pattern matchers to the
+input scalar program and substitutes scalar expressions with vector
+instructions when a profitable match is found. VeGen employs syntactic
+pattern matching instead of solver-based equivalence/refinement
+checking.
+%
+Diospyros~\cite{diospyros} is another vector rewrite rule generator.
+It adopts an equality saturation~\cite{equalitysat} and uses a
+translation validator to discard unsuitable candidates.
+%
+As a tool based on equality saturation, Diospyros constructs its
+search space using existing rewrite rules.
+
+\emph{Program synthesis} -- generating implementations that adhere to
+a given specification, is the essential technique in Minotaur and
+SCCL.
+%
+Rake~\cite{rake} performs instruction selection for vectorized Halide
+expressions using a two-stage synthesis algorithm.
+%
+Cowan et al.~\cite{ml_syn} synthesizes quantized machine learning
+kernels, introducing two sketches: a compute sketch for matrix
+multiplication and a reduction sketch to gather computation results in
+the correct registers.
+%
+It relies on Rosette~\cite{rosette} to generate an efficient NEON
+ implementation that satisfies the specifications for both sketches.
+ %
+SwizzleInventor~\cite{swizzleinventor} synthesizes data movement
+instructions for a GPU compute kernel. SwizzleInventor requires
+user-defined sketches to describe the non-swizzle part of the program.
+
+\section{Conclusion}
+
+This research proposal outlines an approach to leveraging program
+synthesis for efficient optimization of novel instructions on emerging
+architectures. The project's success will contribute to the
+development of highly optimized, adaptive, and intelligent code
+generation techniques, enabling improved performance on cutting-edge
+hardware systems.

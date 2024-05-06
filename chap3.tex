@@ -1,3 +1,63 @@
 \chapter{Loop and SIMD Verification}
 
 
+Alive2 performs bounded translation validation by unrolling loops in
+the source and target functions by a specified factor. Thus, it will
+find any failure of refinement that is triggered within the specified
+bound, and will miss refinement failures that require more loop
+iterations to manifest. Alive2 implements Tarjan-Havlak’s loop
+analysis algorithm [14] for recognizing the loops in a function and
+their nesting relation. The result of the analysis is a loop nesting
+forest (a collection of trees). In a nesting tree, each node
+represents a loop header and its children are the headers of the
+immediately nested loops.
+
+Alive2 unrolls loops inside-out by traversing each loop nesting tree
+in post-order with a DFS. An advantage of this order is that the
+number of unrolls is linear in the number of loops and unroll factor
+instead of being exponential if done in the reverse order.
+
+Alive2 unrolls a loop by repeatedly duplicating the loop until the
+unroll factor is reached. After duplication, three things need fixing:
+(1) instruction operands, (2) targets of jump instructions, and (3)
+introduce/patch $\phi$ nodes.
+
+Operands are patched during basic block duplication. Alive2 maintains
+a map that records the duplicates of each of the original SSA values.
+When an instruction is duplicated, its operands are replaced with the
+latest duplicate in this map.
+
+Jump targets are patched by replacing each target with its next
+duplicate. If no such basic block (BB) exists, it means it is a
+backedge in the last unroll. We redirect these jumps to a special sink
+BB. The reachability domain of the sink BB is negated and added to the
+precondition of its respective function. Since the amount of unrolled
+computation of the source/target functions may not be synchronized
+(e.g., for loop-manipulating optimizations), we need to restrict
+refinement checking such that the control flow cannot reach any of the
+sink BBs. The usage of sink BBs allows us to avoid false positives,
+but it prevents us from supporting infinite loops since we can only
+check refinement of paths that reach a return instruction.
+
+Some instructions inside a loop may have their result used outside the
+loop. We need to patch such users so they observe the right values
+depending on how many loop iterations are executed. We implemented a
+conservative solution with three cases: patch existing $\phi$ nodes
+(just add more predecessors), introduce a new $\phi$ when the loop has
+a single exit to a BB that dominates [7] the user’s BB, and otherwise
+fallback to using memory. Complex cases may require introducing
+several $\phi$ nodes [3]; we introduce a new stack variable to avoid
+having to maintain the SSA form altogether.
+
+
+Picking the right unroll factor involves a tradeoff between coverage
+and run time. We note that the unroll factor should be at least two
+for optimizations that do not manipulate loops so we can cover the
+backedge entry in $\phi$ nodes. For loop-manipulating optimizations,
+this may have to go as high as 64, depending on the optimization.
+Vectorization may optimize, e.g., 32 iterations of the source loop
+into a single (vectorized) iteration, hence we need to unroll the
+source loop at least 64 times so it covers two iterations of the
+target loop.
+
+m
