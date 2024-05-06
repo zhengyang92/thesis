@@ -1,22 +1,21 @@
 \chapter{Synthesizing Optimal Collective Algorithms}
-
 \newcommand{\CC}{C\nolinebreak\hspace{-.05em}\raisebox{.4ex}{\tiny\bf +}\nolinebreak\hspace{-.10em}\raisebox{.4ex}{\tiny\bf +}}
 \def\CC{{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\tiny\bf ++}}}
 
-\newcommand{\gathercoll}{Gather}
-\newcommand{\allgather}{Allgather}
-\newcommand{\scatter}{Scatter}
-\newcommand{\reduce}{Reduce}
-\newcommand{\broadcast}{Broadcast}
-\newcommand{\reducescatter}{Reducescatter}
-\newcommand{\allreduce}{Allreduce}
-\newcommand{\alltoall}{Alltoall}
+\newcommand{\gathercoll}{Gather\xspace}
+\newcommand{\allgather}{Allgather\xspace}
+\newcommand{\scatter}{Scatter\xspace}
+\newcommand{\reduce}{Reduce\xspace}
+\newcommand{\broadcast}{Broadcast\xspace}
+\newcommand{\reducescatter}{Reducescatter\xspace}
+\newcommand{\allreduce}{Allreduce\xspace}
+\newcommand{\alltoall}{Alltoall\xspace}
 
-\newcommand{\dgxone}{DGX-1}
-\newcommand{\dgxtwo}{DGX-2}
-\newcommand{\amd}{AMD}
+\newcommand{\dgxone}{DGX-1\xspace}
+\newcommand{\dgxtwo}{DGX-2\xspace}
+\newcommand{\amd}{AMD\xspace}
 
-\newcommand{\chunkstep}[2]{$#1$-chunk $#2$-step}
+\newcommand{\chunkstep}[2]{$#1$-chunk $#2$-step\xspace}
 
 
 \newcommand{\tool}{SCCL}
@@ -34,9 +33,9 @@
 % \newcommand{\Ite}[3]{\text{if }#1\text{ then }#2\text{ else }#3}
 
 % Synthesis stuff
-\newcommand{\collectiveproblem}{\textsc{SynColl}}
-\newcommand{\bcastproblem}{\textsc{SynCollBcast}}
-\newcommand{\reducingproblem}{\textsc{SynCollReduce}}
+\newcommand{\collectiveproblem}{\textsc{SynColl}\xspace}
+\newcommand{\bcastproblem}{\textsc{SynCollBcast}\xspace}
+\newcommand{\reducingproblem}{\textsc{SynCollReduce}\xspace}
 \newcommand{\size}{P}
 \newcommand{\ids}{I}
 \newcommand{\pre}{\mathit{pre}}
@@ -54,10 +53,10 @@
 \newcommand{\send}[3]{\mathit{snd}_{#1,#2,#3}}
 \newcommand{\qouta}{\mathit{Q}}
 
-\newcommand{\broadcasting}{non-com\-bin\-ing}
-\newcommand{\broadcastingCap}{Non-com\-bin\-ing}
-\newcommand{\reducing}{com\-bin\-ing}
-\newcommand{\reducingCap}{Com\-bin\-ing}
+\newcommand{\broadcasting}{non-com\-bin\-ing\xspace}
+\newcommand{\broadcastingCap}{Non-com\-bin\-ing\xspace}
+\newcommand{\reducing}{com\-bin\-ing\xspace}
+\newcommand{\reducingCap}{Com\-bin\-ing\xspace}
 
 \newcommand{\etal}{\textit{et al}.}
 
@@ -68,4 +67,4 @@
 \input{collective_synthesis/lowering.tex}
 \input{collective_synthesis/evaluation.tex}
 \input{collective_synthesis/related.tex}
-m\input{collective_synthesis/conclusion.tex}
+\input{collective_synthesis/conclusion.tex}:

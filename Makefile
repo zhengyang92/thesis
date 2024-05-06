@@ -29,6 +29,7 @@ watch:
 clean:
 	rm -f *.aux *.bbl *.blg *.log *.out $(PAPER).pdflatex $(PAPER).pdf
 	rm -f $(DRAWIO_PDFS)
+	rm -f *.fls *.fdb_latexmk *.synctex.gz *.lof *.lot *.toc
 
 figures/%.pdf : figures/%.drawio
 	$(DRAWIO) -x -f pdf -o $@ $<
