@@ -1,12 +1,11 @@
 %%% -*-LaTeX-*-
 
 \chapter{Background}
-
-
-\
+\label{chap:background}
 
 
 \section{Superoptimization}
+\label{sec:superoptimization}
 
 
 Superoptimization is a technique in computer science aimed at finding
@@ -27,8 +26,40 @@ superoptimizer would test all possible combinations of instructions
 and compare the output against the original function to ensure
 correctness.
 
-\section{Vector Processing Units (VPUs)}
+\section{SIMD}
 
+
+SIMD stands for Single Instruction, Multiple Data, a type of parallel
+computing architecture found within a CPU or GPU. It allows for the
+execution of the same operation on multiple data points
+simultaneously, making it highly effective for tasks that require the
+same processing to be applied to large sets of data. Here's a detailed
+look at SIMD and its key aspects:
+
+
+SIMD exploits data-level parallelism by applying a single instruction
+to multiple data points at once. This is different from multiple
+instruction, multiple data (MIMD) architectures where different
+processors execute different instructions on different data. By
+processing multiple data points simultaneously, SIMD can significantly
+speed up computations, especially in applications that involve large
+arrays of data such as images, audio, and video streams.
+
+SIMD operations are often carried out by vector processors or vector
+units within a CPU. These processors have registers that can hold
+multiple data elements and execute vectorized instructions on them.
+
+
+Many CPU architectures include SIMD instruction set extensions that
+enhance their ability to perform specific types of parallel
+operations. Common examples include: Intel’s MMX and SSE (Streaming
+SIMD Extensions): These extensions add new instructions and larger
+registers to handle SIMD operations more efficiently. ARM’s NEON: This
+is ARM’s equivalent of SIMD for its processor architectures, used
+extensively in mobile devices. AVX (Advanced Vector Extensions) by
+Intel: This offers enhanced performance and higher bit rates for
+processing, suitable for scientific computations and high-performance
+tasks.
 
 \section{Vectors Support in LLVM}
 
