@@ -42,22 +42,19 @@ traditional compilers. The results of this research will demonstrate
 the potential of program synthesis as a powerful tool for optimizing
 software for emerging architectures.
 
-First and foremost, we present a formal framework for program refinement
-checking .
+We present Minotaur, a superoptimizer that uses program synthesis to
+optimize LLVM IR code. Minotaur extracts program slices from LLVM IR
+code, and uses an SMT solver to find optimized versions of these
+slices. Minotaur is designed to work within the LLVM optimization
+pipeline, and can be used to discover new optimizations that are
+missed by traditional compilers.
 
-Then we present Minotaur, a superoptimizer that uses program synthesis
-to optimize LLVM IR code. Minotaur extracts program slices from LLVM IR
-code, and uses an SMT solver to find optimized versions of these slices.
-Minotaur is designed to work within the LLVM optimization pipeline, and
-can be used to discover new optimizations that are missed by traditional
-compilers.
-
-Finally, we present SCCL, a program synthesizer that optimizes collective
-algorithms for parallel computation. SCCL uses domain-specific knowledge
-about collective algorithms to generate highly optimized code for
-specific architectures. SCCL is designed to work with MPI and OpenMP
-applications, and can be used to improve the performance of parallel
-applications on novel architectures.
+We present SCCL, a program synthesizer that optimizes collective
+algorithms for parallel computation. SCCL uses domain-specific
+knowledge about collective algorithms to generate highly optimized
+code for specific architectures. SCCL is designed to work with MPI and
+OpenMP applications, and can be used to improve the performance of
+parallel applications on novel architectures.
 
 
 
