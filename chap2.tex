@@ -27,7 +27,7 @@ and compare the output against the original function to ensure
 correctness.
 
 \section{SIMD}
-
+\label{sec:simd}
 
 SIMD stands for Single Instruction, Multiple Data, a type of parallel
 computing architecture found within a CPU or GPU. It allows for the
@@ -49,7 +49,6 @@ SIMD operations are often carried out by vector processors or vector
 units within a CPU. These processors have registers that can hold
 multiple data elements and execute vectorized instructions on them.
 
-
 Many CPU architectures include SIMD instruction set extensions that
 enhance their ability to perform specific types of parallel
 operations. Common examples include: Intel’s MMX and SSE (Streaming
@@ -62,7 +61,59 @@ processing, suitable for scientific computations and high-performance
 tasks.
 
 \section{Vectors Support in LLVM}
+\label{sec:llvm-vectors}
 
+LLVM is a popular open-source compiler infrastructure that supports
+various programming languages and architectures. It provides a
+high-level intermediate representation (IR) that can be optimized and
+compiled to machine code for different platforms. LLVM includes
+support for vector operations, which allow programmers to work with
+vectors of data efficiently. Here are some key aspects of vectors
+support in LLVM:
+
+LLVM provides robust support for vector operations, essential for
+optimizing performance in applications that can benefit from SIMD
+(Single Instruction, Multiple Data) capabilities. Here’s a detailed
+overview of how LLVM handles vector support:
+
+\begin{itemize}
+
+\item Vector types: LLVM defines vector types that represent arrays of
+  elements of the same type. For example, a vector type might be
+  defined as <4 x i32>, representing a vector of four 32-bit integers.
+  These types can be used in LLVM IR to perform operations on vectors
+  of data.
+
+\item Vector operations: LLVM provides a set of vector operations that
+  work on vector types. These operations include arithmetic operations,
+  logical operations, shuffling, and other vector-specific
+  instructions. Programmers can use these operations to write
+  high-performance code that takes advantage of SIMD capabilities.
+
+\item Target-specific optimizations: LLVM can generate target-specific
+  code that leverages the SIMD capabilities of the underlying
+  hardware. This allows LLVM to generate efficient code that takes
+  full advantage of the vector units available on modern processors.
+
+\item Vectorization: LLVM includes a vectorizer that can automatically
+  transform scalar code into vectorized code. The vectorizer analyzes
+  loops and other code patterns to identify opportunities for
+  vectorization, improving performance by utilizing SIMD
+  instructions.
+
+\item Intrinsic functions: LLVM provides intrinsic functions that allow
+  programmers to directly access SIMD instructions provided by the
+  target architecture. These intrinsics provide a way to write
+  low-level code that takes full advantage of the vector units
+  available on the hardware.
+
+\item Optimization passes: LLVM includes optimization passes that can
+    transform and optimize vector code. These passes can improve the
+    performance of vectorized code by applying various optimizations
+    such as loop unrolling, instruction scheduling, and register
+    allocation.
+
+\end{itemize}
 
 
 
