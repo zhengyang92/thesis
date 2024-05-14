@@ -284,13 +284,64 @@ SCCL archives a 1.64x speedup on All Reduce, a 1.5x speedup on All Gather
 over NCCL.
 
 
-\section{Dissertation Overview}
-
-
 
 \section{Contributions}
 
-The main contributions of this dissertation are as follows:
+Overall my work consists of two main parts: Minotaur, a synthesizing
+superoptimizer for LLVM IR, and SCCL, a synthesizer for collective
+communication algorithms. The main contributions of this dissertation
+are as follows:
+
+\emph{Minotaur: A synthesis-based superoptimizer} I developed
+Minotaur, a synthesizing superoptimizer for the LLVM intermediate
+representation (LLVM IR) that focuses on LLVM's floating point
+operations, portable vector operations as well as its Intel-specific
+intrinsics. Specifically, I made the following contributions:
+
+\begin{itemize}
+    \item I designed and implemented a domain-specific program
+    transformer that extracts an SSA value from an LLVM function,
+    along with context about how that value was computed.
+    Extracting enough context to permit interesting optimizations,
+    without extracting so much context that the underlying SMT
+    solver was overwhelmed, was an interesting empirical problem.
+
+    \item I created a synthesis engine that searches for cheaper code
+    sequences; it enumerates partially symbolic candidates where the
+    instructions are concrete, but data values are symbolic.
+    \item I developed infrastructure for caching optimizations and also
+    for applying them to code that is being compiled.
+    %
+    All together, these elements run inside of an LLVM optimization pass.
+    \item I performed a detailed evaluation of Minotaur's ability to
+    speed up code, showing that it can find numerous optimziations that
+    LLVM fails to perform, and also that it can achieve speedups on a
+    variety of real-world libraries and benchmarks.
+\end{itemize}
+
+\emph{SCCL: A Collective Algorithm Synthesizer} In addition to
+Minotaur, I and my collaborators also developed SCCL, a synthesizer
+for collective communication algorithms. We've made the following
+contributions:
+
+\begin{itemize}
+\item A formalization of the synthesis problem for broadcasting
+collectives.
+
+\item A general strategy for encoding the synthesis problem for
+collective communications algorithms into the quantifier-free linear
+integer arithmetic (QF\_LIA) sub-logic of the SMT-LIB logic.
+
+\item A reduction from the synthesis problem for reducing collectives
+to that for broadcasting collectives.
+
+\item A description of how SCCL generates efficient code for the
+algorithms we synthesize on nodes with NVIDIA or AMD GPUs.
+
+\item An evaluation of SCCL's generated algorithms on common server
+topologies for deep learning workloads and a comparison against NCCL.
+
+\end{itemize}
 
 \section{Dissertation Outline}
 
