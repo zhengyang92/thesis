@@ -3,18 +3,17 @@
 
 My thesis is as follows:
 %
-Utilizing program synthesis can be used in performance optimization
-for novel hardware platforms, by automatically generating optimized
-and verifiable code sequences and algorithms that are tailored to the
-specific features and configurations of the target architecture.
+Program synthesis can be used in performance optimization for novel
+hardware platforms, by generating optimized and verifiable code that
+are tailored to the specific features and configurations of the target
+architecture.
 %
-Specifically, by leveraging program synthesis techniques, we can
-generate optimal collective algorithms that are proven to be correct
-and optimal for a specific network topology,
-%
-and we can also automatically generate verifiably correct peephole
-optimizations for floating point and vector instructions that are
-missing from a commodity compiler.
+Specifically, this dissertation proposes a systematic approach to
+synthesizing high-performance collective communication algorithms
+that are proven to be correct and optimal for a given network topology, and
+a synthesizing superoptimizer that can automatically generate peephole
+optimizations for vector instructions that are missing from a commodity
+compiler.
 
 \section{Motivation}
 
@@ -57,11 +56,6 @@ Moreover, programs optimized in this way are likely not portable and
 may not be optimal if switching to different hardware platforms.
 
 
-
-
-
-
-
 Another approach is to use optimizing compilers. However, existing
 compilers may not fully exploit the capabilities of novel
 architectures, leading to suboptimal performance.
@@ -92,6 +86,7 @@ optimizations may interfere with each other or have trade-offs in
 terms of code size, execution speed, or memory usage. Compilers may
 prioritize certain optimizations over others based on their
 cost-benefit analysis.
+
 
 
 
