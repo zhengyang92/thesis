@@ -9,11 +9,11 @@ are tailored to the specific features and configurations of the target
 architecture.
 %
 Specifically, this dissertation proposes a systematic approach to
-synthesizing high-performance collective communication algorithms
-that are proven to be correct and optimal for a given network topology, and
+synthesizing high-performance collective communication algorithms that
+are proven to be correct and optimal for a given network topology, and
 a synthesizing superoptimizer that can automatically generate peephole
-optimizations for vector instructions that are missing from a commodity
-compiler.
+optimizations for floating point and vector instructions that are
+missing from a commodity compiler.
 
 \section{Motivation}
 
@@ -41,32 +41,48 @@ features effectively requires more sophisticated optimization
 techniques.
 
 One approach to addressing these challenge is that human experts
-rewrite the code from scratch in low level languages, such as assembly
+rewrite the code from scratch in low level languages or APIs, such as assembly
 and C with intrinsics, to take advantage of the unique features of the
-architecture.
+architecture. However, this has several drawbacks:
+
+\begin{itemize}
 %
-However, because of the increasing complexity of modern hardware, this
-process is time-consuming and error-prone.
-%
-On the other hand, the complexity of modern software makes it even
+\item Because of the increasing complexity of modern hardware,
+implementing with low level languages or API is error-prone and
+time-consuming. Human may need to spend a significant amount of time
+to understand the architecture, for example, the Intel x86 programming
+manual is over 4000 pages long. TODO citation. Code implemented in low
+level languages or APIs are also difficult to understand, increasing
+the likelihood of bugs and requiring more time for testing and
+debugging.
+
+\item On the other hand, the complexity of modern software makes it even
 more difficult for human experts to make the right decisions about
 instruction selection and scheduling, as a result, experts are likely
 to focus on only a small subset of the code, such as inner loops,
-rather than the entire application.
-%
-Moreover, programs optimized in this way are likely not portable and
+rather than the entire application, which may lead to suboptimal
+performance.
+
+\item Programs optimized in this way are likely not portable and
 may not be optimal if switching to different hardware platforms.
+%
+Either the code needs to be rewritten for each new platform, or the
+code needs to be maintained and updated as the architecture evolves.
+
+\end{itemize}
+
 
 
 Another approach is to use optimizing compilers. However, existing
 compilers may not fully exploit the capabilities of novel
 architectures, leading to suboptimal performance.
-%
+
 1. Compiler optimizations are not complete: they may not be able to
 discover all possible optimizations that can be applied to a program.
 Compiler often perform local optimizations within a loop or basic
 block, but they may not be able to perform global optimizations that
 require the analysis of the entire program.
+
 
 
 or the limitations of the compiler's
