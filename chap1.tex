@@ -1,18 +1,20 @@
 \chapter{Introduction}
 \label{chap:intro}
 
-
-My thesis is as follows: Program synthesis can
-help narrow the gap between the capabilities of novel architectures and
-
-
-
+My thesis is as follows:
 %
-Specifically, by leveraging program synthesis
-techniques, we can generate optimal collective algorithms that can be
-proven to be correct and optimal for a specific topology, and we can
-also automatically generate peephole optimizations for vector
-instructions.
+Utilizing program synthesis can be used in performance optimization
+for novel hardware platforms, by automatically generating optimized
+and verifiable code sequences and algorithms that are tailored to the
+specific features and configurations of the target architecture.
+%
+Specifically, by leveraging program synthesis techniques, we can
+generate optimal collective algorithms that can be proven to be
+correct and optimal for a specific topology,
+%
+and we can also automatically generate verifiably correct peephole
+optimizations for vector instructions that are missing from a
+commodity compiler.
 
 
 \section{Motivation}
@@ -23,7 +25,6 @@ Faster software can lead to better user experiences, more efficient
 resource utilization, and lower costs. Developers and researchers have
 spent a significant amount of time optimizing software to run faster
 and more efficiently.
-
 
 However, optimizing software is a challenging task, especially in the
 post Moore's Law area, the performance gains from improvements in
@@ -36,9 +37,9 @@ These architectures offer unique features and capabilities that can
 significantly enhance performance, but leveraging these features
 effectively requires specialized knowledge and expertise.
 
-One approach to addressing these challenge is human experts write low
-level code, such as assembly, to take advantage of the unique features
-of the architecture.
+One approach to addressing these challenge is that human experts write
+low level code from scratch, such as assembly, to take advantage of
+the unique features of the architecture.
 %
 However, this process is time-consuming and
 error-prone. Usually, programs optimized in this way are not
@@ -49,6 +50,9 @@ human experts to fully understand and optimize the code, as a result,
 such approach usually only applies to small compute kernels, rather than
 the entire application.
 %
+Even with the best human experts, the different in the target
+
+
 
 
 
@@ -58,14 +62,31 @@ architectures, leading to suboptimal performance.
 %
 1. Compiler optimizations are not complete: they may not be able to
 discover all possible optimizations that can be applied to a program.
+Compiler often perform local optimizations within a loop or basic
+block, but they may not be able to perform global optimizations that
+require the analysis of the entire program.
+
+
+or the limitations of the compiler's
+understanding of the target architecture.
+New instructions and features in novel architectures may not be
+supported by existing compilers.
 %
 2. Compiler optimizations are not always correct, and newly introduced
 optimizations are more likely to be incorrect, leading to incorrect
 code generation.
 %
 3. Compiler optimizations are not always efficient: although compilers
-uses different heuristics to determine the best optimization for an
-architecture, these heuristics may not be able to fully capture
+may use different heuristics to determine the best optimization for an
+architecture, these heuristics may not be able to fully capture the
+characteristics of the architecture.
+%
+4. Optimization goals are not always aligned: Some
+optimizations may interfere with each other or have trade-offs in
+terms of code size, execution speed, or memory usage. Compilers may
+prioritize certain optimizations over others based on their
+cost-benefit analysis.
+
 
 
 
