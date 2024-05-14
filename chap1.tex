@@ -44,16 +44,19 @@ One approach to addressing these challenge is that human experts write
 low level code from scratch, such as assembly, to take advantage of
 the unique features of the architecture.
 %
-However, this process is time-consuming and
-error-prone. Usually, programs optimized in this way are not
-portable and may not be optimal for different architectures.
+However, because of the increasing complexity of modern hardware, this
+process is time-consuming and error-prone.
 %
-Moreover, the complexity of modern software makes it difficult for
-human experts to fully understand and optimize the code, as a result,
-such approach usually only applies to small compute kernels, rather than
-the entire application.
+On the other hand, the complexity of modern software makes it even
+more difficult for human experts to make the right decisions about
+instruction selection and scheduling, as a result, experts are likely
+to focus on only a small subset of the code, such as inner loops,
+rather than the entire application.
 %
-Even with the best human experts, the different in the target
+Moreover, programs optimized in this way are likely not portable and
+may not be optimal if switching to different hardware platforms.
+
+
 
 
 
