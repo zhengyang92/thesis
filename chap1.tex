@@ -3,7 +3,7 @@
 
 
 My thesis is as follows: Program synthesis can be used to
- utilize novel instructions and features on emerging
+utilize novel instructions and features on emerging
 architectures. Specifically, by leveraging program synthesis
 techniques, we can generate optimal collective algorithms that can be
 proven to be correct and optimal for a specific topology, and we can
@@ -13,31 +13,50 @@ instructions.
 
 \section{Motivation}
 
-Efficient program execution has always been a cornerstone of software
-development, especially in the era of complex computational tasks and
-diverse hardware architectures. Traditional methods of performance
-optimization often require manual intervention, extensive analysis,
-and iterative improvements, which can be time-consuming and may not
-fully exploit the optimization potential of modern computing
-resources.
+Performance is vital in computer software. Faster software can lead to
+better user experiences, more efficient resource utilization, and
+lower costs. As a result, developers and researchers are constantly
+looking for ways to optimize software to run faster and more
+efficiently.
 
-The emergence of novel architectures, such as GPUs, VPUs, and
-specialized accelerators, has further complicated the optimization
-process. These architectures offer unique features and capabilities
-that can significantly enhance performance, but leveraging these
-features effectively requires specialized knowledge and expertise.
+However, optimizing software is a challenging task, especially in the
+era where Moore's Law is no longer valid: the performance gains from
+improvements in single core performance are diminishing, and the
+complexity of software is increasing.
+
+The emergence of novel architectures, such as novel SIMD instructions
+and specialized accelerators, has further complicated the optimization.
+These architectures offer unique features and capabilities that can
+significantly enhance performance, but leveraging these features
+effectively requires specialized knowledge and expertise.
+
+One approach to addressing these challenge is human experts manually
+optimizing code. However, this process is time-consuming and
+error-prone. Usually, programs optimized in this way are not
+portable and may not be optimal for different architectures.
+
+Another approach is to use optimizing compilers. However, existing
+compilers may not fully exploit the capabilities of novel
+architectures, leading to suboptimal performance.
+
+
+
+Furthermore, even with the best compilers and human experts, the
+different in the target architecture may require different
+optimization goals. For example, a
+
+
+
+
+
+
+
+
 Furthermore, existing compilers and optimization tools may not fully
 support or exploit the capabilities of these architectures, leading to
 suboptimal performance. As a result, there is a growing need for
 advanced optimization techniques that can automatically generate
 highly optimized code tailored to specific hardware architectures.
-
-With the recent advances in SMT solving and program synthesis
-techniques, there is an opportunity to develop tools and frameworks
-that can automatically generate optimized code for novel
-architectures.
-
-
 
 A key challenge in optimizing programs for new architectures is the
 rapid pace of innovation in hardware design. Novel architectures
@@ -50,12 +69,22 @@ experts can manually optimize code, but this process is time-consuming
 and may not fully exploit the capabilities of the hardware.
 
 
+
+
+
+
 Some of the challenges in optimizing programs for new architectures
 include:
 
 \begin{itemize}
 \item \textbf{Architecture-specific features}: New architectures often
 \end{itemize}
+
+
+With the recent advances in SMT solving and program synthesis
+techniques, there is an opportunity to develop tools and frameworks
+that can automatically generate optimized code for novel
+architectures.
 
 
 \section{Dissertation Overview}
