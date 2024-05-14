@@ -81,7 +81,7 @@ architectures.
 %
 Advanced optimization techniques such as loop transformations,
 peephole optimization, and automatic vectorizers, are performed by
-optimizing compilers to improve the performance of the generated code.
+commodity compilers to improve the performance of the generated code.
 %
 However, optimizing compilers have several limitations, making them
 less effective in optimizing code for novel architectures:
@@ -100,16 +100,19 @@ compiler, for example, a compiler may not be able to perform
 inter-procedural optimizations that require analyzing the entire
 program, which is computationally expensive.
 %
-Moreover, the lack of platform-specific knowledge may prevent
-compilers from generating optimal code for a specific architecture.
+Furthermore, existing compilers and optimization tools may not fully
+support or exploit the capabilities of these architectures, leading to
+suboptimal performance.
 %
 As a result, as of May 13, 2024, there are 650 open Github issues
 that are tagged with "missed-optimization" in the LLVM repository,
 indicating that there are still many optimizations to be discovered.
 
-\item Compiler optimizations are not always correct, and newly introduced
-optimizations are more likely to be incorrect, leading to incorrect
-code generation.
+
+\item Compiler optimizations are not always correct, and newly
+introduced optimizations are more likely to be incorrect. Programs
+compiled with incorrect optimizations may produce incorrect results,
+crashes, or security vulnerabilities in runtime.
 %
 Researchers have been working on correctness of
 compiler optimizations for decades, they have developed various
@@ -121,67 +124,164 @@ However, these techniques are not perfect, and there are
 still bugs in the compiler optimizations that are discovered from time
 to time.
 
-\item Compiler optimizations are not always efficient: although compilers
-may use different heuristics to determine the best optimization for an
-architecture, these heuristics may not be able to fully capture the
-characteristics of the architecture.
 
-\item Optimization goals are not always aligned: Some
-optimizations may interfere with each other or have trade-offs in
-terms of code size, execution speed, or memory usage. Compilers may
-prioritize certain optimizations over others based on their
-cost-benefit analysis.
+\item Compilers are usually designed in a way that each optimization
+work in isolation, and the interaction between different optimizations
+are not well understood.
+%
+For example, an early optimization may change the code in a way that
+the later optimization cannot recognize, causing a suboptimal code
+generation.
+%
+Tracing and debugging the interaction between optimizations is hard in
+major commodity compilers, makes it even more difficult to understand
+and diagnose the performance issues.
 
 \item Compiler are not always easy to use. To generate the most
 optimized code, developers need to understand the compiler
 optimization flags and options, and how to use them effectively.
-A wrong optimization flag or option may lead to significant performance
-degradation.
+%
+These are usually not well documented, and developers need to spend
+time to experiment with different flags and options to find the best
+combination.
+%
+A wrong optimization flag or option may lead to significant
+performance degradation.
 
 \end{itemize}
 
+The limitations of human experts and optimizing compilers in
+optimizing code for novel architectures have motivated this research
+to explore program synthesis as an alternative approach to
+performance optimization.
 
+\section{Program Synthesis for Performance Optimization}
 
-
-
-
-
-
-
-
-Furthermore, existing compilers and optimization tools may not fully
-support or exploit the capabilities of these architectures, leading to
-suboptimal performance. As a result, there is a growing need for
-advanced optimization techniques that can automatically generate
-highly optimized code tailored to specific hardware architectures.
-
-A key challenge in optimizing programs for new architectures is the
-rapid pace of innovation in hardware design. Novel architectures
-introduce new instructions and features that can significantly improve
-performance, but existing compilers and human experts may
-struggle to fully utilize these features. Optimizing compilers rely on
-heuristics to determine the best optimization strategies, which may not
-be tailored to the specific features of new architectures. Human
-experts can manually optimize code, but this process is time-consuming
-and may not fully exploit the capabilities of the hardware.
-
-
-
-
-
-
-Some of the challenges in optimizing programs for new architectures
-include:
+Program synthesis is a promising approach to address the challenge of
+optimizing software for novel architectures.
+%
+At its core, program synthesis searches for programs that meet a
+specified set of requirements.
+%
+Nowadays, the advances in SMT solvers and increased computation power
+have made program synthesis a more viable choice for code generation.
+%
+There are several reasons why program synthesis can help address the
+challenge:
 
 \begin{itemize}
-\item \textbf{Architecture-specific features}: New architectures often
+    \item \textbf{Semantic as a first-class citizen}: Instead of using
+    compiler heuristics where the semantics of an instruction is treated
+    as a black box, program synthesis can take the semantics of an
+    instruction as input, and generate code that takes full advantage
+    of the instruction. This is particularly useful for novel
+    architectures where the semantics of the instructions are not well
+    handled by existing compilers.
+
+    \item \textbf{Domain-specific optimizations}: Program synthesis
+    can take into account the unique characteristics of a specific
+    domain, such as collective algorithms in parallel computation, to
+    create highly optimized code.
+    %
+    This domain-aware optimization further enhances the performance of
+    applications on new architectures.
+
+    \item \textbf{Correctness and Verifiability}: Program synthesis
+    can generate code that is correct by construction, and can be
+    verified automatically.
+    %
+    This is particularly important for safety-critical applications,
+    where correctness is paramount.
+
+    \item \textbf{Optimality}: Program synthesis usually explores the
+    entire search space of possible optimizations, and find the
+    optimal solution that meets the requirements. This is in contrast
+    to optimizing compilers that use heuristics to determine the best
+    optimization strategies. With program synthesis, we can be sure
+    that the generated code is optimal with respect to the
+    requirements.
+
+    \item \textbf{Continuous improvement}: As an architecture evolves
+    and new features are introduced, program synthesis techniques can
+    be updated to incorporate these advancements, ensuring that the
+    generated code remains optimized over time.
 \end{itemize}
 
+This dissertation focuses on developing program synthesizers that aim
+to efficiently optimize software for emerging architectures.
 
-With the recent advances in SMT solving and program synthesis
-techniques, there is an opportunity to develop tools and frameworks
-that can automatically generate optimized code for novel
-architectures.
+
+\section{Minotaur: A Synthesizing Superoptimizer}
+
+To address these challenges, this dissertation proposes a synthesizing
+superoptimizer, called Minotaur, that can automatically generate
+peephole optimizations for floating point and vector instructions that
+are missing from a commodity compiler.
+
+Minotaur is a synthesis-based superoptimizer for the LLVM intermediate
+representation (LLVM IR) that focuses on LLVM's floating point operations,
+portable vector operations as well as its Intel-specific intrinsics.
+The objective of Minotaur is to automatically identify valuable
+optimizations that LLVM is currently unable to perform.
+Minotaur is designed to be used as a drop-in replacement for Clang/LLVM.
+Minotaur is hundreds of times slower than \texttt{clang -O3} when its
+cache is cold, but with a warm cache, it is just 3\% slower, when
+building the SPEC CPU 2017 benchmarks.
+
+Minotaur works on code fragments that do not span multiple loop
+iterations; it is based on the assumption that existing compiler
+optimization passes such as loop unrolling, software pipelining, and
+automatic vectorization will create the necessary opportunities for
+its optimizations to work effectively.
+
+Minotaur uses and enumerative search algorithm to explore the space of
+possible optimizations, and a refinement checker to verify the
+correctness of the optimizations.
+Minotaur uses a cost model to evaluate the performance of the
+optimizations, and a cache to store the discovered optimizations.
+
+Minotaur finds many profitable optimizations that are missing from
+LLVM, I've sent patches that implement those new optimizations to the
+LLVM community. Minotaur achieves speedups on various benchmarks and
+real-world applications, including the integer parts of SPEC CPU2017,
+GMP, and libYUV. Minotaur gets an average 4\%, 0.5\% and 1.1\% speedups
+on GMP, libYUV and SPEC CPU17, respectively. The maximum speedup on
+real-world applications is 15\% in GMP. TODO: update
+
+\section{SCCL: A Collective Algorithm Synthesizer}
+
+In addition to Minotaur, this dissertation also proposes a synthesizer
+for collective communication algorithms, called SCCL, that can
+automatically generate high-performance communication kernels for
+specific network topologies.
+
+The convergence of recent trends of training and deploying large
+models, and the stagnation of processors' performance due to Moore's
+Law, has prompted system designers to incorporate innovative
+high-bandwidth interconnect networks within and between nodes in
+distributed clusters. For example, the NVIDIA DGX-1 server features
+two x86 processors and eight GPUs, connected by NVIDIA's NVLink
+network. These network designs are driven not only by the need for
+efficient data transfer, but also by hardware factors such as signal
+integrity, cooling, and physical layout. These novel topologies
+require novel communication kernels to maximize performance.
+Currently, these kernels are created and optimized manually.
+
+SCCL is a program synthesizer that, given a topology, specified as a
+graph with bandwidth constraints on nodes and edges, and a
+communication primitive, specified as the pre- and post-condition on
+data locations, it generates a quantifier-free SMT formula that
+captures the set of all feasible algorithms that implement the
+primitive on the input topology.
+
+SCCL efficiently lowers algorithms to implementations on two systems
+(NVIDIA DGX-1 and Gigabyte AMD Z52) and demonstrates competitive
+performance with hand-optimized collective communication libraries.
+SCCL synthesizes novel latency and bandwidth optimal algorithms not
+seen in the literature on two popular hardware topologies.
+SCCL can be used as a drop-in replacement for NCCL.
+SCCL archives a 1.64x speedup on All Reduce, a 1.5x speedup on All Gather
+over NCCL.
 
 
 \section{Dissertation Overview}
