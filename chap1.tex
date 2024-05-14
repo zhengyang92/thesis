@@ -72,27 +72,47 @@ code needs to be maintained and updated as the architecture evolves.
 \end{itemize}
 
 
-
-Another approach is to use optimizing compilers. However, existing
-compilers may not fully exploit the capabilities of novel
-architectures, leading to suboptimal performance.
-
-1. Compiler optimizations are not complete: they may not be able to
-discover all possible optimizations that can be applied to a program.
-Compiler often perform local optimizations within a loop or basic
-block, but they may not be able to perform global optimizations that
-require the analysis of the entire program.
-
-
-
-or the limitations of the compiler's
-understanding of the target architecture.
-New instructions and features in novel architectures may not be
-supported by existing compilers.
+Another approach is to use an optimizing compilers. People have been
+using optimizing compilers to generate efficient code for decades, and
+optimizing compilers have been proven successful in generating
+efficient code for a wide range of architectures.
 %
-2. Compiler optimizations are not always correct, and newly introduced
+Advanced optimization techniques such as loop unrolling, peephole
+optimization, and automatic vectorizers, are performed by optimizing
+compilers to improve the performance of the generated code.
+%
+However, optimizing compilers have several limitations, making them
+less effective in optimizing code for novel architectures:
+
+\begin{itemize}
+
+    \item Compiler optimizations are not complete: they may not be
+able to discover all possible optimizations that can be applied to a
+program.
+%
+Optimizations might be overlooked by a compiler due to limited
+engineering resources.
+%
+And some of the optimizations might be too complex for a compiler to
+discover, for example,
+compilers often perform local optimizations within a loop or
+basic block, but they may not be able to perform global optimizations
+that require the analysis of the entire program.
+%
+Moreover, the lack of platform-specific knowledge may prevent
+compilers from generating optimal code for a specific architecture.
+%
+As a result, as of May 13, 2024, there are 650 open Github issues
+that are tagged with "missed-optimization" in the LLVM repository,
+indicating that there are still many optimizations to be discovered.
+
+\item Compiler optimizations are not always correct, and newly introduced
 optimizations are more likely to be incorrect, leading to incorrect
 code generation.
+
+
+\end{itemize}
+
 %
 3. Compiler optimizations are not always efficient: although compilers
 may use different heuristics to determine the best optimization for an
