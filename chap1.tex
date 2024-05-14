@@ -72,14 +72,16 @@ code needs to be maintained and updated as the architecture evolves.
 \end{itemize}
 
 
-Another approach is to use an optimizing compilers. People have been
-using optimizing compilers to generate efficient code for decades, and
-optimizing compilers have been proven successful in generating
-efficient code for a wide range of architectures.
+Another approach is to use an optimizing compilers.
 %
-Advanced optimization techniques such as loop unrolling, peephole
-optimization, and automatic vectorizers, are performed by optimizing
-compilers to improve the performance of the generated code.
+Software developers have been using optimizing compilers to generate
+efficient code for decades, and optimizing compilers have been proven
+successful in generating efficient code for a wide range of
+architectures.
+%
+Advanced optimization techniques such as loop transformations,
+peephole optimization, and automatic vectorizers, are performed by
+optimizing compilers to improve the performance of the generated code.
 %
 However, optimizing compilers have several limitations, making them
 less effective in optimizing code for novel architectures:
@@ -90,14 +92,13 @@ less effective in optimizing code for novel architectures:
 able to discover all possible optimizations that can be applied to a
 program.
 %
-Optimizations might be overlooked by a compiler due to limited
+Optimizations might be overlooked by a compiler simply due to limited
 engineering resources.
 %
-And some of the optimizations might be too complex for a compiler to
-discover, for example,
-compilers often perform local optimizations within a loop or
-basic block, but they may not be able to perform global optimizations
-that require the analysis of the entire program.
+Some of the optimizations might be too complex to be implemented in a
+compiler, for example, a compiler may not be able to perform
+inter-procedural optimizations that require analyzing the entire
+program, which is computationally expensive.
 %
 Moreover, the lack of platform-specific knowledge may prevent
 compilers from generating optimal code for a specific architecture.
@@ -109,50 +110,37 @@ indicating that there are still many optimizations to be discovered.
 \item Compiler optimizations are not always correct, and newly introduced
 optimizations are more likely to be incorrect, leading to incorrect
 code generation.
-
-
-\end{itemize}
-
 %
-3. Compiler optimizations are not always efficient: although compilers
+Researchers have been working on correctness of
+compiler optimizations for decades, they have developed various
+techniques including formal verification, fuzzy testing, differential
+testing and translation validation to ensure the correctness of
+validation.
+%
+However, these techniques are not perfect, and there are
+still bugs in the compiler optimizations that are discovered from time
+to time.
+
+\item Compiler optimizations are not always efficient: although compilers
 may use different heuristics to determine the best optimization for an
 architecture, these heuristics may not be able to fully capture the
 characteristics of the architecture.
-%
-4. Optimization goals are not always aligned: Some
+
+\item Optimization goals are not always aligned: Some
 optimizations may interfere with each other or have trade-offs in
 terms of code size, execution speed, or memory usage. Compilers may
 prioritize certain optimizations over others based on their
 cost-benefit analysis.
 
+\item Compiler are not always easy to use. To generate the most
+optimized code, developers need to understand the compiler
+optimization flags and options, and how to use them effectively.
+A wrong optimization flag or option may lead to significant performance
+degradation.
+
+\end{itemize}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Furthermore, even with the best compilers and human experts, the
-different in the target architecture may require different
-optimization goals. For example, a
 
 
 
