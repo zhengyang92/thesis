@@ -38,9 +38,7 @@ compilers.
 We present SCCL, a program synthesizer that optimizes collective
 algorithms for parallel computation. SCCL uses domain-specific knowledge
 about collective algorithms to generate highly optimized code for
-specific architectures. SCCL is designed to work with MPI and OpenMP
-applications, and can be used to improve the performance of parallel
-applications on novel architectures.
-
-
-
+specific architectures. SCCL is designed to be a drop-in replacement for
+existing collective communication libraries, such as NVIDIA NCCL and AMD RCCL,
+and can be used to improve the communication performance of parallel
+applications.
