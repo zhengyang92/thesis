@@ -129,15 +129,44 @@ execute thousands of threads simultaneously, making them well-suited
 for tasks that can be parallelized.
 
 
-\section {Collective Communication Language}
+\section {Collective Communication Library}
 
-Collective communication is a common pattern in parallel computing
-where multiple processes or threads coordinate to exchange data or
-synchronize their operations. Collective communication operations
-include collective reductions, broadcasts, scatter-gather operations,
-and more. A collective communication language is a domain-specific
-language or library that provides high-level abstractions for
-expressing collective communication patterns in parallel programs.
+A collective communication library is a software library that provides
+high-level abstractions for collective communication operations in
+parallel computing. Collective communication operations involve
+multiple processes or threads coordinating to exchange data or
+synchronize their operations. These libraries offer optimized
+implementations of common collective communication patterns.
+A collective communicatoin library usually include following operations:
+
+\begin{itemize}
+    \item Broadcast: A process sends a message to all other processes.
+    \item Scatter: A process sends different parts of an array to
+    different processes.
+    \item Gather: Processes send their data to a single process.
+    \item Reduce: Processes combine their data using an operation like
+    addition or multiplication.
+    \item Allreduce: A combination of reduce and broadcast where all
+    processes receive the result of the reduction.
+    \item Allgather: A combination of gather and broadcast where all
+    processes receive data from all other processes.
+    \item Alltoall: Processes exchange data with all other processes.
+\end{itemize}
+
+
+
+
+There are several collective communication libraries available for
+parallel computing, such as MPI (Message Passing Interface), NCCL
+(NVIDIA Collective Communications Library), and RCCL (Radeon Open
+Compute Collective Library). These libraries provide optimized
+implementations of common collective communication operations and
+enable efficient communication between parallel processes or threads.
+
+
+
+
+
 
 
 
