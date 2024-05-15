@@ -144,16 +144,14 @@ A collective communicatoin library usually include following operations:
     \item Scatter: A process sends different parts of an array to
     different processes.
     \item Gather: Processes send their data to a single process.
-    \item Reduce: Processes combine their data using an operation like
-    addition or multiplication.
+    \item Reduce: Processes combine their data using an operation such as
+    addition.
     \item Allreduce: A combination of reduce and broadcast where all
     processes receive the result of the reduction.
     \item Allgather: A combination of gather and broadcast where all
     processes receive data from all other processes.
     \item Alltoall: Processes exchange data with all other processes.
 \end{itemize}
-
-
 
 
 There are several collective communication libraries available for
@@ -163,15 +161,12 @@ Compute Collective Library). These libraries provide optimized
 implementations of common collective communication operations and
 enable efficient communication between parallel processes or threads.
 
-
-
-
-
-
-
-
-
-
+The collective communication library is widely used in data-parallel
+training of deep learning models, distributed computing, and
+high-performance computing applications. By providing high-level
+abstractions for collective communication operations, these libraries
+simplify the development of parallel applications and enable efficient
+communication between processes or threads.
 
 
 
