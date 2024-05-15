@@ -1,5 +1,5 @@
 PAPER = main
-TEX = $(wildcard *.tex)
+TEX = $(wildcard *.tex) $(wildcard minotaur/*.tex) $(wildcard collective_synthesis/*.tex)
 BIB = main.bib
 FIGS = $(wildcard figures/*.pdf figures/spec/*.pdf)
 DRAWIO_SRCS = $(wildcard figures/*.drawio)

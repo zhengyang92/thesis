@@ -3,6 +3,25 @@
 \chapter{Background}
 \label{chap:background}
 
+\section {Translation Validation}
+
+Translation validation is a technique used to ensure that a program
+preserves its semantics when translated from one representation to
+another. This is particularly important in the context of compilers,
+where a high-level source code is translated into a lower-level
+representation, such as assembly language or machine code. By
+validating the correctness of the translation, we can ensure that the
+compiled program behaves as expected and that the optimizations
+performed by the compiler do not introduce errors.
+
+There are several approaches to translation validation, including
+formal verification, testing, and debugging. Formal verification
+involves mathematically proving that the translation is correct with
+respect to a formal specification of the source code. This can be
+challenging due to the complexity of modern programming languages and
+compilers, but it provides a high level of confidence in the
+correctness of the translation.
+
 
 \section{Superoptimization}
 \label{sec:superoptimization}
@@ -11,14 +30,13 @@
 Superoptimization is a technique in computer science aimed at finding
 the optimal sequence of instructions for a particular task.
 %
- Unlike traditional optimization methods that rely on heuristics or
+Unlike traditional optimization methods that rely on heuristics or
 general rules to improve code efficiency, superoptimization
 systematically searches the space of possible program transformations
 to identify the better sequence of instructions.
 %
 This can result in significantly more efficient code, sometimes
 surpassing what expert programmers or compilers can achieve.
-
 
 The concept of superoptimization was first introduced by Alexia
 Massalin in a 1987 paper, where she described a system for generating
@@ -28,6 +46,20 @@ superoptimizer would test all possible combinations of instructions
 and compare the output against the original function to ensure
 correctness.
 
+STOKE is a superoptimizer that uses stochastic search techniques to
+explore the space of possible instruction sequences and find the most
+efficient code for a given task. STOKE-FP is an extension of STOKE
+that focuses on floating-point operations.
+
+Souper is a superoptimizer that works on LLVM IR, the intermediate
+representation used by the LLVM compiler infrastructure. Souper
+extracts slices of LLVM instructions from a function and uses an SMT
+solver to find optimized versions of these slices. It is designed to
+work within the LLVM optimization pipeline and discover new
+optimizations that traditional compilers might miss.
+
+
+\section {Program Synthesis for domain-specific optimizations}
 
 
 

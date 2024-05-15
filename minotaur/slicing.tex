@@ -55,7 +55,7 @@ described in Section~\ref{sec:rewrite}.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.28\linewidth]{figures/cut-depth.pdf}
+  \includegraphics[width=0.5\linewidth]{figures/cut-depth.pdf}
   \caption{Example of cutting an LLVM function}
   \label{fig:cut-depth}
 \end{figure}
@@ -206,8 +206,8 @@ loop.
 
 
 \begin{algorithm}[tbp]
-  \small
-  \caption{\small{Cut Extraction Algorithm}}
+  %\small
+\caption{Cut Extraction Algorithm}
   \begin{algorithmic}[1]
   \Function{ExtractCut}{\emph{F}: Function, \emph{I}: Instruction, \emph{B}: $\mathbb{N}$}
   \If{$I$ is in a loop}
@@ -358,7 +358,7 @@ the instruction that is the basis for the cut.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.8\linewidth]{figures/slice.pdf}
+  \includegraphics[width=\linewidth]{figures/slice.pdf}
   \caption{Example of cut extraction}
   \label{fig:cut}
 \end{figure}
