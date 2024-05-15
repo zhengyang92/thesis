@@ -9,13 +9,15 @@
 
 
 Superoptimization is a technique in computer science aimed at finding
-the optimal sequence of instructions for a particular task. Unlike
-traditional optimization methods that rely on heuristics or general
-rules to improve code efficiency, superoptimization lstematically
-searches the space of possible program transformations to identify the
-absolute best sequence of instructions, often for a specific hardware
-architecture. This can result in significantly more efficient code,
-sometimes surpassing what expert programmers or compilers can achieve.
+the optimal sequence of instructions for a particular task.
+%
+ Unlike traditional optimization methods that rely on heuristics or
+general rules to improve code efficiency, superoptimization
+systematically searches the space of possible program transformations
+to identify the better sequence of instructions.
+%
+This can result in significantly more efficient code, sometimes
+surpassing what expert programmers or compilers can achieve.
 
 
 The concept of superoptimization was first introduced by Alexia
@@ -27,15 +29,10 @@ and compare the output against the original function to ensure
 correctness.
 
 
-Superoptimization is particularly useful in scenarios where
-performance is critical, such as embedded systems, high-performance
-computing, and real-time applications. By finding the optimal
-instruction sequence, superoptimization can reduce execution time,
 
 
 
-
-\section{SIMD}
+\section{Single Instruction, Multiple Data (SIMD) Parallelism}
 \label{sec:simd}
 
 SIMD stands for Single Instruction, Multiple Data, a type of parallel
@@ -44,7 +41,6 @@ execution of the same operation on multiple data points
 simultaneously, making it highly effective for tasks that require the
 same processing to be applied to large sets of data. Here's a detailed
 look at SIMD and its key aspects:
-
 
 SIMD exploits data-level parallelism by applying a single instruction
 to multiple data points at once. This is different from multiple
@@ -69,7 +65,7 @@ Intel: This offers enhanced performance and higher bit rates for
 processing, suitable for scientific computations and high-performance
 tasks.
 
-\section{SIMD in LLVM}
+\section{SIMD support in LLVM}
 \label{sec:llvm-vectors}
 
 LLVM is a popular open-source compiler infrastructure that supports
@@ -123,6 +119,8 @@ overview of how LLVM handles vector support:
     allocation.
 
 \end{itemize}
+
+
 
 
 
