@@ -208,24 +208,27 @@ other, offline mode can run all synthesis jobs in parallel.
 \begin{figure}[tbp]
   \small
   \begin{tabular}{r c l}
-    \emph{Op} &::=& \emph{Inst} | \emph{Constant} | \emph{Value} \\
-    \emph{Inst}  &::=& (\emph{UnaryOp} \emph{Op}, \emph{Type}) | (\emph{BinaryOp} \emph{Op}, \emph{Op}, \emph{Type}) | (\emph{Conversion} \emph{Op}, \emph{Type}) |\\
-              && (insertelement \emph{Op}, \emph{Op}, \emph{Op}) | (extractelement \emph{Op}, \emph{Op}) | (shufflevector \emph{Op}, \emph{Op}, \emph{Constant}) |\\
-              && (\emph{Comparison} \emph{Op} \emph{Op}) | (select \emph{Op}, \emph{Op}, \emph{Op}) | (\emph{Intrinsic} \emph{Op}, \emph{Op}) \\
+    \emph{Op} &::=& \emph{Inst} $\vert$ \emph{Constant} $\vert$ \emph{Value} \\
+    \emph{Inst}  &::=& (\emph{UnaryOp} \emph{Op}, \emph{Type}) $\vert$ (\emph{BinaryOp} \emph{Op}, \emph{Op}, \emph{Type}) $\vert$ (\emph{Conversion} \emph{Op}, \emph{Type}) $\vert$\\
+              && (insertelement \emph{Op}, \emph{Op}, \emph{Op}) $\vert$ (extractelement \emph{Op}, \emph{Op})  $\vert$\\
+              && (\emph{Comparison} \emph{Op} \emph{Op}) $\vert$ (select \emph{Op}, \emph{Op}, \emph{Op}) $\vert$ (\emph{Intrinsic} \emph{Op}, \emph{Op}) $\vert$ \\
+              && (shufflevector \emph{Op}, \emph{Op}, \emph{Constant}) \\
     \emph{Constant} &::=& (const \emph{Type} \texttt{number-literal}) \\
     \emph{Value} &::=& (val \emph{Type} \texttt{llvm-identifier}) \\
 
-    \emph{Type} &::=& \emph{ScalarType} | <elements $\times$ \emph{ScalarType}> \\
-    \emph{ScalarType} &::=& i1 | i8 | i16 | i32 | i64 | half | float | double | fp128 \\
-    \emph{BinaryOp} &::=& xor | and | or | add | sub | mul | udiv | sdiv | ashr | lshr | shl | umax | umin | smax | smin\\
-                && fadd | fsub | fmul | fdiv | copysign | fmaximum | fminimum | fmaxnum | fminnum \\
-    \emph{UnaryOp} &::=& ctpop | ctlz | cttz | bswap | bitreverse |\\
-                      && fneg | fabs | fceil | ffloor | frint | fround | ftrunc | fnearbyint | froundeven \\
-    \emph{Conversion} &::=& zext | sext | trunc |\\
-                    && fptrunc | fpext | fptosi | sitofp | fptoui | uitofp \\
-    \emph{Comparison} &::=& eq | ne | ult | ule | slt | sle |\\
-                && oeq | ogt | oge | olt | ole | one | ord | ueq | ugt | uge | ult | ule | une | uno \\
-    \emph{Intrinsic} &::=& ssse3.phadd.d.128 | avx2.pavg.b | avx512.pmaddubs.w.512 | \dots (165 intrinsics in total) \\
+    \emph{Type} &::=& \emph{ScalarType} $\vert$ <elements $\times$ \emph{ScalarType}> \\
+    \emph{ScalarType} &::=& i1 $\vert$ i8 $\vert$ i16 $\vert$ i32 $\vert$ i64 $\vert$ half $\vert$ float $\vert$ double $\vert$ fp128 \\
+    \emph{BinaryOp} &::=& xor $\vert$ and $\vert$ or $\vert$ add $\vert$ sub $\vert$ mul $\vert$ udiv $\vert$ sdiv $\vert$ \\
+                && ashr $\vert$ lshr $\vert$ shl $\vert$ umax $\vert$ umin $\vert$ smax $\vert$ smin\\
+                && fadd $\vert$ fsub $\vert$ fmul $\vert$ fdiv $\vert$ copysign $\vert$ \\
+                && fmaximum $\vert$ fminimum $\vert$ fmaxnum $\vert$ fminnum \\
+    \emph{UnaryOp} &::=& ctpop $\vert$ ctlz $\vert$ cttz $\vert$ bswap $\vert$ bitreverse $\vert$\\
+                      && fneg $\vert$ fabs $\vert$ fceil $\vert$ ffloor $\vert$ frint $\vert$ fround $\vert$ ftrunc $\vert$ fnearbyint $\vert$ froundeven \\
+    \emph{Conversion} &::=& zext $\vert$ sext $\vert$ trunc $\vert$\\
+                    && fptrunc $\vert$ fpext $\vert$ fptosi $\vert$ sitofp $\vert$ fptoui $\vert$ uitofp \\
+    \emph{Comparison} &::=& eq $\vert$ ne $\vert$ ult $\vert$ ule $\vert$ slt $\vert$ sle $\vert$\\
+                && oeq $\vert$ ogt $\vert$ oge $\vert$ olt $\vert$ ole $\vert$ one $\vert$ ord $\vert$ ueq $\vert$ ugt $\vert$ uge $\vert$ ult $\vert$ ule $\vert$ une $\vert$ uno \\
+    \emph{Intrinsic} &::=& ssse3.phadd.d.128 $\vert$ avx2.pavg.b  $\vert$ \dots (165 intrinsics in total) \\
   \end{tabular}
   \caption{Syntax for Minotaur rewrites}
   \label{fig:syntax}
