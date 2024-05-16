@@ -66,7 +66,7 @@ and \texttt{srem} is the signed integer modulus operator:
 
 %%% https://gcc.godbolt.org/z/Wes9sPKGW
 
-{\begin{quote}
+{\small\begin{quote}
 \begin{verbatim}
 define i64 @f(i64 %x, i64 %y, i64 %z) {
   %a = sdiv i64 %x, %y
@@ -86,7 +86,7 @@ mind that \minotaur{} does not actually construct $R$---we show it here to
 make the explanation concrete):
 
 \begin{multicols}{2}
-{\begin{quote}
+{\small\begin{quote}
 \begin{verbatim}
 define i64 @r0(i64 %x, i64 %y, i64 %z) {
   %m = sdiv i64 %x, %y
@@ -98,7 +98,7 @@ define i64 @r0(i64 %x, i64 %y, i64 %z) {
 \end{verbatim}
 \end{quote}}
 \columnbreak
-{\begin{quote}
+{\small\begin{quote}
 \begin{verbatim}
 define i64 @c0(i64 %t1) {
   %t2 = xor i64 %t1, -1
@@ -114,7 +114,7 @@ to support any optimizations.
 If we cut \texttt{f} with respect to \texttt{\%c} with $B = 1$ then we get:
 
 \begin{multicols}{2}
-{\begin{quote}
+{\small\begin{quote}
 \begin{verbatim}
 define i64 @r1(i64 %x, i64 %y, i64 %z) {
   %m = sdiv i64 %x, %y
@@ -125,7 +125,7 @@ define i64 @r1(i64 %x, i64 %y, i64 %z) {
 \end{verbatim}
 \end{quote}}
 \columnbreak
-{\begin{quote}
+{\small\begin{quote}
 \begin{verbatim}
 define i64 @c1(i64 %t1) {
   %t2 = xor i64 %t1, -1
@@ -142,7 +142,7 @@ return its argument.
 If we increase the depth bound to two, then we would get:
 
 \begin{multicols}{2}
-{\begin{quote}
+{\small\begin{quote}
 \begin{verbatim}
 define i64 @r2(i64 %x, i64 %y, i64 %z) {
   %o = call i64 @c2(i64 %x, i64 %y)
@@ -152,7 +152,7 @@ define i64 @r2(i64 %x, i64 %y, i64 %z) {
 \end{verbatim}
 \end{quote}}
 \columnbreak
-{\begin{quote}
+{\small\begin{quote}
 \begin{verbatim}
 define i64 @c2(i64 %t1, i64 %t2) {
   %t3 = sdiv i64 %t1, %t2
@@ -206,8 +206,7 @@ loop.
 
 
 \begin{algorithm}[tbp]
-  %
-\caption{Cut Extraction Algorithm}
+  \caption{Cut Extraction Algorithm}
   \begin{algorithmic}[1]
   \Function{ExtractCut}{\emph{F}: Function, \emph{I}: Instruction, \emph{B}: $\mathbb{N}$}
   \If{$I$ is in a loop}
