@@ -55,6 +55,7 @@ $\size$ is the number of nodes in the topology. $\bw$ gives a flexible way to ex
 \newcommand{\relTranspose}{Transpose\xspace}
 \newcommand{\chunkReduce}{\left\lfloor\frac{i}{\size}\right\rfloor}
 \begin{table}
+    \center
     \begin{tabularx}{\columnwidth}{@{}Xl@{}}
         \toprule
         Name & Relation \\
@@ -374,60 +375,3 @@ Note that latency- or bandwidth-optimal algorithms are not necessarily Pareto-op
 The procedure above systematically synthesizes Pareto-optimal $k$-synchronous algorithms. The inputs are the parameter $k$, the name of the collective to synthesize, and the topology parameters $\size, \bw$~(Section~\ref{sec:topology}). The procedure computes the latency lower bound $a_l$ from the diameter of the topology, and the bandwidth lower bound $b_l$ from the inverse bisectional bandwidth of the topology. The procedure starts enumerating steps $\steps$ starting with $a_l$. Then it generates $A$, the candidate set of tuples $(\rounds, \chunk)$ that satisfy the round constraint and the inverse bandwidth constraint. Note that without the $k$ parameter, this set would be unbounded. The procedure checks if a $(\steps,\rounds,\chunk)$ algorithm exists in the increasing order of the bandwidth cost $\frac{\rounds}{\chunk}$ using the encoding discussed in Section~\ref{sec:encoding}. If one exists, the reported algorithm is guaranteed to be Pareto-optimal for the current steps $\steps$. As we increase the number of $\steps$, we get algorithms with lower bandwidth cost. Additionally, if the current bandwidth cost matches the lower bound $b_l$, the procedure returns. As we have already generated the Pareto-optimal algorithm with $b_l$ bandwidth cost, it is not necessary to increase $\steps$ further.
 Note, that it is possible for this procedure to never terminate as there can sometimes be unbounded number of Pareto-optimal algorithms for certain topologies and collectives. While the synthesis procedure above is for \broadcasting collectives, synthesis for \reducing collectives is similar~(Section~\ref{sec:reduction}).
 %\todo{explains that when increase $S$, we should have better $(R,C)$ pairs for better bandwidth. The limit the to the bandwidth is the lower bound, once we can reach it, there's no point increasing $S$, because it increases the latency.}
-
-\begin{comment}
-\todofor{Madan}{Explain the meta algorithm here}
-As explained in Section~\ref{sec:pareto}, an algorithm at the Pareto frontier of the latency-bandwidth tradeoff maximizes the number of chunks for a given number of steps. The number of nodes $\size$ and the bandwidth limits $\bw$ are set by the target hardware and the number of steps $\steps$ to synthesize for is given. As some collectives are only well-defined for specific combinations of $\size$ and $\chunk$ (see Section~\ref{sec:specifications}), let $p_\mathit{valid}$ be the relevant predicate. Now we can now we can iterate over numbers of identifiers $\chunk_k\in\{\chunk \setwhere \chunk\in\posint \wedge p_\mathit{valid}(\chunk,\size)\}$ in ascending order. For each $\chunk_k$ the problem instance will be constructed for the target collective by setting $\pre$, $\post$ and $\chunk$ appropriately.
-
-This sequence of problem instances will be solved using and SMT solver such as Z3 either through the direct encoding in Section~\ref{sec:encoding} or the reduction approach in Section~\ref{sec:reduction}. If the instance for the smallest valid value of $\chunk_k$ has no solution, then it is not possible to implement the collective in question in $\steps$ steps. Otherwise, the optimal algorithm is the largest $\chunk_k$ for which an algorithm still exists.\footnote{For the collectives in Section~\ref{sec:specifications} an instance for a given $\chunk_k$ has all smaller ones as sub-problems, meaning that if one fails no larger ones can succeed.}
-\end{comment}
-
-\begin{comment}
-% Madan: Moved content earlier
-\subsection{Modeling Topologies with Bandwidth Groups}
-\label{sec:topologies}
-
-This section describes how \tool{} models various types of connections
-found in modern hardware. Intuitively, the bandwidth relation $\bw$
-constrains how the synthesis algorithm can exploit links between any
-subset of nodes.  For example, to model a directional point-to-point
-communication from node $s$ to node $d$ that uses at most bandwidth
-$b$, we explicitly encode $\bw=\{(\{(s,d)\},b)\}$ and thus enforce the
-pseudo-boolean constraint for this directional send.  In general,
-$\bw$ can contain the powerset of all possible combinations of a
-source (i.e., $s \in N$) and a destination ($d \in N$) and their
-resulting bandwidth constraints.  This flexible encoding allows us to
-model directional point-to-point links and shared links (i.e., like in
-PCIe, Ethernet, or a switch).  For example, to model a shared PCIe
-link wherein only 1 node can use that shared link at a particular
-step, we enumerate all pairwise PCIe connections and assert their
-collective bandwidth is at most equal to a single chunk.
-
-One clear assumption behind this approach is that \tool{} models
-bandwidth utilization using integer constraints.  If the relative
-bandwidth between 2 links is not a multiple of another, a user is
-forced to encode that relative bandwidth with a ratio.  For example,
-if a unidirectional link between source $s_0$ and destination $d_0$ is
-$1.5$ times larger than a link between $s_1$ and $d_1$, the bandwidth
-constraints $\bw=\{(\{(s_0,d_0)\},15), (\{(s_1,d_1)\},10)\}$ would
-accurately model such a link.  Of course, this implies a
-bandwidth-optimal algorithm would have to send 15 chunks over $s_0$ to
-$d_0$ and 10 chunks over $s_1$ to $d_1$ at each step.  In general,
-adding more chunks increases the difficulty of synthesis and so using
-bandwidth constraints closer to 1 is recommended. \todofor{saemal}{add
-  some intuitions about max-flow here?}
-\todofor{todd}{transport?}
-
-\todofor{todd}{dynamic routing?}
-\end{comment}
-
-
-%\section{\allreduce}
-%\todofor{Saeed}{Discuss optimality of \allreduce as implemented with \reducescatter followed by \allgather. This might also go in the synthesis section.}
-
-
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "paper"
-%%% End:

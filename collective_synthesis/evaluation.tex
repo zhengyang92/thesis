@@ -113,20 +113,16 @@ they interact with the underlying hardware.
 \newcolumntype{H}{>{\setbox0=\hbox\bgroup}c<{\egroup}@{}}
 
 \begin{table}
-  \begin{tabular}{@{}llll@{}}
+  \begin{tabularx}{\columnwidth}{@{}llll@{}}
 \toprule
 Collective &$\chunk$ & $\steps$ & $\rounds$ \\
 \midrule
-\allgather/\reducescatter & 6 & 7 & 7 \\ % & $7 \cdot \alpha + 7/6\cdot L \cdot \beta$ \\ % ring
-% \allreduce(tree) & ? & ? & $? \cdot \alpha + ?\cdot L \cdot \beta$ \\ % tree
-\allreduce & 48 & 14 & 14 \\ % & $14 \cdot \alpha + 14/48\cdot L \cdot \beta$ \\ % ring
-\broadcast/\reduce  & $6m$ & $6+m$ & $6+m$ \\ % & $(6+m) \cdot \alpha + \frac{6+m}{6m}\cdot L \cdot \beta$ \\ % ring
-%\broadcast  & $6m$ & $6+m$ & $(6+m) \cdot \alpha + \frac{6+m}{6m}\cdot L \cdot \beta$ \\ % ring
-%\reducescatter & 48 & 7 & $7 \cdot \alpha + 7/48\cdot L \cdot \beta$ \\ % ring
+\allgather/\reducescatter & 6 & 7 & 7 \\
+\allreduce & 48 & 14 & 14 \\
+\broadcast/\reduce  & $6m$ & $6+m$ & $6+m$ \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \caption{NCCL hand-written collectives and their chunks and steps. }
-%For \reducescatter $\chunk$ should be multiplied by 8.
 \label{table:nccl}
 \end{table}
 
