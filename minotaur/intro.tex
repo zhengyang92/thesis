@@ -53,7 +53,7 @@ void make_simple_name(char *name) {
 
 %https://godbolt.org/z/cfbTsMrcv
 %https://alive2.llvm.org/ce/z/Q9JPSg
-{\small\begin{quote}
+{\begin{quote}
 \begin{verbatim}
 do {
   if (*--p == '.') *p = '_';
@@ -66,11 +66,11 @@ When this loop is compiled by LLVM~18 for a target supporting AVX2
 vector extensions, this code is found inside the loop:
 
 % original
-{\small\begin{quote}
+{\begin{quote}
 \begin{verbatim}
-%1 = shufflevector <32 x i8> %0, poison, <31, 30, 29, 28, 27, ... 4, 3, 2, 1, 0>
-%2 = icmp eq <32 x i8> %1, <46, 46, 46, 46, 46, ... 46, 46, 46, 46, 46>
-%3 = shufflevector <32 x i1> %2, poison, <31, 30, 29, 28, 27, ... 4, 3, 2, 1, 0>
+%1 = shufflevector <32 x i8> %0, poison, <31, 30, ... , 2, 1, 0>
+%2 = icmp eq <32 x i8> %1, <46, 46, ... , 46, 46, 46>
+%3 = shufflevector <32 x i1> %2, poison, <31, 30, ... , 2, 1, 0>
 \end{verbatim}
 \end{quote}}
 
@@ -100,9 +100,9 @@ reversals are unnecessary, and rewrites the code in this equivalent,
 but significantly cheaper (three uOps), form:
 
 %original
-{\small\begin{quote}
+{\begin{quote}
 \begin{verbatim}
-%1 = icmp eq <32 x i8> %0, <46, 46, 46, 46, 46, ... 46, 46, 46, 46, 46>
+%1 = icmp eq <32 x i8> %0, <46, 46, ... , 46, 46, 46>
 \end{verbatim}
 \end{quote}}
 
@@ -120,7 +120,7 @@ optimizations for scalar code.
 For example, this instruction sequence can be found in the OpenBLAS
 numerical library:
 
-{\small\begin{quote}
+{\begin{quote}
 \begin{verbatim}
 %1 = fmul float %0, 2.000000e+00
 %2 = fcmp oge float %1, 0.000000e+00
@@ -133,7 +133,7 @@ then checks if the result is greater than 0.0.
 This can be performed more efficiently by simply comparing the
 original value against 0.0:
 
-{\small\begin{quote}
+{\begin{quote}
 \begin{verbatim}
 %2 = fcmp oge float %0, 0.000000e+00
 \end{verbatim}
