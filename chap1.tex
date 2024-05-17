@@ -261,15 +261,21 @@ automatically generate high-performance communication kernels for
 specific network topologies.
 
 The convergence of recent trends of training and deploying large
-models, and the stagnation of processors' performance due to Moore's
-Law, has prompted system designers to incorporate innovative
-high-bandwidth interconnect networks within and between nodes in
-distributed clusters. For example, the NVIDIA DGX-1 server features
-two x86 processors and eight GPUs, connected by NVIDIA's NVLink
-network. These network designs are driven not only by the need for
-efficient data transfer, but also by hardware factors such as signal
-integrity, cooling, and physical layout. These novel topologies
-require novel communication kernels to maximize performance.
+models, and the stagnation of single processors' performance, has
+prompted system designers to incorporate innovative high-bandwidth
+interconnect networks within and between nodes in distributed
+clusters.
+%
+For example, the NVIDIA DGX-1 server features two x86 processors and
+eight GPUs, connected by NVIDIA's NVLink network.
+%
+These network designs are driven not only by the need for efficient
+data transfer, but also by hardware factors such as signal integrity,
+cooling, and physical layout.
+%
+These novel topologies require novel communication kernels to maximize
+performance.
+%
 Currently, these kernels are created and optimized manually.
 
 SCCL is a program synthesizer that, given a topology, specified as a
@@ -283,10 +289,9 @@ SCCL efficiently lowers algorithms to implementations on two systems
 (NVIDIA DGX-1 and Gigabyte AMD Z52) and demonstrates competitive
 performance with hand-optimized collective communication libraries.
 SCCL synthesizes novel latency and bandwidth optimal algorithms not
-seen in the literature on two popular hardware topologies.
-SCCL can be used as a drop-in replacement for NCCL.
-SCCL archives a 1.64x speedup on All Reduce, a 1.5x speedup on All Gather
-over NCCL.
+seen in the literature on two popular hardware topologies. SCCL can be
+used as a drop-in replacement for NCCL. SCCL archives a 1.64x speedup
+on All Reduce, a 1.5x speedup on All Gather over NCCL.
 
 
 
