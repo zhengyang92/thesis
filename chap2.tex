@@ -5,8 +5,6 @@
 
 \section {Translation Validation}
 
-
-
 Translation validation is a technique used to ensure that a program
 preserves its semantics when translated from one representation to
 another.
@@ -19,10 +17,41 @@ The correctness of the translation process is crucial to ensure that
 the compiled program behaves as expected and that optimizations
 performed by the compiler do not introduce errors.
 %
-
 Translation validation can be achieved using formal methods, such as
 theorem proving, model checking, and symbolic execution.
 %
+This work focuses on translation validation in the context of
+LLVM IR, specifically, for transformations that involve vector
+instructions and SIMD operations, using the Alive2 Translation Validator.
+
+
+\section {SMT Solving and the Z3 Theorem Prover}
+
+Satisfiability Modulo Theories (SMT) solving is a technique used to
+decide the satisfiability of logical formulas with respect to
+background theories.
+%
+An SMT solver is a tool that can automatically
+determine whether a given formula is satisfiable or not, and if it is
+satisfiable, provide a model that satisfies the formula.
+%
+SMT solvers are widely used in formal verification, program analysis,
+and software testing.
+
+This dissertation uses the Z3 theorem prover as a backend for program
+synthesis and verification tasks.
+%
+The Z3 theorem prover is a state-of-the-art SMT solver developed by
+Microsoft, which supports a wide range of theories, including
+arithmetic, bit-vectors, arrays, and uninterpreted functions.
+
+
+
+\section {Alive2 Translation Validator}
+
+Alive2 is a translation validator for LLVM IR that checks
+
+
 
 
 
