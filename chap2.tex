@@ -45,15 +45,38 @@ arithmetic, bit-vectors, arrays, and uninterpreted functions.
 
 \section {Alive2 Translation Validator}
 
-Alive2 is a translation validator for LLVM IR that checks
+The primary goal of Alive2 is to ensure that the transformations made
+by the LLVM compiler during optimization phases do not alter the
+intended behavior of the original program.
+%
+Specifically, for a given pair of functions,
+Alive2 checks if one function is a refinement of the other.
+%
+Here, We uses the word \emph{refinement}, rather than \emph{equivalence},
+because compilers is allowed to remove non-determinism from the
+program.
+%
+For example, an out-of-bound \texttt{extractelement} instruction can
+be safely removed by the compiler, as the result of such an
+instruction is undefined in LLVM IR.
+%
+In the absence of undefined behavior, refinement degrades to
+simply equivalence.
 
-
+Alive2 supports a wide range of LLVM operations, including integer
+arithmetic, floating-point operations, memory operations, and vector
+operations.
+%
+The chapter\ref{} of this desertation focuses on extending Alive2 to
+support vector operations and floating-point operations, which
+are essential for verifying optimizations related to SIMD and
+floating-point instructions.
 
 \section{Superoptimization}
 \label{sec:superoptimization}
 
 
-Superoptimization is a technique in computer science aimed at finding
+Superoptimization is a technique that aims to find
 the optimal sequence of instructions for a particular task.
 %
 Unlike traditional optimization methods that rely on heuristics or
@@ -83,6 +106,9 @@ extracts slices of LLVM instructions from a function and uses an SMT
 solver to find optimized versions of these slices. It is designed to
 work within the LLVM optimization pipeline and discover new
 optimizations that traditional compilers might miss.
+
+Chapter 4 of this dissertation presents Minotaur, a superoptimizer
+that uses program synthesis to optimize LLVM IR code.
 
 \section{Single Instruction, Multiple Data (SIMD) Parallelism}
 \label{sec:simd}
