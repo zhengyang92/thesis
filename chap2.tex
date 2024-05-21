@@ -152,11 +152,17 @@ overview of how LLVM handles vector support:
   high-performance code that takes advantage of SIMD capabilities.
   A summary of the vector operations is listed in the next section.
 
-\item Vectorization: LLVM includes a vectorizer that can automatically
-  transform scalar code into vectorized code. The vectorizer analyzes
-  loops and other code patterns to identify opportunities for
-  vectorization, improving performance by utilizing SIMD
-  instructions.
+\item Vectorization: LLVM has two main auto-vectorization passes, the
+  Loop Vectorizer and the Superword Level Parallelism (SLP)
+  Vectorizer.
+  %
+  The Loop Vectorizer optimizes loops by transforming scalar loop body
+  into vectorized code, while the SLP Vectorizer optimizes
+  straight-line code by combining multiple scalar operations into
+  vector operations.
+  %
+  These vectorizers help improve performance by utilizing SIMD
+  instructions, without requiring manual intervention.
 
 \item Platform-independent peephole optimizations: The peephole
   optimization pass in LLVM, InstCombine, is designed in a way that
@@ -167,7 +173,6 @@ overview of how LLVM handles vector support:
   designed to be agnostic to the vector length, and the same
   optimization rules can be applied to both scalar and vector
   instructions.
-
 
 \item Target-specific optimizations: LLVM can generate target-specific
   code that leverages the SIMD capabilities of the underlying
