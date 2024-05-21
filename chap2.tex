@@ -199,7 +199,24 @@ LLVM IR provides a rich set of vector operations that allow
 programmers to work with vectors of data efficiently. Here is a
 summary of some of the vector operations available in LLVM.
 
-
+\begin{itemize}
+  \item Arithmetic operations: LLVM supports vectorized arithmetic
+  operations such as addition, subtraction, multiplication, and
+  division on vectors
+  \item Logical operations: Vectorized logical operations like AND, OR
+  and XOR can be performed on integer vectors.
+  \item \texttt{insertelement} and \texttt{extractelement}: These
+  operations allow programs to insert or extract elements from a
+  vector at a specified index.
+  \item \texttt{shufflevector}: The \texttt{shufflevector} instruction
+  selects elements from two input vectors to create a new vector,
+  controlled by a mask vector.
+  \item Reductions: LLVM provides reduction operations like add, mul,
+  min, and max that combine all elements of a vector into a single
+  value.
+  \item Predicated operations: LLVM supports predicated vector
+  operations that conditionally execute based on a mask vector.
+\end{itemize}
 
 
 
