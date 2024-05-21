@@ -32,13 +32,16 @@ I present Minotaur, a superoptimizer that uses program synthesis
 to optimize LLVM IR code. Minotaur extracts program slices from LLVM IR
 code, and uses an SMT solver to find optimized versions of these slices.
 Minotaur is designed to work within the LLVM optimization pipeline, and
-can be used to discover new optimizations that are missed by traditional
+can be used to discover new optimizations that are missed by commodity
 compilers.
 
 We present SCCL, a program synthesizer that optimizes collective
 algorithms for parallel computation. SCCL uses domain-specific knowledge
 about collective algorithms to generate highly optimized code for
 specific architectures. SCCL is designed to be a drop-in replacement for
-existing collective communication libraries, such as NVIDIA NCCL and AMD RCCL,
-and can be used to improve the communication performance of parallel
-applications.
+existing collective communication libraries, such as NVIDIA NCCL and AMD RCCL.
+We synthesize novel latency and bandwidth optimal algorithms not seen
+in the literature on two popular hardware topologies. We also show how
+SCCL efficiently lowers algorithms to implementations on two GPGPU
+hardware architectures (NVIDIA and AMD) and demonstrate competitive
+performance with hand optimized collective communication libraries.
