@@ -3,9 +3,8 @@
 
 \section {Translation Validation}
 
-Translation validation is a technique used to ensure that a program
-preserves its semantics when translated from one representation to
-another.
+Translation validation checks if a program preserves its semantics
+when translated from one representation to another.
 %
 This is particularly important in the context of compilers,
 where multiple stages of translation are involved in transforming a
@@ -29,9 +28,9 @@ Satisfiability Modulo Theories (SMT) solving is a technique used to
 decide the satisfiability of logical formulas with respect to
 background theories.
 %
-An SMT solver is a tool that can automatically
-determine whether a given formula is satisfiable or not, and if it is
-satisfiable, provide a model that satisfies the formula.
+An SMT solver is a tool that can automatically determine whether a
+given SMT formula is satisfiable or not, and if it is satisfiable,
+provide a model that satisfies the formula.
 %
 SMT solvers are widely used in formal verification, program analysis,
 and software testing.
@@ -42,8 +41,7 @@ synthesis and verification tasks.
 The Z3 theorem prover is a state-of-the-art SMT solver developed by
 Microsoft, which supports a wide range of theories, including
 arithmetic, bit-vectors, arrays, and uninterpreted functions.
-
-
+%
 
 \section {Alive2 Translation Validator}
 
@@ -132,7 +130,7 @@ support in LLVM:
 
 LLVM provides robust support for vector operations, essential for
 optimizing performance in applications that can benefit from SIMD
-(Single Instruction, Multiple Data) capabilities. Here’s a detailed
+(Single Instruction, Multiple Data) capabilities. Her is a detailed
 overview of how LLVM handles vector support:
 
 \begin{itemize}
@@ -193,6 +191,18 @@ overview of how LLVM handles vector support:
   units available on the hardware.
 
 \end{itemize}
+
+\section {Vector Operations in LLVM}
+\label{sec:llvm-vector-ops}
+
+LLVM IR provides a rich set of vector operations that allow
+programmers to work with vectors of data efficiently. Here is a
+summary of some of the vector operations available in LLVM.
+
+
+
+
+
 
 \section {Collective Communication Libraries}
 
