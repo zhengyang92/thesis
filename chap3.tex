@@ -3,8 +3,7 @@
 
 In order for \minotaur{} to use Alive2 as a verification backend, I extended
 Alive2 to support a number of floating point instructions,
-platform independent vector instructions, and a large number of
-Intel-architecture-specific vector intrinsics.
+platform independent vector instructions, and 165 x86 vector intrinsics.
 %
 I also extend Alive2 to support the verification of transformations on
 bounded loops by unrolling loops in the source and target functions by
@@ -13,9 +12,16 @@ a specified factor.
 \section{Supporting Floating Point Instructions}
 
 LLVM's floating point instructions trivially map to SMT's Floating Point
-Arithmetic (FPA) theory
+Arithmetic (FPA) theory.
 %
-With Alive2, we have found
+For example, a floating add call in LLVM IR is translated to an `Z3_mk_fpa_add'
+API call in the Z3 solver.
+%
+
+
+
+
+
 
 
 
