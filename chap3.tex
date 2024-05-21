@@ -10,11 +10,12 @@ I also extend Alive2 to support the verification of transformations on
 bounded loops by unrolling loops in the source and target functions by
 a specified factor.
 
-\section{Supporting Floating Point Instructions in Alive2}
+\section{Supporting Floating Point Instructions}
 
 LLVM's floating point instructions trivially map to SMT's Floating Point
 Arithmetic (FPA) theory
 %
+With Alive2, we have found
 
 
 
@@ -23,13 +24,7 @@ Arithmetic (FPA) theory
 
 
 
-
-
-
-
-
-
-\section{Supporting Platform Independent SIMD operations in Alive2}
+\section{Supporting Platform Independent SIMD operations}
 
 LLVM uses a typed, SSA-based intermediate representation (IR).
 %
@@ -65,7 +60,7 @@ constant mask vector.
 
 
 
-\section{Supporting Intel Architecture Specific SIMD Intrinsics in Alive2}
+\section{Supporting Intel Architecture Specific SIMD Intrinsics}
 
 %
 Finally, to provide direct access to platform-specific vector
