@@ -170,13 +170,13 @@ There are several reasons why program synthesis can help address the
 challenge:
 
 \begin{itemize}
-    \item \textbf{Semantic as a first-class citizen}: Instead of using
-    compiler heuristics where the semantics of an instruction are treated
-    as a black box, program synthesis can take the semantics of an
-    instruction as input, and generate code that takes full advantage
-    of the instruction. This is particularly useful for novel
-    architectures where the semantics of the instructions are not well
-    handled by existing compilers.
+    \item \textbf{Formal semantic as a first-class citizen}: Instead
+    of using compiler heuristics where the semantics of an instruction
+    are treated as a black box, program synthesis can take the
+    semantics of an instruction as input, and generate code that takes
+    full advantage of the instruction. This is particularly useful for
+    novel architectures where the semantics of the instructions are
+    not well handled by existing compilers.
 
     \item \textbf{Domain-specific optimizations}: Program synthesis
     can be designed to take into account the characteristics of a
@@ -330,10 +330,9 @@ intrinsics. Specifically, I made the following contributions:
     variety of real-world libraries and benchmarks.
 \end{itemize}
 
-\emph{SCCL: A Collective Algorithm Synthesizer} In addition to
-Minotaur, I and my collaborators also developed SCCL, a synthesizer
-for collective communication algorithms. We've made the following
-contributions:
+In addition to Minotaur, I and my collaborators developed SCCL, a
+synthesizer for collective communication algorithms. We've made the
+following contributions:
 
 \begin{itemize}
 \item A formalization of the synthesis problem for broadcasting
