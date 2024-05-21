@@ -158,14 +158,16 @@ overview of how LLVM handles vector support:
   vectorization, improving performance by utilizing SIMD
   instructions.
 
-\item Platform-independent peephole optimizations:
+\item Platform-independent peephole optimizations: The peephole
+  optimization pass in LLVM, InstCombine, is designed in a way that
+  the scalar optimizations can be applied to element-wise vector
+  operations without any additional effort.
+  %
+  This is because the InstCombine matching and rewriting APIs are
+  designed to be agnostic to the vector length, and the same
+  optimization rules can be applied to both scalar and vector
+  instructions.
 
-
-LLVM includes a set
-  of platform-independent peephole optimizations that can transform
-  scalar code into vectorized code. These optimizations are applied at
-  the LLVM IR level and can improve the performance of vector
-  operations.
 
 \item Target-specific optimizations: LLVM can generate target-specific
   code that leverages the SIMD capabilities of the underlying
@@ -179,17 +181,13 @@ LLVM includes a set
   based on the target architecture.
 
 
-\item Intrinsic functions: LLVM provides intrinsic functions that allow
-  programmers to directly access SIMD instructions provided by the
-  target architecture. These intrinsics provide a way to write
-  low-level code that takes full advantage of the vector units
-  available on the hardware.
-
-\item Optimization passes: LLVM includes optimization passes that can
-    transform and optimize vector code. These passes can improve the
-    performance of vectorized code by applying various optimizations
-    such as loop unrolling, instruction scheduling, and register
-    allocation.
+\item Intrinsic functions: LLVM provides intrinsic functions that
+  allow optimization developers to directly access SIMD instructions
+  provided by the target architecture.
+  %
+  These intrinsics provide a way
+  to write low-level code that takes full advantage of the vector
+  units available on the hardware.
 
 \end{itemize}
 
