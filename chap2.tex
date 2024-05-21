@@ -121,7 +121,7 @@ Intel: This offers enhanced performance and higher bit rates for
 processing, suitable for scientific computations and high-performance
 tasks.
 
-\section{SIMD support in LLVM}
+\section{SIMD support in LLVM Optimization Pipeline}
 \label{sec:llvm-vectors}
 
 LLVM is a popular open-source compiler infrastructure that supports
@@ -150,17 +150,34 @@ overview of how LLVM handles vector support:
   logical operations, shuffling, and other vector-specific
   instructions. Programmers can use these operations to write
   high-performance code that takes advantage of SIMD capabilities.
-
-\item Target-specific optimizations: LLVM can generate target-specific
-  code that leverages the SIMD capabilities of the underlying
-  hardware. This allows LLVM to generate efficient code that takes
-  full advantage of the vector units available on modern processors.
+  A summary of the vector operations is listed in the next section.
 
 \item Vectorization: LLVM includes a vectorizer that can automatically
   transform scalar code into vectorized code. The vectorizer analyzes
   loops and other code patterns to identify opportunities for
   vectorization, improving performance by utilizing SIMD
   instructions.
+
+\item Platform-independent peephole optimizations:
+
+
+LLVM includes a set
+  of platform-independent peephole optimizations that can transform
+  scalar code into vectorized code. These optimizations are applied at
+  the LLVM IR level and can improve the performance of vector
+  operations.
+
+\item Target-specific optimizations: LLVM can generate target-specific
+  code that leverages the SIMD capabilities of the underlying
+  hardware.
+  %
+  TTI (Target Transform Information) is an analysis pass of LLVM that
+  provides information about the target architecture, including
+  details about vectorization support.
+  %
+  The TTI pass allows LLVM middle-end to make optimization decisions
+  based on the target architecture.
+
 
 \item Intrinsic functions: LLVM provides intrinsic functions that allow
   programmers to directly access SIMD instructions provided by the
