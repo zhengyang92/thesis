@@ -88,24 +88,23 @@ less effective in optimizing code for novel architectures:
 
 \begin{itemize}
 
-    \item Compiler optimizations are not complete: they may not be
-able to discover all possible optimizations that can be applied to a
-program.
+\item Compiler optimizations are not complete: they may not be able to
+discover all possible optimizations that can be applied to a program.
 %
 Optimizations might be overlooked by a compiler simply due to limited
 engineering resources.
 %
-Some of the optimizations might be too complex to be implemented in a
-compiler, for example, a compiler may not be able to perform
-inter-procedural optimizations that require analyzing the entire
-program, which is computationally expensive.
+Some optimizations might be too complex to be implemented or to be
+executed in a compiler, for example, a compiler may not be able to
+perform inter-procedural optimizations that require analyzing the
+entire program, which is computationally expensive.
 %
 Furthermore, existing compilers and optimization tools may not fully
 support or exploit the capabilities of these architectures, leading to
 suboptimal performance.
 %
-As a result, as of May 13, 2024, there are 650 open Github issues
-that are tagged with \texttt{missed-optimization} in the LLVM repository,
+As a result, as of May 13, 2024, there are 650 open Github issues that
+are tagged with \texttt{missed-optimization} in the LLVM repository,
 indicating that there are still many optimizations to be discovered.
 
 
@@ -114,15 +113,13 @@ introduced optimizations are more likely to be incorrect. Programs
 compiled with incorrect optimizations may produce incorrect results,
 crashes, or security vulnerabilities in runtime.
 %
-Researchers have been working on the correctness of
-compiler optimizations for decades, they have developed various
-techniques, including formal verification, fuzzy testing, differential
-testing and translation validation to ensure the correctness of
-validation.
+Researchers have been working on the correctness of compiler
+optimizations for decades, they have developed various techniques,
+including formal verification, fuzzy testing, differential testing and
+translation validation to ensure the correctness of validation.
 %
-However, these techniques are not perfect, and there are
-still bugs in the compiler optimizations that are discovered from time
-to time.
+However, these techniques are not perfect, and there are still bugs in
+the compiler optimizations that are discovered from time to time.
 
 
 \item Compilers are usually designed in a way that each optimization
@@ -135,7 +132,7 @@ generation.
 %
 Tracing and debugging the interaction between optimizations is hard in
 major commodity compilers, making it even more difficult to understand
-and diagnose the performance issues.
+the performance issues.
 
 \item Compilers are not always easy to use. To generate the most
 optimized code, developers need to understand the compiler
@@ -257,7 +254,7 @@ real-world applications is 15\% in GMP. TODO: update
 
 In addition to Minotaur, this dissertation also proposes a synthesizer
 for collective communication algorithms, called Synthesized Collective
-Communication Library (SCCL) , that can automatically generate
+Communication Library (SCCL), that can automatically generate
 high-performance communication kernels for specific network
 topologies.
 
@@ -303,31 +300,30 @@ superoptimizer for LLVM IR, and SCCL, a synthesizer for collective
 communication algorithms. The main contributions of this dissertation
 are as follows:
 
-\emph{Minotaur: A synthesis-based superoptimizer} I developed
-Minotaur, a synthesizing superoptimizer for the LLVM intermediate
-representation (LLVM IR) that focuses on LLVM's floating point
-operations, portable vector operations as well as its Intel-specific
-intrinsics. Specifically, I made the following contributions:
+I developed Minotaur, a synthesizing superoptimizer for the LLVM
+intermediate representation (LLVM IR) that focuses on LLVM's floating
+point operations, portable vector operations as well as its
+Intel-specific intrinsics. Specifically, I made the following
+contributions:
 
 \begin{itemize}
-    \item I designed and implemented a domain-specific program
-    transformer that extracts an SSA value from an LLVM function,
-    along with context about how that value was computed.
-    Extracting enough context to permit interesting optimizations,
-    without extracting so much context that the underlying SMT
-    solver was overwhelmed, was an interesting empirical problem.
+\item I designed and implemented a domain-specific program
+transformer that extracts an SSA value from an LLVM function,
+along with context about how that value was computed.
 
-    \item I created a synthesis engine that searches for cheaper code
-    sequences; it enumerates partially symbolic candidates where the
-    instructions are concrete, but data values are symbolic.
-    \item I developed infrastructure for caching optimizations and also
-    for applying them to code that is being compiled.
-    %
-    All together, these elements run inside of an LLVM optimization pass.
-    \item I performed a detailed evaluation of Minotaur's ability to
-    speed up code, showing that it can find numerous optimziations that
-    LLVM fails to perform, and also that it can achieve speedups on a
-    variety of real-world libraries and benchmarks.
+\item I created a synthesis engine that searches for cheaper code
+sequences; it enumerates partially symbolic candidates where the
+instructions are concrete, but data values are symbolic.
+
+\item I developed infrastructure for caching optimizations and also
+for applying them to code that is being compiled.
+%
+All together, these elements run inside of an LLVM optimization pass.
+
+\item I performed a detailed evaluation of Minotaur's ability to
+speed up code, showing that it can find numerous optimziations that
+LLVM fails to perform, and also that it can achieve speedups on a
+variety of real-world libraries and benchmarks.
 \end{itemize}
 
 In addition to Minotaur, I and my collaborators developed SCCL, a
@@ -335,20 +331,21 @@ synthesizer for collective communication algorithms. We've made the
 following contributions:
 
 \begin{itemize}
-\item A formalization of the synthesis problem for broadcasting
+\item We formalized the synthesis problem for broadcasting
 collectives.
 
-\item A general strategy for encoding the synthesis problem for
-collective communications algorithms into the quantifier-free linear
-integer arithmetic (QF\_LIA) sub-logic of the SMT-LIB logic.
+\item We proposed a general strategy for encoding the synthesis
+problem for collective communications algorithms into the
+quantifier-free linear integer arithmetic (QF\_LIA) sub-logic of the
+SMT-LIB logic.
 
-\item A reduction from the synthesis problem for reducing collectives
+\item We proposed a reduction from the synthesis problem for reducing collectives
 to that for broadcasting collectives.
 
-\item A description of how SCCL generates efficient code for the
-algorithms we synthesize on nodes with NVIDIA or AMD GPUs.
+\item We developed a code generator that lowers the synthesized algorithms
+to GPU compute kernels.
 
-\item An evaluation of SCCL's generated algorithms on common server
+\item We evalauted of SCCL's generated algorithms on common server
 topologies for deep learning workloads and a comparison against NCCL.
 
 \end{itemize}
