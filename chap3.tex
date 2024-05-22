@@ -30,8 +30,8 @@ Alive2 supports \texttt{NNaN} (No NaNs), \texttt{NInf} (No Infinities) and
 \begin{itemize}
 
 \item \texttt{NNaN} flag allows optimizations to assume the arguments
-and result are not \texttt{NaN} (not a number). If an argument is
-\texttt{NaN}, or the result would be a NaN, the instruction produces a
+and result are not NaN (not a number). If an argument is
+NaN, or the result would be a NaN, the instruction produces a
 poison value instead.
 
 \item \texttt{NInf} flag allows optimizations to assume the arguments
@@ -238,16 +238,16 @@ Alive2 unrolls loops inside-out by traversing each loop nesting tree
 in post-order with a DFS. An advantage of this order is that the
 number of unrolls is linear in the number of loops and unroll factor
 instead of being exponential if done in the reverse order.
-
+%
 Alive2 unrolls a loop by repeatedly duplicating the loop until the
-unroll factor is reached. After duplication, three things need fixing:
+unroll factor is reached. After duplication, three things need fimxing:
 %
 (1) instruction operands,
 %
 (2) targets of jump instructions, and
 %
 (3) introduce/patch $\phi$ nodes.
-g
+%
 Operands are patched during basic block duplication. Alive2 maintains
 a map that records the duplicates of each of the original SSA values.
 When an instruction is duplicated, its operands are replaced with the
@@ -303,14 +303,12 @@ This unrolling feature is useful for verifying transformations on
 bounded loops, but is not used in the main \minotaur{} pipeline, as
 \minotaur{} only works on loop free cuts.
 
-\section {Extending Alive2 for Constant Synthesis}
+\section {Extending Alive2 for Literal Constant Synthesis}
 
-We modified Alive2 in such a way that symbolic constants get turned
-into literal constants as a side effect of the refinement check which,
-in our modified version, is posed to the solver as an exists-forall
-call.
+I modified Alive2 to support the synthesis of unknown literal
+constants in a transformation. In my modified version, such synthesis
+task is posed to the solver as an exists-forall call.
 %
-
 For example, consider the following partial-finished transformation:
 
 {\begin{quote}

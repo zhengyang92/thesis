@@ -78,15 +78,15 @@ which is much larger).
 \begin{figure}[tbp]
   \centering
   \subfloat[Unique cuts extracted\label{fig:loop-expression}]{
-    \includegraphics[width=0.32\linewidth]{figures/spec/expression-count.pdf}
+    \includegraphics[width=0.5\linewidth]{figures/spec/expression-count.pdf}
   }
   \hfill
   \subfloat[Unique opts. synthesized\label{fig:loop-optimization}]{
-    \includegraphics[width=0.32\linewidth]{figures/spec/optimization-count.pdf}
+    \includegraphics[width=0.5\linewidth]{figures/spec/optimization-count.pdf}
   }
   \hfill
   \subfloat[Compilation time\label{fig:loop-buildtime}]{
-    \includegraphics[width=0.32\linewidth]{figures/spec/compilation-time.pdf}
+    \includegraphics[width=0.5\linewidth]{figures/spec/compilation-time.pdf}
   }
   \caption{Evaluating the effect of varying $B$, the depth bound for
     cut extraction}
@@ -135,7 +135,7 @@ We leave explorations of this nature for future work.
 In this section, we show how \minotaur{} speeds up real-world benchmarks
 and applications.
 
-\paragraph{Experimental setup}
+\subsubsection{Experimental setup}
 %
 We used two machines for our evaluation: one with an Intel Xeon Gold
 6210U processor running at 2.5\,GHz (this implements the Cascade Lake
@@ -163,7 +163,7 @@ Finally, for each instruction that it tries to optimize, \minotaur{} gives
 up if no solution is found within five minutes.
 
 
-\paragraph{Benchmark selection}
+\subsubsection{Benchmark selection}
 %
 We evaluate on SPEC CPU 2017%\footnote{\url{https://www.spec.org/cpu2017/}}
 because it is a widely accepted standard
@@ -182,11 +182,59 @@ performance, they rely on loops, and they come with performance
 benchmark suites that we could simply reuse.
 
 
-\paragraph{Compile times}
+\subsubsection{Compile times}
 %
-Table~\ref{tab:compiletime} shows how long it takes \minotaur{} to process
-our benchmarks, along with the number of potentially optimizable
-values and the number of optimizations found.
+\begin{table}[t]
+  \centering
+  \begin{tabular}{| r | r r r | r r |}
+    \hline
+    % \multirow{2}{*}{}& \multicolumn{5}{c|}{Intel Cascade Lake}\\
+    % \cline{2-6}
+    & \multicolumn{3}{c|}{Compilation time (min)} & \multicolumn{2}{c|}{Opt. found}   \\
+    \hline
+    Benchmarks & cold cache & warm & clang & \# cut & \# opt. \\
+    \hline\hline
+    SPEC CPU 2017 & 2,337 & 3 & 3 & 109,177 & 2,683\\
+    \hline
+    gmp-6.2.1 & 440 & $<$ 1 & $<$ 1 & 9,170 & 336 \\
+    \hline
+    libYUV & 2,196 & $<$ 1 & $<$ 1 & 6,849 & 334  \\
+    % \hline
+    % OpenBLAS-0.3.26 & 554 & < 1 & < 1 & 8,683 &  & 670 & < 1 & < 1 & 9,182 & 156 \\
+    \hline
+  \end{tabular}
+  \caption{Compile-time statistics for Intel Cascade Lake}
+  \label{tab:compiletime-intel}
+\end{table}
+
+\begin{table}[t]
+  \centering
+  \begin{tabular}{| r | r r r | r r |}
+    \hline
+    % \multirow{2}{*}{}& \multicolumn{5}{c|}{AMD Zen3} \\
+    % \cline{2-6}
+    & \multicolumn{3}{c|}{Compilation time (min)} & \multicolumn{2}{c|}{Opt. found}  \\
+    \hline
+    Benchmarks & cold cache & warm & clang & \# cut & \# opt. \\
+    \hline\hline
+    SPEC CPU 2017 & 2,580 & 3 & 3 & 114,612 & 2,820 \\
+    \hline
+    gmp-6.2.1& 445 & $<$ 1 & $<$ 1 & 9,265 & 387\\
+    \hline
+    libYUV & 2,193 & $<$ 1 & $<$ 1 & 6,809 & 357 \\
+    % \hline
+    % OpenBLAS-0.3.26 & 554 & < 1 & < 1 & 8,683 &  & 670 & < 1 & < 1 & 9,182 & 156 \\
+    \hline
+  \end{tabular}
+  \caption{Compile-time statistics for AMD Zen3}
+  \label{tab:compiletime-amd}
+\end{table}
+
+
+Table~\ref{tab:compiletime-intel} and~\ref{tab:compiletime-amd} show
+how long it takes \minotaur{} to process our benchmarks, along with
+the number of potentially optimizable values and the number of
+optimizations found.
 %
 In most cases, \minotaur{} found more optimizations when targeting the AMD
 processor.
@@ -202,30 +250,9 @@ performs a large number of solver queries.
 %
 However, with a warm cache, it is only 3\% slower than baseline \texttt{clang}.
 
-\begin{table}[t]
-  \centering
-  \begin{tabular}{| r | r r  r | r r | r r r | r r |}
-    \hline
-    \multirow{2}{*}{}& \multicolumn{5}{c|}{Intel Cascade Lake} & \multicolumn{5}{c|}{AMD Zen3} \\
-    \cline{2-11}
-    & \multicolumn{3}{c|}{Compilation time (min)} & \multicolumn{2}{c|}{Opt. found} & \multicolumn{3}{c|}{Compilation time (min)} & \multicolumn{2}{c|}{Opt. found}  \\
-    \hline
-    Benchmarks & cold cache & warm & clang & \# cut & \# opt. & cold cache & warm & clang & \# cut & \# opt. \\
-    \hline\hline
-    SPEC CPU 2017 & 2,337 & 3 & 3 & 109,177 & 2,683 & 2,580 & 3 & 3 & 114,612 & 2,820 \\
-    \hline
-    gmp-6.2.1 & 440 & < 1 & < 1 & 9,170 & 336 & 445 & < 1 & < 1 & 9,265 & 387\\
-    \hline
-    libYUV & 2,196 & < 1 & < 1 & 6,849 & 334  & 2,193 & < 1 & < 1 & 6,809 & 357 \\
-    % \hline
-    % OpenBLAS-0.3.26 & 554 & < 1 & < 1 & 8,683 &  & 670 & < 1 & < 1 & 9,182 & 156 \\
-    \hline
-  \end{tabular}
-  \caption{Compile-time statistics}
-  \label{tab:compiletime}
-\end{table}
 
-\paragraph{Optimizing GMP with \minotaur{}}
+
+\subsubsection{Optimizing GMP with \minotaur{}}
 
 \begin{figure}[tbp]
   \centering
@@ -262,7 +289,7 @@ resulted in one benchmark slowing down, and the rest of benchmarks
 speeding up, for an overall mean speedup of 6.5\%.
 
 
-\paragraph{Optimizing libYUV with \minotaur{}}
+\subsubsection{Optimizing libYUV with \minotaur{}}
 
 \begin{figure}[tbp]
   \centering
@@ -336,17 +363,17 @@ performance-critical libraries.
 \begin{figure}[tbp]
   \centering
   \subfloat[Speedups on Cascade Lake; geomean = 1.015x\label{fig:spec-intel-speed-ups}]{
-    \includegraphics[width=0.48\linewidth]{figures/spec/spec-intel.pdf}
+    \includegraphics[width=0.8\linewidth]{figures/spec/spec-intel.pdf}
   }
   \hfill
   \subfloat[Speedups on Zen 3; geomean = 1.012x\label{fig:spec-amd-speed-ups}]{
-    \includegraphics[width=0.48\linewidth]{figures/spec/spec-amd.pdf}
+    \includegraphics[width=0.8\linewidth]{figures/spec/spec-amd.pdf}
   }
   \caption{SPEC CPU2017 benchmark performance}
   \label{fig:spec}
 \end{figure}
 
-\paragraph{Optimizing SPEC CPU2017 with \minotaur{}}
+\subsubsection{Optimizing SPEC CPU2017 with \minotaur{}}
 
 Figure~\ref{fig:spec} shows the effect of optimizing the benchmarks
 from SPEC CPU2017 using \minotaur.

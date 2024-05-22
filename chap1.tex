@@ -50,11 +50,13 @@ architecture. However, this has several drawbacks:
 \item Because of the increasing complexity of modern hardware,
 implementing with low-level languages or APIs is error-prone and
 time-consuming. Humans may need to spend a significant amount of time
-to understand the architecture, for example, the Intel x86 programming
-manual is over 4000 pages long. TODO citation. Code implemented in low
-level languages or APIs are also difficult to understand, increasing
-the likelihood of bugs and requiring more time for testing and
-debugging.
+to understand the architecture, for example, the Intel 64 and IA-32
+Architectures Software Developer Manuals~\cite{intelmanual} is over
+5,082 pages long.
+%
+Code implemented in low level languages or APIs are also difficult to
+understand, increasing the likelihood of bugs and requiring more time
+for testing and debugging.
 
 \item On the other hand, the complexity of modern software makes it even
 more difficult for human experts to make the right decisions about
@@ -210,13 +212,11 @@ to efficiently optimize software for emerging architectures.
 \section{Minotaur: A Synthesizing Superoptimizer}
 
 To address above challenges, this dissertation proposes a synthesizing
-superoptimizer, called Minotaur, that can automatically generate
-peephole optimizations for floating point and vector instructions that
-are missing from a commodity compiler.
-
-Minotaur is a synthesis-based superoptimizer for the LLVM intermediate
+superoptimizer, called Minotaur,
+a synthesis-based superoptimizer for the LLVM intermediate
 representation (LLVM IR) that focuses on LLVM's floating point operations,
 portable vector operations as well as its Intel-specific intrinsics.
+%
 The objective of Minotaur is to automatically identify valuable
 optimizations that LLVM is currently unable to perform.
 Minotaur is designed to be used as a drop-in replacement for Clang/LLVM.
@@ -242,8 +242,6 @@ LLVM,
 I have sent reports of the missing optimizations to the LLVM community;
 some of them have been implemented.
 %
-
-
 Minotaur achieves speedups on various benchmarks and
 real-world applications, including the integer parts of SPEC CPU2017,
 GMP, and libYUV. Minotaur gets an average 4\%, 0.5\% and 1.1\% speedups
