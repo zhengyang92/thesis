@@ -41,6 +41,12 @@ synthesis and verification tasks.
 The Z3 theorem prover is a state-of-the-art SMT solver developed by
 Microsoft, which supports a wide range of theories, including
 arithmetic, bit-vectors, arrays, and uninterpreted functions.
+
+\section {Undefined Behavior in LLVM IR}
+
+
+
+
 %
 
 \section {Alive2 Translation Validator}
@@ -58,7 +64,7 @@ program.
 %
 For example, an out-of-bound \texttt{extractelement} instruction can
 be safely removed by the compiler, as the result of such an
-instruction is undefined in LLVM IR.
+instruction is poison in LLVM IR.
 %
 In the absence of undefined behavior, refinement degrades to
 simply equivalence.
