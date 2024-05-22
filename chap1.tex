@@ -51,7 +51,7 @@ architecture. However, this has several drawbacks:
 implementing with low-level languages or APIs is error-prone and
 time-consuming. Humans may need to spend a significant amount of time
 to understand the architecture, for example, the Intel 64 and IA-32
-Architectures Software Developer Manuals~\cite{intelmanual} is over
+Architectures Software Developer Manual~\cite{intelmanual} is over
 5,082 pages long.
 %
 Code implemented in low level languages or APIs are also difficult to
@@ -211,11 +211,11 @@ to efficiently optimize software for emerging architectures.
 
 \section{\minotaur: A Synthesizing Superoptimizer}
 
-To address above challenges, this dissertation proposes a synthesizing
-superoptimizer, called \minotaur,
-a synthesis-based superoptimizer for the LLVM intermediate
-representation (LLVM IR) that focuses on LLVM's floating point operations,
-portable vector operations as well as its Intel-specific intrinsics.
+To address above challenges, this dissertation proposes \minotaur{}, a
+synthesis-based superoptimizer for the LLVM intermediate
+representation (LLVM IR) that focuses on LLVM's floating point
+operations, portable vector operations as well as its Intel-specific
+intrinsics.
 %
 The objective of \minotaur{} is to automatically identify valuable
 optimizations that LLVM is currently unable to perform.
