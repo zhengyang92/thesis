@@ -280,15 +280,14 @@ A collective communication library usually include following operations:
 
 
 There are several collective communication libraries available for
-parallel computing, such as MPI (Message Passing Interface), NCCL
-(NVIDIA Collective Communications Library), and RCCL (Radeon Open
-Compute Collective Library). These libraries provide optimized
-implementations of common collective communication operations and
-enable efficient communication between parallel processes or threads.
-
-The collective communication library is widely used in data-parallel
+parallel computing, such as OpenMPI (Open Message Passing
+Interface)~\cite{OpenMPI}, NCCL (NVIDIA Collective Communications
+Library), and RCCL (ROCm Open Compute Collective Library).
+%
+These libraries provide optimized implementations of common collective
+communication operations and enable efficient communication between
+parallel processes or devices.
+%
+These collective communication libraries are widely used in data-parallel
 training of deep learning models, distributed computing, and
-high-performance computing applications. By providing high-level
-abstractions for collective communication operations, these libraries
-simplify the development of parallel applications and enable efficient
-communication between processes or threads.
+high-performance computing applications.
