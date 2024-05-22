@@ -9,15 +9,15 @@ This section evaluates \minotaur{}.
 Every optimization discovered by \minotaur{} has been formally verified by
 Alive2.
 %
-Even so, bugs might remain in the instruction semantics that we have
+Even so, bugs might remain in the instruction semantics that I have
 added to Alive2, in our cut extractor, in our rewrite mechanism, or in
 Alive2 itself.
 %
-To defend against implementation errors, we have compiled numerous
+To defend against implementation errors, I have compiled numerous
 open source applications using \minotaur, and then run those applications'
 test suites, to ensure that they were not miscompiled.
 %
-Furthermore, we have compiled SPEC CPU 2017 using \minotaur{} and
+Furthermore, I have compiled SPEC CPU 2017 using \minotaur{} and
 used the SPEC drivers to ensure that all of its benchmarks behave
 as expected.
 
@@ -53,10 +53,10 @@ can be overwhelmed, leading to timeouts; if cuts are too small, then
 they form an insufficient basis for driving an optimization.
 %
 To determine a good value for $B$, the depth parameter to the cut
-extraction procedure shown in Algorithm~\ref{alg:slicing}, we
+extraction procedure shown in Algorithm~\ref{alg:slicing}, I
 performed an empirical study.
 %
-We started with FlexC's benchmark suite~\cite{woodruff2023rewriting},
+I started with FlexC's benchmark suite~\cite{woodruff2023rewriting},
 a collection of 2,386 compilable, non-trivial C functions containing
 loops from FFMPEG, FreeImage, DarkNet, xz, bzip2, and the LivermoreC
 benchmark.
@@ -69,7 +69,7 @@ When compiled to LLVM IR, these functions contain a total of 123,062
 instructions; thus, our cut extractor was invoked 123,062 times for
 each depth bound.
 %
-We chose this code as the basis for our experiment because it is
+I chose this code as the basis for our experiment because it is
 derived from real applications while also being small enough to
 keep compile times manageable (compared to, e.g., SPEC CPU 2017,
 which is much larger).
@@ -94,11 +94,11 @@ which is much larger).
 \end{figure}
 
 
-We then ran \minotaur{} on these functions with all depth bounds from
+I then ran \minotaur{} on these functions with all depth bounds from
 0--7, measuring the number of unique cuts that were extracted, the
 number of optimizations found, and the compilation time.
 %
-We used a one-minute timeout for individual Z3 queries, and we also
+I used a one-minute timeout for individual Z3 queries, and I also
 gave \minotaur{} a total of up to five minutes to synthesize an optimized
 version of each cut.
 %
@@ -116,23 +116,23 @@ Finally, the total compile time increases smoothly with the depth
 bound, eventually leveling off as most solver queries time out.
 
 
-For the experiments in the rest of the evaluation section, we chose
+For the experiments in the rest of the evaluation section, I chose
 $B=4$ because this gets pretty close to the maximum observed number of
 optimizations without requiring exorbitant compile times.
 %
 It seems likely that there is room for improvement in this aspect of
 \minotaur: perhaps the depth bound should be determined adaptively.
 %
-In this scenario, we would extract more and more components into the
+In this scenario, I would extract more and more components into the
 cut, until either an optimization is found or else the solver begins
 to time out.
 %
-We leave explorations of this nature for future work.
+I leave explorations of this nature for future work.
 
 
 \subsection{Speedups for Benchmarks and Applications}
 
-In this section, we show how \minotaur{} speeds up real-world benchmarks
+In this section, I show how \minotaur{} speeds up real-world benchmarks
 and applications.
 
 \subsubsection{Experimental setup}
@@ -147,17 +147,17 @@ The Intel machine supports the AVX-512 instruction set.
 Both machines run Linux and were idle except for a single core running
 our benchmarks.
 %
-To reduce the performance variation caused by frequency scaling, we
+To reduce the performance variation caused by frequency scaling, I
 disabled turbo boost on the Intel machine and the core performance
 boost on the AMD machine.
 %
-We invoked LLVM with the \texttt{-march=native} compilation flag to
-ask it to take maximum advantage of processor features; we left other
+I invoked LLVM with the \texttt{-march=native} compilation flag to
+ask it to take maximum advantage of processor features; I left other
 compilation flags unchanged, except where noted.
 %
 All benchmarks are compiled at the \texttt{-O3} optimization level.
 %
-We set the timeout for Z3~\cite{z3} queries to one minute.
+I set the timeout for Z3~\cite{z3} queries to one minute.
 %
 Finally, for each instruction that it tries to optimize, \minotaur{} gives
 up if no solution is found within five minutes.
@@ -165,21 +165,21 @@ up if no solution is found within five minutes.
 
 \subsubsection{Benchmark selection}
 %
-We evaluate on SPEC CPU 2017%\footnote{\url{https://www.spec.org/cpu2017/}}
+I evaluate on SPEC CPU 2017%\footnote{\url{https://www.spec.org/cpu2017/}}
 because it is a widely accepted standard
 benchmark.
 %
-We only evaluate on the \emph{speed} subset of the SPEC suite, and we omit
+I only evaluate on the \emph{speed} subset of the SPEC suite, and we omit
 648.exchange, 607.cactuBSSN, 621.wrf, 627.cam4, 628.pop2, 649.fotonik3d,
 and 654.roms as they contain Fortran code.
 %
-We additionally use GMP, the GNU Multiple Precision Library, and libYUV,
+I additionally use GMP, the GNU Multiple Precision Library, and libYUV,
 which is used by Google Chrome/Chromium for manipulating images in the
 YUV format.
 %
-We chose these libraries because they have been heavily tuned for
+I chose these libraries because they have been heavily tuned for
 performance, they rely on loops, and they come with performance
-benchmark suites that we could simply reuse.
+benchmark suites that I could simply reuse.
 
 
 \subsubsection{Compile times}
@@ -239,7 +239,7 @@ optimizations found.
 In most cases, \minotaur{} found more optimizations when targeting the AMD
 processor.
 %
-We believe this is because LLVM is more mature targeting
+I believe this is because LLVM is more mature targeting
 AVX2 than AVX512.
 %
 Solving queries with 256-bit vectors is also less likely to cause Z3
@@ -271,10 +271,10 @@ However, with a warm cache, it is only 3\% slower than baseline \texttt{clang}.
 GMP provides a portable C-language implementation and then, for
 several platforms, a faster assembly language implementation.
 %
-For this evaluation, we selected the C implementation, because \minotaur{}
+For this evaluation, I selected the C implementation, because \minotaur{}
 works on LLVM IR and cannot process assembly code at all.
 %
-The benchmark suite that we used is
+The benchmark suite that I used is
 GMPbench.%\footnote{\url{https://gmplib.org/gmpbench}}
 %
 Figure~\ref{fig:gmp} summarizes the results.
@@ -330,7 +330,7 @@ performance; most commits to its repository over the last several
 years have been performance-related.
 %
 Our hypothesis is that this manual tuning has already eaten up most of
-the performance gains that we would have hoped to gain from \minotaur{}.
+the performance gains that I would have hoped to gain from \minotaur{}.
 %
 For some time now, Google's released versions of Chrome have been
 compiled using LLVM; the Chrome engineers have had ample time to
@@ -378,10 +378,10 @@ performance-critical libraries.
 Figure~\ref{fig:spec} shows the effect of optimizing the benchmarks
 from SPEC CPU2017 using \minotaur.
 %
-When optimizing for, and running on, the Intel processor, we observed
+When optimizing for, and running on, the Intel processor, I observed
 a mean speedup of 1.5\%.
 %
-When optimizing for, and running on, the AMD processor, we observed a
+When optimizing for, and running on, the AMD processor, I observed a
 mean speedup of 1.2\%.
 %
 It is notoriously difficult to speed up the SPEC CPU benchmarks
@@ -402,8 +402,8 @@ that \minotaur{} is based on,
 %\footnote{\minotaur{} uses LLVM~18.1.0 for all results in this paper.}
 at its \texttt{-O3} optimization level.
 %
-We present optimizations in an SSA format that is close to LLVM IR,
-but we have edited it slightly for compactness and legibility.
+I present optimizations in an SSA format that is close to LLVM IR,
+but I have edited it slightly for compactness and legibility.
 
 \iffalse
 One might be inclined to ask, while reading this section, ``Why is
