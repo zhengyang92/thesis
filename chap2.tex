@@ -37,14 +37,15 @@ performed by the compiler do not introduce errors.
 Translation validation can be achieved using formal methods, such as
 theorem proving, model checking, and symbolic execution.
 %
-This work focuses on translation validation in the context of
-LLVM IR, specifically for transformations that involve vector
-instructions and SIMD operations, using the Alive2 Translation Validator.
+This work focuses on translation validation in the context of LLVM
+IR~\cite{LLVM:CGO04}, specifically for transformations that involve
+vector instructions and SIMD operations, using the
+Alive2~\cite{alive2} Translation Validator.
 
 \section {Undefined Behavior in LLVM IR}
 
 
-LLVM IR~\cite{LLVM:CGO04} explicitly models undefined behavior using
+LLVM IR explicitly models undefined behavior using
 two kinds of deferred undefined behavior values, \emph{poison} and
 \emph{undef}, as well as immediate undefined behavior~\cite{taming}.
 
