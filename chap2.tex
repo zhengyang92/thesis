@@ -178,7 +178,6 @@ overview of how LLVM handles vector support:
   logical operations, shuffling, and other vector-specific
   instructions. Programmers can use these operations to write
   high-performance code that takes advantage of SIMD capabilities.
-  A summary of the vector operations is listed in the next section.
 
 \item Vectorization: LLVM has two auto-vectorization passes, the
   Loop Vectorizer and the Superword Level Parallelism (SLP)
@@ -214,18 +213,11 @@ overview of how LLVM handles vector support:
   based on the target architecture.
 
 
-\item Intrinsic functions: LLVM provides intrinsic functions that
-  allow optimization developers to directly access SIMD instructions
-  provided by the target architecture.
-
 \end{itemize}
 
-\section {Vector Operations in LLVM}
-\label{sec:llvm-vector-ops}
-
 LLVM IR provides a rich set of vector operations that allow
-programmers to work with vectors of data efficiently. Here is a
-summary of some of the vector operations available in LLVM.
+optimization passes to work with vectors. Here is a summary of vector
+operations available in LLVM.
 
 \begin{itemize}
   \item Arithmetic operations: LLVM supports vectorized arithmetic
@@ -244,6 +236,9 @@ summary of some of the vector operations available in LLVM.
   value.
   \item Predicated operations: LLVM supports predicated vector
   operations that conditionally execute based on a mask vector.
+  \item Intrinsic functions: LLVM provides intrinsic functions that
+  allow optimization developers to directly access SIMD instructions
+  provided by the target architecture.
 \end{itemize}
 
 
