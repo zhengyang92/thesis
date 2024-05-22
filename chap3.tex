@@ -313,11 +313,13 @@ call.
 
 For example, consider the following partial-finished transformation:
 
+{\begin{quote}
 \begin{verbatim}
 %1 = mul <4 x i32> %a, <i32 8, i32 8, i32 8, i32 8>
   =>
 %1 = shl <4 x i32> %a, %c
 \end{verbatim}
+\end{quote}}
 
 
 In order to get \texttt{\%c}, my modified Alive2 asks the question: ``Does
@@ -330,8 +332,10 @@ replacement for the specification and, also, the model produced by the
 SMT solver contains literal values for the symbolic constants, giving
 a complete, sound optimization.
 
+{\begin{quote}
 \begin{verbatim}
 %1 = mul <4 x i32> %a, <i32 8, i32 8, i32 8, i32 8>
   =>
 %1 = shl <4 x i32> %a, <i32 3, i32 3, i32 3, i32 3>
 \end{verbatim}
+\end{quote}}
