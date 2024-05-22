@@ -193,9 +193,9 @@ overview of how LLVM handles vector support:
   instructions. Programmers can use these operations to write
   high-performance code that takes advantage of SIMD capabilities.
 
-\item Vectorization: LLVM has two auto-vectorization passes: the
-  Loop Vectorizer and the Superword Level Parallelism (SLP)
-  Vectorizer.
+\item Vectorization: LLVM has two auto-vectorization
+  passes~\cite{llvmvectorizers}: the Loop Vectorizer and the Superword
+  Level Parallelism (SLP) Vectorizer.
   %
   The Loop Vectorizer optimizes loops by transforming the scalar loop body
   into vectorized code, while the SLP Vectorizer optimizes
@@ -206,7 +206,7 @@ overview of how LLVM handles vector support:
   instructions, without requiring manual intervention.
 
 \item Platform-independent peephole optimizations: The peephole
-  optimization pass in LLVM, InstCombine, is designed in a way that
+  optimization pass in LLVM, InstCombine~\cite{InstCombine}, is designed in a way that
   the scalar optimizations can be applied to element-wise vector
   operations without any additional effort.
   %
@@ -219,9 +219,9 @@ overview of how LLVM handles vector support:
   code that leverages the SIMD capabilities of the underlying
   hardware.
   %
-  Target Transform Information (TTI) is an analysis pass of LLVM that
-  provides information about the target architecture, including
-  details about vectorization support.
+  Target Transform Information (TTI)~\cite{tti} is an analysis pass of
+  LLVM that provides information about the target architecture,
+  including details about vectorization support.
   %
   The TTI pass allows the LLVM middle-end to make optimization decisions
   based on the target architecture.
@@ -282,9 +282,8 @@ A collective communication library usually includes the following operations:
 
 
 There are several collective communication libraries available for
-parallel computing, such as OpenMPI (Open Message Passing
-Interface)~\cite{OpenMPI}, NCCL (NVIDIA Collective Communications
-Library), and RCCL (ROCm Open Compute Collective Library).
+parallel computing, such as OpenMPI~\cite{OpenMPI}, NCCL~\cite{nccl},
+and RCCL~\cite{rccl}.
 %
 These libraries provide optimized implementations of common collective
 communication operations and enable efficient communication between
