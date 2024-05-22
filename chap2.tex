@@ -119,27 +119,28 @@ This can result in significantly more efficient code, sometimes
 surpassing what expert programmers or compilers can achieve.
 
 The concept of superoptimization was first introduced by Alexia
-Massalin in a 1987 paper~\cite{massalin}, where she described a system for generating
-the shortest possible sequence of machine instructions that performed
-the same function as a given piece of assembly code. The
-superoptimizer would test all possible combinations of instructions
-and compare the output against the original function to ensure
-correctness.
+Massalin in a 1987 paper~\cite{massalin}, where she described a system
+for generating the shortest possible sequence of machine instructions
+that performed the same function as a given piece of assembly code.
+The superoptimizer would test all possible combinations of
+instructions and compare the output against the original function to
+ensure correctness.
 
-STOKE~\cite{stoke} is a superoptimizer that uses stochastic search techniques to
-explore the space of possible instruction sequences and find the most
-efficient code for a given task. STOKE-FP~\cite{stoke-fp} is an extension of STOKE
-that focuses on floating-point operations.
+STOKE~\cite{stoke} is a superoptimizer that uses stochastic search
+techniques to explore the space of possible instruction sequences and
+find the most efficient code for a given task.
+STOKE-FP~\cite{stoke-fp} is an extension of STOKE that focuses on
+floating-point operations.
 
-Souper~\cite{souper} is a superoptimizer that works on LLVM IR, the intermediate
-representation used by the LLVM compiler infrastructure. Souper
-extracts slices of LLVM instructions from a function and uses an SMT
-solver to find optimized versions of these slices. It is designed to
-work within the LLVM optimization pipeline and discover new
-optimizations that traditional compilers might miss.
+Souper~\cite{souper} is a superoptimizer that works on LLVM IR, the
+intermediate representation used by the LLVM compiler infrastructure.
+Souper extracts slices of LLVM instructions from a function and uses
+an SMT solver to find optimized versions of these slices. It is
+designed to work within the LLVM optimization pipeline and discover
+new optimizations that traditional compilers might miss.
 
-Chapter~\ref{chap:minotaur} of this dissertation presents Minotaur, a superoptimizer
-that uses program synthesis to optimize LLVM IR code.
+Chapter~\ref{chap:minotaur} of this dissertation presents Minotaur, a
+superoptimizer that uses program synthesis to optimize LLVM IR code.
 
 \section{Single Instruction, Multiple Data (SIMD) Parallelism}
 \label{sec:simd}

@@ -54,7 +54,7 @@ Alive2 does not support the other fast-math flags, such as \texttt{ARCP},
 
 LLVM uses a typed, SSA-based intermediate representation (IR).
 %
-It supports a derived \emph{vector type}; for example, a vector with
+It supports a derived vector type; for example, a vector with
 eight lanes, where each element is a 64-bit integer, would have type
 \texttt{<8 x i64>}.
 %
@@ -75,13 +75,13 @@ store, and scatter/gather.
 Additionally, there are three vector-specific data movement
 instructions that I encoded in Alive2:
 %
-\textit{extractelement} retrieves the element at a specified index
+\texttt{extractelement} retrieves the element at a specified index
 from a vector;
 %
-\textit{insertelement} non-destructively creates a new vector where
+\texttt{insertelement} non-destructively creates a new vector where
 one element of an old vector has been replaced with a specified value;
 %
-and, \textit{shufflevector} returns a new vector that is a permutation
+and, \texttt{shufflevector} returns a new vector that is a permutation
 of two input vectors using elements whose indices are specified by a
 constant mask vector.
 
