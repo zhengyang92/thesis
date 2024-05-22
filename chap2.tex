@@ -31,14 +31,14 @@ where multiple stages of translation are involved in transforming a
 high-level programming language into machine code.
 %
 The correctness of the translation process is crucial to ensure that
-the compiled program behaves as expected and that optimizations
+the compiled program behaves as expected, and that optimizations
 performed by the compiler do not introduce errors.
 %
 Translation validation can be achieved using formal methods, such as
 theorem proving, model checking, and symbolic execution.
 %
 This work focuses on translation validation in the context of
-LLVM IR, specifically, for transformations that involve vector
+LLVM IR, specifically for transformations that involve vector
 instructions and SIMD operations, using the Alive2 Translation Validator.
 
 \section {Undefined Behavior in LLVM IR}
@@ -60,14 +60,14 @@ division by zero or dereferencing a null pointer.
 erroneous operation.
 %
 In order to allow aggressive optimizations, LLVM IR allows poison
-values to propagate through the program, if the operation does not
+values to propagate through the program if the operation does not
 invoke immediate undefined behavior.
 %
 On the other hand, if a poison value is used as an operand that has
-any values that triggers immediate undefined behavior, immediate
+any values that trigger immediate undefined behavior, immediate
 undefined behavior occurs.
 
-\item A undef value represents an undefined bit-pattern, and it is
+\item An undef value represents an undefined bit-pattern, and it is
 weaker than poison. The undef value is used to model uninitialized
 values.
 %
@@ -85,7 +85,7 @@ Specifically, for a given pair of functions,
 Alive2 checks if one function is a refinement of the other.
 %
 Here, we use the word \emph{refinement}, rather than \emph{equivalence},
-because compilers is allowed to remove non-determinism from the
+because compilers are allowed to remove non-determinism from the
 program.
 %
 For example, an out-of-bound \texttt{extractelement} instruction can
@@ -108,13 +108,11 @@ floating-point instructions.
 \label{sec:superoptimization}
 
 
-Superoptimization is a technique that aims to find
-the optimal sequence of instructions for a particular task.
-%
 Unlike traditional optimization methods that rely on heuristics or
-general rules to improve code efficiency, superoptimization
-systematically searches the space of possible program transformations
-to identify the better sequence of instructions.
+general rules to improve code efficiency, superoptimization is a
+technique that looks at the code being compiled and uses a search
+procedure and an equivalence checker to automatically discover better
+code sequences.
 %
 This can result in significantly more efficient code, sometimes
 surpassing what expert programmers or compilers can achieve.
@@ -156,7 +154,9 @@ involve large arrays of data such as images, audio, and video streams.
 
 SIMD operations are often carried out by vector units within a CPU.
 These processors have registers that can hold multiple data elements
-and execute vectorized instructions on them. Common examples of SIMD
+and execute vectorized instructions.
+%
+Common examples of SIMD
 architecture include Intel’s MMX, SSE, AVX, AVX2, and AVX-512
 extensions, as well as ARM’s NEON SIMD ISA.
 
@@ -169,7 +169,7 @@ various programming languages and architectures. It provides a
 high-level intermediate representation (IR) that can be optimized and
 compiled to machine code for different platforms. LLVM includes
 support for vector operations, which allow programmers to work with
-vectors of data efficiently. Here are some key aspects of vectors
+vectors of data efficiently. Here are some key aspects of vector
 support in LLVM:
 
 LLVM provides robust support for vector operations, essential for
@@ -191,11 +191,11 @@ overview of how LLVM handles vector support:
   instructions. Programmers can use these operations to write
   high-performance code that takes advantage of SIMD capabilities.
 
-\item Vectorization: LLVM has two auto-vectorization passes, the
+\item Vectorization: LLVM has two auto-vectorization passes: the
   Loop Vectorizer and the Superword Level Parallelism (SLP)
   Vectorizer.
   %
-  The Loop Vectorizer optimizes loops by transforming scalar loop body
+  The Loop Vectorizer optimizes loops by transforming the scalar loop body
   into vectorized code, while the SLP Vectorizer optimizes
   straight-line code by combining multiple scalar operations into
   vector operations.
@@ -221,7 +221,7 @@ overview of how LLVM handles vector support:
   provides information about the target architecture, including
   details about vectorization support.
   %
-  The TTI pass allows LLVM middle-end to make optimization decisions
+  The TTI pass allows the LLVM middle-end to make optimization decisions
   based on the target architecture.
 
 
@@ -262,7 +262,7 @@ parallel computing. Collective communication operations involve
 multiple processes or threads coordinating to exchange data or
 synchronize their operations. These libraries offer optimized
 implementations of common collective communication patterns.
-A collective communication library usually include following operations:
+A collective communication library usually includes the following operations:
 
 \begin{itemize}
     \item Broadcast: A process sends a message to all other processes.

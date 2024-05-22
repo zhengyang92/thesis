@@ -3,7 +3,7 @@
 
 In order for \minotaur{} to use Alive2 as a verification backend, I extended
 Alive2 to support a number of floating point instructions,
-platform independent vector instructions, and 165 x86 vector intrinsics.
+platform-independent vector instructions, and 165 x86 vector intrinsics.
 %
 I also extend Alive2 to support the verification of transformations on
 bounded loops by unrolling loops in the source and target functions by
@@ -42,7 +42,7 @@ negative infinities, the instruction produces a poison value instead.
 \item NSZ flag allows optimizations to treat the sign of a zero
 argument or zero result as non-significant. Different from
 \texttt{NNaN} and \texttt{NInf}, the \texttt{NSZ} flag does not imply
-that the negative zero is poison and/or guaranteed to not exist in the
+that the negative zero is poison or guaranteed to not exist in the
 operation.
 
 \end{itemize}
@@ -67,7 +67,7 @@ I extended Alive2 to handle these vector operations.
 
 
 Beyond the vertical ALU instructions that are element-wise vector
-versions of scalar instructions, I encoded the semantic of a
+versions of scalar instructions, I encoded the semantics of a
 variety of horizontal vector reduction intrinsics and an assortment of
 memory operations such as vector load and store, strided load and
 store, and scatter/gather.
