@@ -1,6 +1,26 @@
 \chapter{Background}
 \label{chap:background}
 
+\section {SMT Solving and the Z3 Theorem Prover}
+
+Satisfiability Modulo Theories (SMT)~\cite{barrett2018satisfiability}
+solving is a technique used to decide the satisfiability of logical
+formulas with respect to background theories.
+%
+An SMT solver is a tool that can automatically determine whether a
+given SMT formula is satisfiable or not, and if it is satisfiable,
+provide a model that satisfies the formula.
+%
+SMT solvers are widely used in formal verification, program analysis,
+and software testing.
+
+This dissertation uses the Z3 theorem prover~\cite{z3} as a backend
+for program synthesis and verification tasks.
+%
+The Z3 theorem prover is a state-of-the-art SMT solver developed by
+Microsoft, which supports a wide range of theories, including
+arithmetic, bit-vectors, arrays, and uninterpreted functions.
+
 \section {Translation Validation}
 
 Translation validation checks if a program preserves its semantics
@@ -21,28 +41,8 @@ This work focuses on translation validation in the context of
 LLVM IR, specifically, for transformations that involve vector
 instructions and SIMD operations, using the Alive2 Translation Validator.
 
-
-\section {SMT Solving and the Z3 Theorem Prover}
-
-Satisfiability Modulo Theories (SMT) solving is a technique used to
-decide the satisfiability of logical formulas with respect to
-background theories.
-%
-An SMT solver is a tool that can automatically determine whether a
-given SMT formula is satisfiable or not, and if it is satisfiable,
-provide a model that satisfies the formula.
-%
-SMT solvers are widely used in formal verification, program analysis,
-and software testing.
-
-This dissertation uses the Z3 theorem prover as a backend for program
-synthesis and verification tasks.
-%
-The Z3 theorem prover is a state-of-the-art SMT solver developed by
-Microsoft, which supports a wide range of theories, including
-arithmetic, bit-vectors, arrays, and uninterpreted functions.
-
 \section {Undefined Behavior in LLVM IR}
+
 
 
 
@@ -101,19 +101,19 @@ superoptimizer would test all possible combinations of instructions
 and compare the output against the original function to ensure
 correctness.
 
-STOKE is a superoptimizer that uses stochastic search techniques to
+STOKE~\cite{stoke} is a superoptimizer that uses stochastic search techniques to
 explore the space of possible instruction sequences and find the most
-efficient code for a given task. STOKE-FP is an extension of STOKE
+efficient code for a given task. STOKE-FP~\cite{stoke-fp} is an extension of STOKE
 that focuses on floating-point operations.
 
-Souper is a superoptimizer that works on LLVM IR, the intermediate
+Souper~\cite{souper} is a superoptimizer that works on LLVM IR, the intermediate
 representation used by the LLVM compiler infrastructure. Souper
 extracts slices of LLVM instructions from a function and uses an SMT
 solver to find optimized versions of these slices. It is designed to
 work within the LLVM optimization pipeline and discover new
 optimizations that traditional compilers might miss.
 
-Chapter 4 of this dissertation presents Minotaur, a superoptimizer
+Chapter~\ref{chap:minotaur} of this dissertation presents Minotaur, a superoptimizer
 that uses program synthesis to optimize LLVM IR code.
 
 \section{Single Instruction, Multiple Data (SIMD) Parallelism}
