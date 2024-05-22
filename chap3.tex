@@ -9,7 +9,7 @@ I also extend Alive2 to support the verification of transformations on
 bounded loops by unrolling loops in the source and target functions by
 a specified factor.
 
-\section{Supporting Floating Point Instructions}
+\section{Supporting Floating Point Operations}
 
 LLVM's floating point instructions trivially map to SMT's Floating
 Point Arithmetic (FPA) theory.
@@ -51,7 +51,7 @@ operation.
 \end{itemize}
 
 Alive2 does not support the other fast-math flags, such as \texttt{ARCP},
-\texttt{}
+\texttt{contract}, \texttt{reassoc} or \texttt{afn}.
 
 \section{Supporting Platform Independent SIMD operations}
 
@@ -92,25 +92,16 @@ constant mask vector.
 \section{Supporting Intel Architecture Specific SIMD Intrinsics}
 
 %
-Finally, to provide direct access to platform-specific vector
+To provide direct access to platform-specific vector
 instructions, LLVM provides numerous intrinsic functions such as
 \texttt{@llvm.x86.avx512.mask.cvttps2dq.512}, aka ``convert with
 truncation packed single-precision floating-point values to packed
 signed doubleword integer values.''
 
-
-
-
-
-The version of Alive2 that we started with supports most of the core
-LLVM intermediate representation, including its target-independent
-vector operations.
-%
-However, Alive2 did not have a semantics for any of the numerous
+Alive2 did not have a semantics for any of the numerous
 LLVM-level intrinsic functions that provide predictable, low-level
 access to target-specific vector instructions.
-
-
+%
 We added semantics for 165 x86-64 vector intrinsics to Alive2; these
 come from the SSE, AVX, AVX2, and AVX512 ISA extensions.
 %
@@ -234,8 +225,6 @@ to reject our malformed queries.
 After we fixed these $14$ bugs, extensive testing failed to find
 additional defects.
 
-
-
 \section {Validating Loop Transformations by Unrolling}
 
 Alive2 performs bounded translation validation by unrolling loops in
@@ -256,9 +245,13 @@ instead of being exponential if done in the reverse order.
 
 Alive2 unrolls a loop by repeatedly duplicating the loop until the
 unroll factor is reached. After duplication, three things need fixing:
-(1) instruction operands, (2) targets of jump instructions, and (3)
-introduce/patch $\phi$ nodes.
-
+%
+(1) instruction operands,
+%
+(2) targets of jump instructions, and
+%
+(3) introduce/patch $\phi$ nodes.
+g
 Operands are patched during basic block duplication. Alive2 maintains
 a map that records the duplicates of each of the original SSA values.
 When an instruction is duplicated, its operands are replaced with the
@@ -266,33 +259,50 @@ latest duplicate in this map.
 
 Jump targets are patched by replacing each target with its next
 duplicate. If no such basic block (BB) exists, it means it is a
-backedge in the last unroll. We redirect these jumps to a special sink
-BB. The reachability domain of the sink BB is negated and added to the
-precondition of its respective function. Since the amount of unrolled
-computation of the source/target functions may not be synchronized
-(e.g., for loop-manipulating optimizations), we need to restrict
-refinement checking such that the control flow cannot reach any of the
-sink BBs. The usage of sink BBs allows us to avoid false positives,
-but it prevents us from supporting infinite loops since we can only
-check refinement of paths that reach a return instruction.
+backedge in the last unroll. Alive2 redirect these jumps to a special
+sink BB.
+%
+The reachability domain of the sink BB is negated and added to the
+precondition of its respective function.
+%
+Since the amount of unrolled computation of the source/target
+functions may not be synchronized (e.g., for loop-manipulating
+optimizations), we need to restrict refinement checking such that the
+control flow cannot reach any of the sink BBs.
+%
+The usage of sink BBs allows us to avoid false positives, but it
+prevents us from supporting infinite loops since Alive2 can only check
+refinement of paths that reach a return instruction.
 
 Some instructions inside a loop may have their result used outside the
 loop. We need to patch such users so they observe the right values
-depending on how many loop iterations are executed. We implemented a
-conservative solution with three cases: patch existing $\phi$ nodes
-(just add more predecessors), introduce a new $\phi$ when the loop has
-a single exit to a BB that dominates [7] the user’s BB, and otherwise
-fallback to using memory. Complex cases may require introducing
-several $\phi$ nodes [3]; we introduce a new stack variable to avoid
-having to maintain the SSA form altogether.
+depending on how many loop iterations are executed.
+%
+I implemented a conservative solution with three cases: patch existing
+$\phi$ nodes (just add more predecessors), introduce a new $\phi$ when
+the loop has a single exit to a BB that dominates [7] the user’s BB,
+and otherwise fallback to using memory.
+%
+Complex cases may require introducing several $\phi$ nodes [3]; I
+introduce a new stack variable to avoid having to maintain the SSA
+form altogether.
 
 
 Picking the right unroll factor involves a tradeoff between coverage
-and run time. We note that the unroll factor should be at least two
-for optimizations that do not manipulate loops so we can cover the
-backedge entry in $\phi$ nodes. For loop-manipulating optimizations,
-this may have to go as high as 64, depending on the optimization.
+and run time.
+%
+We note that the unroll factor should be at least two for
+optimizations that do not manipulate loops so we can cover the
+backedge entry in $\phi$ nodes.
+%
+For loop-manipulating optimizations, this may have to go as high as
+64, depending on the optimization.
+%
 Vectorization may optimize, e.g., 32 iterations of the source loop
 into a single (vectorized) iteration, hence we need to unroll the
 source loop at least 64 times so it covers two iterations of the
 target loop.
+
+This unrolling feature is useful for verifying transformations on
+bounded loops, but is not used in the main \minotaur{} pipeline, as
+\minotaur{} only works on loop free cuts.
