@@ -15,7 +15,7 @@ LLVM's floating point instructions trivially map to SMT's Floating
 Point Arithmetic (FPA) theory.
 %
 For example, a floating point addition \texttt{fadd} in LLVM IR is
-translated to an \texttt{Z3_mk_fpa_add} API call in the Z3 solver.
+translated to an \texttt{Z3\_mk\_fpa\_add} API call in the Z3 solver.
 %
 Alive2 supports 16-bit (\texttt{half}), 32-bit (\texttt{float}), 64-bit
 (\texttt{double}) and 128-bit (\texttt{fp128}) floating point types.
@@ -23,9 +23,6 @@ Alive2 supports 16-bit (\texttt{half}), 32-bit (\texttt{float}), 64-bit
 Non-IEEE-754 compliant floating point types are not supported, such as
 the x86 80-bit floating type, as they are not supported by z3's FPA
 theory.
-%
-Also not supported is \frem instruction, which is not supported by
-Z3's FPA theory, either.
 
 Alive2 supports \texttt{NNaN} (No NaNs), \texttt{NInf} (No Infinities) and
 \texttt{NSZ} (No Signed Zeros) fast-math flags.
@@ -66,19 +63,20 @@ and pointer arithmetic, can operate on vectors as well as scalars.
 %
 IR-level vectors are target-independent; backends attempt to lower
 vector operations to native SIMD instructions, if available.
+I extended Alive2 to handle these vector operations.
 
 
 Beyond the vertical ALU instructions that are element-wise vector
-versions of scalar instructions, LLVM supports a variety of horizontal
-vector reduction intrinsics and an assortment of memory intrinsics
-such as vector load and store, strided load and store, and
-scatter/gather.
+versions of scalar instructions, I encoded the semantic of a
+variety of horizontal vector reduction intrinsics and an assortment of
+memory operations such as vector load and store, strided load and
+store, and scatter/gather.
 %
 Additionally, there are three vector-specific data movement
-instructions:
+instructions that I encoded in Alive2:
 %
-\textit{extractelement} retrieves the element at a specified index from
-a vector;
+\textit{extractelement} retrieves the element at a specified index
+from a vector;
 %
 \textit{insertelement} non-destructively creates a new vector where
 one element of an old vector has been replaced with a specified value;
@@ -88,10 +86,8 @@ of two input vectors using elements whose indices are specified by a
 constant mask vector.
 
 
+\section{Supporting Intel x86 SIMD Intrinsics}
 
-\section{Supporting Intel Architecture Specific SIMD Intrinsics}
-
-%
 To provide direct access to platform-specific vector
 instructions, LLVM provides numerous intrinsic functions such as
 \texttt{@llvm.x86.avx512.mask.cvttps2dq.512}, aka ``convert with
