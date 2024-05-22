@@ -346,6 +346,18 @@ number of thread blocks and report the best performing combination for
 both \tool{} and NCCL. See Section~\ref{sec:lowering} for more
 details.
 
+\begin{figure}[h]
+  \centering
+  \subfloat[Average latency\label{fig:dgx1-res-allgather-avglat}]{
+    \includegraphics[page=1,width=0.84\columnwidth]{figures/evals-camera-ready}
+  }
+  \hfill
+  \subfloat[Speedup\label{fig:dgx1-res-allgather-speedup}] {
+    \includegraphics[page=2,width=0.84\columnwidth]{figures/evals-camera-ready}
+  }
+  \caption{\allgather performance comparison with NCCL}
+  \label{fig:dgx1-res-allgather}
+\end{figure}
 
 Figure~\ref{fig:dgx1-res-allgather} compares \tool's generated code
 for \allgather with NCCL's \allgather. A point on
@@ -367,6 +379,32 @@ $2.2\times$ faster than NCCL's \allgather on small sizes and
 $1.14\times$ faster on larger sizes. It is possible for \tool{} to
 automatically switch between multiple implementations based on the
 input size. In which case, \tool{} will consistently outperform NCCL.
+
+\begin{figure}[h]
+  \centering
+  \subfloat[Average latency\label{fig:dgx1-res-allreduce-avglat}] {
+    \includegraphics[page=3,width=0.84\columnwidth]{figures/evals-camera-ready}
+  }
+  \hfill
+  \subfloat[Speedup\label{fig:dgx1-res-allreduce-speedup}] {
+    \includegraphics[page=4,width=0.84\columnwidth]{figures/evals-camera-ready}
+  }
+  \caption{\allreduce performance comparison with NCCL}
+  \label{fig:dgx1-res-allreduce}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \subfloat[Average latency\label{fig:dgx1-res-alltoall-avglat}]{
+    \includegraphics[page=5,width=0.84\columnwidth]{figures/evals-camera-ready}
+  }
+  \hfill
+  \subfloat[Speedup\label{fig:dgx1-res-alltoall-speedup}] {
+    \includegraphics[page=6,width=0.84\columnwidth]{figures/evals-camera-ready}
+  }
+  \caption{\alltoall performance comparison with NCCL}
+  \label{fig:dgx1-res-alltoall}
+\end{figure}
 
 Likewise, Figure~\ref{fig:dgx1-res-allreduce} shows the running time
 in milliseconds (Figure~\ref{fig:dgx1-res-allreduce-avglat}) or
