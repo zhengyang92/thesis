@@ -172,8 +172,8 @@ contaminate non-dependent vector elements.
         \State {$S_{ret}$[$i$].val $\gets$ PassThrough[$i$].val}
         \State {$S_{ret}$[$i$].poison $\gets$ PassThrough[$i$].poison}
     \Else
-	\State {$S_{ret}$[$i$].val$\gets$sext($S_{a}$[2$\cdot i$].val $\times_\textsc{\tiny{16}}$ $S_{b}$[2$\cdot i$].val) $+_\textsc{\tiny{32}}$  sext($S_{a}$[2$\cdot i+1$].val $\times_\textsc{\tiny{16}}$ $S_{b}$[2$\cdot i +1$].val)}
-	\State {$S_{ret}$[$i$].poison$\gets$$S_{a}$[2$\cdot i$].poison $\vee$  $S_{b}$[2$\cdot i$].poison $\vee$ $S_{a}$[2$\cdot i + 1$].poison $\vee$  $S_{b}$[2$\cdot i + 1$].poison}
+	\State {$S_{ret}$[$i$].val$\gets$sext($S_{a}$[2$\cdot i$].val $\times_\textsc{\tiny{16}}$ $S_{b}$[2$\cdot i$].val) $+_\textsc{\tiny{32}}$  \\ \hspace{8em} sext($S_{a}$[2$\cdot i+1$].val $\times_\textsc{\tiny{16}}$ $S_{b}$[2$\cdot i +1$].val)}
+	\State {$S_{ret}$[$i$].poison$\gets$$S_{a}$[2$\cdot i$].poison $\vee$  $S_{b}$[2$\cdot i$].poison $\vee$  \\ \hspace{10em} $S_{a}$[2$\cdot i + 1$].poison $\vee$ $S_{b}$[2$\cdot i + 1$].poison}
     \EndIf
     \EndFor
     % \EndProcedure
