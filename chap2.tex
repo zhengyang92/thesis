@@ -206,7 +206,7 @@ overview of how LLVM handles vector support:
   code that leverages the SIMD capabilities of the underlying
   hardware.
   %
-  TTI (Target Transform Information) is an analysis pass of LLVM that
+  Target Transform Information (TTI) is an analysis pass of LLVM that
   provides information about the target architecture, including
   details about vectorization support.
   %
@@ -217,10 +217,6 @@ overview of how LLVM handles vector support:
 \item Intrinsic functions: LLVM provides intrinsic functions that
   allow optimization developers to directly access SIMD instructions
   provided by the target architecture.
-  %
-  These intrinsics provide a way
-  to write low-level code that takes full advantage of the vector
-  units available on the hardware.
 
 \end{itemize}
 
