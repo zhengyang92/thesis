@@ -302,3 +302,36 @@ target loop.
 This unrolling feature is useful for verifying transformations on
 bounded loops, but is not used in the main \minotaur{} pipeline, as
 \minotaur{} only works on loop free cuts.
+
+\section {Extending Alive2 for Constant Synthesis}
+
+We modified Alive2 in such a way that symbolic constants get turned
+into literal constants as a side effect of the refinement check which,
+in our modified version, is posed to the solver as an exists-forall
+call.
+%
+
+For example, consider the following partial-finished transformation:
+
+\begin{verbatim}
+%1 = mul <4 x i32> %a, <i32 8, i32 8, i32 8, i32 8>
+  =>
+%1 = shl <4 x i32> %a, %c
+\end{verbatim}
+
+
+In order to get \texttt{\%c}, my modified Alive2 asks the question: ``Does
+there exist a valuation of the symbolic constants (\texttt{\%c}) such
+that the synthesis candidate refines the specification for all
+possible values of the inputs (\texttt{\%a})?''.
+%
+When the refinement relation holds, the candidate is a feasible
+replacement for the specification and, also, the model produced by the
+SMT solver contains literal values for the symbolic constants, giving
+a complete, sound optimization.
+
+\begin{verbatim}
+%1 = mul <4 x i32> %a, <i32 8, i32 8, i32 8, i32 8>
+  =>
+%1 = shl <4 x i32> %a, <i32 3, i32 3, i32 3, i32 3>
+\end{verbatim}

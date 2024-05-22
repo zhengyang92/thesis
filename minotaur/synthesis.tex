@@ -67,23 +67,6 @@ supported by \minotaur{}'s synthesis algorithm.
 
 \subsection{Checking Refinement}
 
-\minotaur{} uses Alive2 to eliminate every candidate that does not refine
-the specification.
-%
-We modified Alive2 in such a way that symbolic constants get turned
-into literal constants as a side effect of the refinement check which,
-in our modified version, is posed to the solver as an exists-forall
-call.
-%
-In other words, \minotaur{} asks the question: ``Does there exist a
-valuation of the symbolic constants such that the synthesis candidate
-refines the specification for all possible values of the inputs?''
-%
-When the refinement relation holds, the candidate is a feasible
-replacement for the specification and, also, the model produced by the
-SMT solver contains literal values for the symbolic constants, giving
-a complete, sound optimization.
-
 
 \begin {figure}[tbp]
   \centering
@@ -95,6 +78,9 @@ a complete, sound optimization.
   \label{fig:synthesizing}
 \end{figure}
 
+\minotaur{} uses Alive2 to eliminate every candidate that does not refine
+the specification.
+%
 Figure~\ref{fig:synthesizing} illustrates this process.
 %
 For the incoming cut shown in the top of the figure, \minotaur{}
