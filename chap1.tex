@@ -242,11 +242,14 @@ LLVM,
 I have sent reports of the missing optimizations to the LLVM community;
 some of them have been implemented.
 %
-Minotaur achieves speedups on various benchmarks and
-real-world applications, including the integer parts of SPEC CPU2017,
-GMP, and libYUV. Minotaur gets an average 4\%, 0.5\% and 1.1\% speedups
-on GMP, libYUV and SPEC CPU17, respectively. The maximum speedup on
-real-world applications is 15\% in GMP. TODO: update
+Minotaur achieves speedups on various benchmarks and real-world
+applications, including the integer parts of SPEC CPU2017, GMP, and
+libYUV.
+%
+Minotaur achieves an average speedup of 7.3\% on the GNU Multiple
+Precision library (GMP)'s benchmark suite, with a maximum speedup of
+13\%. On SPEC CPU 2017, \tool{} produces an average speedup of 1.5\%,
+with a maximum speedup of 4.5\% for 638.imagick.
 
 \section{Synthesizing Optimal Collective Algorithms}
 
@@ -286,10 +289,10 @@ SCCL efficiently lowers algorithms to implementations on two systems
 performance with hand-optimized collective communication libraries.
 SCCL synthesizes novel latency and bandwidth optimal algorithms not
 seen in the literature on two popular hardware topologies. SCCL can be
-used as a drop-in replacement for NCCL. SCCL archives a 1.64x speedup
-on All Reduce, a 1.5x speedup on All Gather over NCCL.
-
-
+used as a drop-in replacement for NCCL. SCCL synthesizes novel
+algorithms that are not seen in the literature on two popular hardware
+topologies. The generated algorithms are competitive with hand
+optimized libraries such as NCCL and RCCL.
 
 \section{Contributions}
 
