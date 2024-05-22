@@ -209,51 +209,51 @@ This dissertation focuses on developing program synthesizers that aim
 to efficiently optimize software for emerging architectures.
 
 
-\section{Minotaur: A Synthesizing Superoptimizer}
+\section{\minotaur: A Synthesizing Superoptimizer}
 
 To address above challenges, this dissertation proposes a synthesizing
-superoptimizer, called Minotaur,
+superoptimizer, called \minotaur,
 a synthesis-based superoptimizer for the LLVM intermediate
 representation (LLVM IR) that focuses on LLVM's floating point operations,
 portable vector operations as well as its Intel-specific intrinsics.
 %
-The objective of Minotaur is to automatically identify valuable
+The objective of \minotaur{} is to automatically identify valuable
 optimizations that LLVM is currently unable to perform.
-Minotaur is designed to be used as a drop-in replacement for Clang/LLVM.
-Minotaur is hundreds of times slower than \texttt{clang -O3} when its
+\minotaur{} is designed to be used as a drop-in replacement for Clang/LLVM.
+\minotaur{} is hundreds of times slower than \texttt{clang -O3} when its
 cache is cold, but with a warm cache, it is just 3\% slower, when
 building the SPEC CPU 2017 benchmarks.
 
-Minotaur works on code fragments that do not span multiple loop
+\minotaur{} works on code fragments that do not span multiple loop
 iterations; it is based on the assumption that existing compiler
 optimization passes such as loop unrolling, software pipelining, and
 automatic vectorization will create the necessary opportunities for
 its optimizations to work effectively.
 
-Minotaur uses an enumerative search algorithm to explore the space of
+\minotaur{} uses an enumerative search algorithm to explore the space of
 possible optimizations and a refinement checker to verify the
 correctness of the optimizations.
-Minotaur uses a cost model to evaluate the performance of the
+\minotaur{} uses a cost model to evaluate the performance of the
 optimizations, and a cache to store the discovered optimizations.
 
-Minotaur finds many profitable optimizations that are missing from
+\minotaur{} finds many profitable optimizations that are missing from
 LLVM,
 %
 I have sent reports of the missing optimizations to the LLVM community;
 some of them have been implemented.
 %
-Minotaur achieves speedups on various benchmarks and real-world
+\minotaur{} achieves speedups on various benchmarks and real-world
 applications, including the integer parts of SPEC CPU2017, GMP, and
 libYUV.
 %
-Minotaur achieves an average speedup of 7.3\% on the GNU Multiple
+\minotaur{} achieves an average speedup of 7.3\% on the GNU Multiple
 Precision library (GMP)'s benchmark suite, with a maximum speedup of
-13\%. On SPEC CPU 2017, \tool{} produces an average speedup of 1.5\%,
+13\%. On SPEC CPU 2017, \minotaur{} produces an average speedup of 1.5\%,
 with a maximum speedup of 4.5\% for 638.imagick.
 
 \section{Synthesizing Optimal Collective Algorithms}
 
-In addition to Minotaur, this dissertation also proposes a synthesizer
+In addition to \minotaur, this dissertation also proposes a synthesizer
 for collective communication algorithms, called Synthesized Collective
 Communication Library (SCCL), that can automatically generate
 high-performance communication kernels for specific network
@@ -296,12 +296,12 @@ optimized libraries such as NCCL and RCCL.
 
 \section{Contributions}
 
-Overall, my work consists of two main parts: Minotaur, a synthesizing
+Overall, my work consists of two main parts: \minotaur, a synthesizing
 superoptimizer for LLVM IR, and SCCL, a synthesizer for collective
 communication algorithms. The main contributions of this dissertation
 are as follows:
 
-I developed Minotaur, a synthesizing superoptimizer for the LLVM
+I developed \minotaur, a synthesizing superoptimizer for the LLVM
 intermediate representation (LLVM IR) that focuses on LLVM's floating
 point operations, portable vector operations as well as its
 Intel-specific intrinsics. Specifically, I made the following
@@ -321,13 +321,13 @@ for applying them to code that is being compiled.
 %
 All together, these elements run inside of an LLVM optimization pass.
 
-\item I performed a detailed evaluation of Minotaur's ability to
+\item I performed a detailed evaluation of \minotaur's ability to
 speed up code, showing that it can find numerous optimziations that
 LLVM fails to perform, and also that it can achieve speedups on a
 variety of real-world libraries and benchmarks.
 \end{itemize}
 
-In addition to Minotaur, my collaborators and I developed SCCL, a
+In addition to \minotaur, my collaborators and I developed SCCL, a
 synthesizer for collective communication algorithms. We've made the
 following contributions:
 
@@ -354,11 +354,18 @@ and AMD RCCL.
 
 \section{Dissertation Outline}
 
-The rest of this dissertation is organized as follows. In Chapter 2, we
+The rest of this dissertation is organized as follows.
+%
+In Chapter~\ref{chap:background}, I
 provide background information on superoptimization, SIMD architectures,
-and program synthesis. In Chapter 3, we present a verification framework
-for LLVM vector instructions. In Chapter 4, we introduce Minotaur and
-describe its architecture and implementation. Chapter 5 presents SCCL,
-a synthesizer for collective communication algorithms. Finally in Chapter
-6, we conclude with a summary of our contributions and directions for
-future work.
+and collective algorithms.
+%
+In Chapter~\ref{chap:extending-alive2}, I describe how I extended
+Alive2 to support \minotaur{}'s verification needs.
+%
+In Chapter~\ref{chap:minotaur}, I introduce \minotaur{} and
+describe its architecture and implementation.
+%
+Chapter~\ref{chap:sccl} presents SCCL,
+a synthesizer for collective communication algorithms.
+Finally, in Chapter~\ref{chap:conclusion}, I conclude with a summary of my contributions.
