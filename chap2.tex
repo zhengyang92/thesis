@@ -44,10 +44,36 @@ instructions and SIMD operations, using the Alive2 Translation Validator.
 \section {Undefined Behavior in LLVM IR}
 
 
+LLVM IR~\cite{LLVM:CGO04} explicitly models undefined behavior using
+two kinds of deferred undefined behavior values, \emph{poison} and
+\emph{undef}, as well as immediate undefined behavior~\cite{taming}.
 
-
-
+\begin{itemize}
 %
+\item The immediate undefined behavior is an operation that, when
+executed, the program is in a corrupted state.
+%
+The immediate undefined behavior is triggered by operations such as
+division by zero or dereferencing a null pointer.
+
+\item A poison value is a special value that represents the result of
+erroneous operation.
+%
+In order to allow aggressive optimizations, LLVM IR allows poison
+values to propagate through the program, if the operation does not
+invoke immediate undefined behavior.
+%
+On the other hand, if a poison value is used as an operand that has
+any values that triggers immediate undefined behavior, immediate
+undefined behavior occurs.
+
+\item A undef value represents an undefined bit-pattern, and it is
+weaker than poison. The undef value is used to model uninitialized
+values.
+%
+This dissertation does not study undef values, as they are in the
+process of being deprecated by the LLVM community~\cite{killundef}.
+\end{itemize}
 
 \section {Alive2 Translation Validator}
 
@@ -94,7 +120,7 @@ This can result in significantly more efficient code, sometimes
 surpassing what expert programmers or compilers can achieve.
 
 The concept of superoptimization was first introduced by Alexia
-Massalin in a 1987 paper, where she described a system for generating
+Massalin in a 1987 paper~\cite{massalin}, where she described a system for generating
 the shortest possible sequence of machine instructions that performed
 the same function as a given piece of assembly code. The
 superoptimizer would test all possible combinations of instructions
@@ -120,39 +146,25 @@ that uses program synthesis to optimize LLVM IR code.
 \label{sec:simd}
 
 SIMD stands for Single Instruction, Multiple Data, a type of parallel
-computing architecture found within a CPU or GPU. It allows for the
-execution of the same operation on multiple data points
-simultaneously, making it highly effective for tasks that require the
-same processing to be applied to large sets of data. Here's a detailed
-look at SIMD and its key aspects:
+computing architecture found within a CPU or GPU. SIMD exploits
+data-level parallelism by applying a single instruction to multiple
+data points at once.
+%
+By processing multiple data points simultaneously, SIMD can
+significantly speed up computations, especially in applications that
+involve large arrays of data such as images, audio, and video streams.
 
-SIMD exploits data-level parallelism by applying a single instruction
-to multiple data points at once. This is different from multiple
-instruction, multiple data (MIMD) architectures where different
-processors execute different instructions on different data. By
-processing multiple data points simultaneously, SIMD can significantly
-speed up computations, especially in applications that involve large
-arrays of data such as images, audio, and video streams.
+SIMD operations are often carried out by vector units within a CPU.
+These processors have registers that can hold multiple data elements
+and execute vectorized instructions on them. Common examples of SIMD
+architecture include Intel’s MMX, SSE, AVX, AVX2, and AVX-512
+extensions, as well as ARM’s NEON SIMD ISA.
 
-SIMD operations are often carried out by vector processors or vector
-units within a CPU. These processors have registers that can hold
-multiple data elements and execute vectorized instructions on them.
-
-Many CPU architectures include SIMD instruction set extensions that
-enhance their ability to perform specific types of parallel
-operations. Common examples include: Intel’s MMX and SSE (Streaming
-SIMD Extensions): These extensions add new instructions and larger
-registers to handle SIMD operations more efficiently. ARM’s NEON: This
-is ARM’s equivalent of SIMD for its processor architectures, used
-extensively in mobile devices. AVX (Advanced Vector Extensions) by
-Intel: This offers enhanced performance and higher bit rates for
-processing, suitable for scientific computations and high-performance
-tasks.
 
 \section{SIMD support in LLVM Optimization Pipeline}
 \label{sec:llvm-vectors}
 
-LLVM is a popular open-source compiler infrastructure that supports
+LLVM~\cite{llvm} is a popular open-source compiler infrastructure that supports
 various programming languages and architectures. It provides a
 high-level intermediate representation (IR) that can be optimized and
 compiled to machine code for different platforms. LLVM includes
@@ -162,7 +174,7 @@ support in LLVM:
 
 LLVM provides robust support for vector operations, essential for
 optimizing performance in applications that can benefit from SIMD
-(Single Instruction, Multiple Data) capabilities. Her is a detailed
+(Single Instruction, Multiple Data) capabilities. Here is a detailed
 overview of how LLVM handles vector support:
 
 \begin{itemize}
