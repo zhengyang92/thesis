@@ -8,7 +8,7 @@ improvement in the output of LLVM's autovectorizer.
 %
 As a step towards fixing these, I created \minotaur{}: a synthesis-based
 superoptimizer for the LLVM intermediate
-representation~\cite{LLVM:CGO04} that focuses on LLVM's portable
+representation~\cite{llvm} that focuses on LLVM's portable
 vector operations as well as its Intel-specific intrinsics.
 %
 Our goal is to automatically discover useful optimizations that are
@@ -18,7 +18,7 @@ missed by LLVM\@.
 implement the missing transformations.
 %
 Even so, \minotaur{} can also be used as a drop-in replacement for
-Clang/LLVM\@.
+Clang\@.
 %
 Since it must solve numerous program synthesis problems at compile
 time, \minotaur{} is hundreds of times slower than \texttt{clang -O3}
