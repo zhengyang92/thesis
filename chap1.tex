@@ -32,8 +32,8 @@ post-Moore's Law era, the performance gains from improvements in
 single core performance is diminishing, and the complexity of
 software is increasing.
 %
-The emergence of novel architectures, such as novel vector processors
-and specialized accelerators has further complicated the task.
+The emergence of novel architectures, such as tensor processors and
+specialized accelerators has further complicated the task.
 %
 These architectures offer unique features and capabilities that can
 significantly improve the runtime performance, but leveraging these
@@ -272,8 +272,8 @@ These network designs are driven not only by the need for efficient
 data transfer, but also by hardware factors such as signal integrity,
 cooling, and physical layout.
 %
-These novel topologies require novel communication kernels to maximize
-performance.
+These novel topologies require customized communication kernels to
+maximize performance.
 %
 Currently, these kernels are created and optimized manually.
 
@@ -287,12 +287,14 @@ primitive on the input topology.
 SCCL efficiently lowers algorithms to implementations on two systems
 (NVIDIA DGX-1 and Gigabyte AMD Z52) and demonstrates competitive
 performance with hand-optimized collective communication libraries.
+%
 SCCL synthesizes novel latency and bandwidth optimal algorithms not
-seen in the literature on two popular hardware topologies. SCCL can be
-used as a drop-in replacement for NCCL. SCCL synthesizes novel
-algorithms that are not seen in the literature on two popular hardware
-topologies. The generated algorithms are competitive with hand
-optimized libraries such as NCCL and RCCL.
+seen in the literature on two popular hardware topologies.
+%
+SCCL can be used as a drop-in replacement for NCCL.
+%
+The generated algorithms are competitive with hand optimized libraries
+such as NCCL and RCCL.
 
 \section{Contributions}
 
