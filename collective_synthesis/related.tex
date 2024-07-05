@@ -11,7 +11,7 @@ architectures like mesh, hypercube, or
 fat-tree\cite{scott1991efficient,bokhari1992complete,barnett1993global}
 and for clusters of shared-memory
 processors~\cite{sistare1999optimization,traff2002improved,sanders2002hierarchical,tipparaju2003fast}.
-The class of $k$-synchronous algorithms studied in this paper is
+The class of $k$-synchronous algorithms studied in this chapter is
 designed to include many of the algorithms proposed in these works and
 implemented in popular MPI implementations such as
 MPICH~\cite{thakur2005optimization} and
@@ -35,7 +35,7 @@ chan2007collective} that switch between latency- and bandwidth-optimal
 algorithm along each dimension of a mesh network. However, to the best
 of our knowledge, these prior works do not seek to identify algorithms
 that are Pareto-optimal for a given topology. In contrast to these
-prior works, the goal of this paper is to automatically synthesize
+prior works, the goal of this chapter is to automatically synthesize
 Pareto-optimal algorithms for a given topology.
 
 There are also hierarchical approaches to implement collective
@@ -44,7 +44,7 @@ implements collective primitives by using NCCL locally in node and MPI
 across nodes. Others such as BlueConnect~\cite{blueconnect} and
 PLink~\cite{plink} exploit the hierarchical network topology of a
 cloud system or a data center to improve the performance of collective
-primitives. In this paper, we focus on synthesizing algorithms for a
+primitives. In this chapter, we focus on synthesizing algorithms for a
 single node with multiple GPU, while the above approaches are
 beneficial on multi node systems.
 

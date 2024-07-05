@@ -1,19 +1,19 @@
 \section{Introduction}
 % Machine learning workloads imply novel topologies
-Recent trends in machine learning towards training and serving large models together with the stagnation of Moore's-law-induced compute performance has led system designers to include novel high-bandwidth interconnect networks both within and across nodes in distributed clusters. For instance, a \dgxone server consists of two x86 processors and eight GPUs, interconnected by NVIDIA's NVLink network as shown in Figure~\ref{fig:dgx1-topo}. These networks' designs are motivated as much by the need to perform efficient \allreduce, a crucial primitive in machine learning, as well as by hardware considerations such as signal integrity, cooling and physical layout. 
-%\todo{only NVLink is shown in the figure, maybe reword the sentence or change the figure? 
+Recent trends in machine learning towards training and serving large models together with the stagnation of Moore's-law-induced compute performance has led system designers to include novel high-bandwidth interconnect networks both within and across nodes in distributed clusters. For instance, a \dgxone server consists of two x86 processors and eight GPUs, interconnected by NVIDIA's NVLink network as shown in Figure~\ref{fig:dgx1-topo}. These networks' designs are motivated as much by the need to perform efficient \allreduce, a crucial primitive in machine learning, as well as by hardware considerations such as signal integrity, cooling and physical layout.
+%\todo{only NVLink is shown in the figure, maybe reword the sentence or change the figure?
 %Actually, I am not even sure if a socket contains THOSE four GPUs.}
 A wide variety of similar accelerators with novel high-speed interconnects are used to train machine learning models today, including AMD's MI50 GPUs~\cite{mi50}, Graphcore's IPUs~\cite{graphcore} and Google's TPUs~\cite{tpu}.
 %\todo{We mention distributed clusters but don't otherwise address them in the paper, I think}
 
-% Hand-written communication primitives - what are the problems. 
-These novel topologies require novel communication kernels to maximize performance. Today these kernels are written and optimized manually. For instance, NVIDIA Collective Communication Library (NCCL) has two general algorithms for the supported operations such as \allreduce: a high-bandwidth ring algorithm and a low-latency tree algorithm. These implementations are manually written and they do not necessarily have the best performance for different topologies including \dgxone's. On one hand, repeating this manual effort for other communication primitives such as \alltoall or extending already implemented algorithms to a wide variety of hardware topologies is simply infeasible. 
+% Hand-written communication primitives - what are the problems.
+These novel topologies require novel communication kernels to maximize performance. Today these kernels are written and optimized manually. For instance, NVIDIA Collective Communication Library (NCCL) has two general algorithms for the supported operations such as \allreduce: a high-bandwidth ring algorithm and a low-latency tree algorithm. These implementations are manually written and they do not necessarily have the best performance for different topologies including \dgxone's. On one hand, repeating this manual effort for other communication primitives such as \alltoall or extending already implemented algorithms to a wide variety of hardware topologies is simply infeasible.
 %\todo{maybe just say communication algorithms, as ring/tree algorithms are mentioned later}
 
 On the other hand, optimizing these communication kernels for performance for each topology and buffer size is crucial. For instance, we found 30\% of the training time for the 8.3 billion parameter Megatron language model with model parallelism is spent inside \allreduce where each
 buffer is of medium size (10-100MB). Also, for data parallelism, the communication buffers
 could range from a few KBs (one layer) to a few GBs (the entire model).
-We expect this wide range of sizes as large models are developed and trained on 
+We expect this wide range of sizes as large models are developed and trained on
 larger distributed clusters.
 
 %As machine learning models growing both in size and training complexity, the
@@ -31,7 +31,7 @@ larger distributed clusters.
 %In contrast with traditional inter-node networks, the interconnects for GPUs
 %inside a node are often highly asymmetric. This is caused by a number of
 %concerns, such as limitations on wire length and signal quality requirements for
-%high-bandwidth links such as PCIe and NVLink as well as limitations on GPU 
+%high-bandwidth links such as PCIe and NVLink as well as limitations on GPU
 %placement due to cooling and physical layout. This results in in-node networks
 %often not corresponding to any widely studied network topology (e.g., butterfly
 %or hypercube). \todo{Give an example here?}
@@ -52,7 +52,7 @@ larger distributed clusters.
 %\todo{the grey box indicating a socket has a low contrast when printed. colours for two different rings should have higher contrast (blue and orange perhaps?)}
 
 % explain our approach
-In this paper, we automatically synthesize high-performance communication kernels. 
+In this chapter, we automatically synthesize high-performance communication kernels.
 Given a topology, specified as a graph with bandwidth constraints on nodes and edges, and a communication primitive, specified as the pre- and post-condition on data location and computation on it, we generate~(Section~\ref{sec:synthesis}) a quantifier-free SMT formula that captures the set of all feasible algorithms that implement the primitive on the input topology.
 Exploring this space to appropriately minimize the number of communication steps or decrease the granularity of communication at each step, is a computationally difficult problem. We exploit
 an SMT solver to synthesize algorithms that explore this tradeoff along the Pareto frontier between latency-optimality and bandwidth-optimality.
@@ -82,7 +82,7 @@ be produced by inverting a \broadcasting one, e.g. \reduce by inverting \broadca
 
 %This allows us to reuse
 %the synthesis of certain primitives such as \allreduce, further improving our
-%scalability. 
+%scalability.
 %\todo{"time time-reversed mirror-image", huh? find easier to understand wording.}
 %\todo{what do you mean by "modularize"? it's more like we reduce (no pun intended) the problem of reduction to broadcasting, which is the wording used later in bullet points}
 
@@ -111,9 +111,9 @@ send and/or reduce data from others.
 % algorithmic novelty
 Some of the algorithms we synthesize are novel, with no known counterparts in
 the literature occupying the same latency-bandwidth tradeoff. For example, we
-have produced a latency-optimal 2-step (4-step) algorithm for 
+have produced a latency-optimal 2-step (4-step) algorithm for
 the \allgather (\allreduce) primitive in the DGX-1 topology (Figure~\ref{fig:dgx1-topo}) and
-a bandwidth-optimal 3-step (6-step) algorithm for the \allgather (\allreduce) primitive on the 
+a bandwidth-optimal 3-step (6-step) algorithm for the \allgather (\allreduce) primitive on the
 same topology.  In addition to providing novel
 algorithms, our approach informs us when a combination of bandwidth and number
 of steps is \emph{not possible}. This makes our synthesis approach a tool for
@@ -122,10 +122,10 @@ useful for co-design of hardware interconnects with communication libraries.
 %\todo{"occupying the same latency-bandwidth tradeoff": exhibiting? and being different isn't necessarily good, we want more bandwidth with the same latency or lower latency with the same bandwidth.}
 %\todo{tell reader that the "number of steps" correlate with latency?}
 % results
-Our evaluation~(Section~\ref{sec:evaluation}) shows us that this approach scales and beats NCCL in almost all cases. 
+Our evaluation~(Section~\ref{sec:evaluation}) shows us that this approach scales and beats NCCL in almost all cases.
 
 
-To summarize, the contributions of our paper are as follows:
+To summarize, the contributions of this chapter are as follows:
 \begin{itemize}
     \item A formalization of the synthesis problem for \broadcasting collectives.
     \item A general strategy for encoding the synthesis problem for

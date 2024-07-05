@@ -64,46 +64,11 @@ $$7\cdot \alpha + \frac{7}{6}\cdot L \cdot \beta$$
 
 Each node has to receive at least $7 \cdot L$ amount of data, and it has an agglomerated incoming per-byte cost of $\beta/6$ (6 incoming NVLinks). Thus, any algorithm for \allgather has to take at least $\frac{7}{6}\cdot L \cdot \beta$ amount of time. Thus, this algorithm is bandwidth-optimal for the \dgxone topology. But can we do better with the latency cost?
 
-Using the techniques described in this paper, we have automatically synthesized an algorithm~(Section~\ref{fig:dgxone:syn}) with cost $$3\cdot \alpha + \frac{7}{6}\cdot L \cdot \beta$$ To the best of our knowledge, this algorithm was not previously known. Moreover, we prove that this algorithm is Pareto-optimal with respect to the class of algorithms we call $k$-synchronous algorithms~(Section~\ref{sec:ksync}).
+Using the techniques described in this chapter, we have automatically synthesized an algorithm~(Section~\ref{fig:dgxone:syn}) with cost $$3\cdot \alpha + \frac{7}{6}\cdot L \cdot \beta$$ To the best of our knowledge, this algorithm was not previously known. Moreover, we prove that this algorithm is Pareto-optimal with respect to the class of algorithms we call $k$-synchronous algorithms~(Section~\ref{sec:ksync}).
 
 \subsection{Latency-Optimal Algorithm for \dgxone}
 The next question is whether we can improve upon the latency cost of the synthesized algorithm. If each node communicates its data along a binary tree instead of a ring, it would take at least $3$ steps. Using the techniques described in this paper, we have automatically synthesized a better algorithm~(Section~\ref{fig:dgxone:syn}) with cost $$2\cdot \alpha + \frac{3}{2}\cdot L \cdot \beta$$
 Since the \dgxone topology has a diameter of $2$, this algorithm is latency-optimal. To the best of our knowledge, a latency-optimal algorithm for the \dgxone was not previously known. This algorithm is Pareto-optimal with respect to the class of $k$-synchronous algorithms.
-
-\begin{comment}
-While bandwidth optimal algorithms are suitable for large inputs $D \gg \alpha / \beta$, they are wasteful for small inputs. In such cases, we seek a latency-optimal algorithm. NCCL is
-capable of creating trees but on a \dgxone, the created trees are always a line graph and
-therefore, they have the same latency as a ring.
-\todofor{Saeed}{Does NCCL have a tree based allgather? If not, what's the tree like in allreduce? Is it binary? from saemal: no it does not. For allgather it doesn't even have
-any other implementation other than a ring and for allreduce on DGX1, it only creates a ring with the tree. It is safe to say that on DGX-1 they use a ring always even though they have the capability of doing a tree}
-\todo{"they are wasteful for small inputs"=>they might not give the smallest possible latency for small inputs}
-
-The technique discussed in this paper synthesized a better algorithm that takes $2$ steps! To the best of our knowledge, this algorithm is not previously known. The algorithm works as follows. In the first step, each node sends its chunk to all its neighbors. For instance, node $0$ sends its chunk to its intra-socket neighbors $1$, $2$, and $3$ as well to its inter-socket neighbor $5$. Since each link is bidirectional communication from nodes do not conflict. At the end of step 1, each node has received chunks from all its intra-socket neighbors and one chunk from its inter-socket neighbor. In the second step, each node sends the chunk from its inter-socket neighbor to all its intra-socket neighbors. That is, node $0$ sends the chunk from $5$ to nodes $1$, $2$, $3$.
-
-This two-step algorithm does not subdivide its input data of size $D$. So, we will call this algorithm a \chunkstep{1}{2} algorithm. The time taken by this algorithm is
-$$2\cdot \alpha + 2\cdot D\cdot\beta$$
-Since the diameter of this topology is $2$ and each node has to communicate with every other node, one cannot implement an \allgather in one step. Thus, for $D \ll \alpha / \beta$, this algorithm is optimal. We call such algorithms latency optimal.
-
-A natural question, again, is whether a faster latency optimal algorithms exist that can use the bandwidth more efficiently. For instance, the \chunkstep{1}{2} does not make use of fast bandwidth links as it only sends one chunk between a pair of nodes at each step. This paper shows that such an algorithm exist.
-\todo{Not true, with rounds, we have a better algorithm.}
-
-\subsection{Pareto Frontier}
-\label{sec:pareto}
-
-While the bandwidth-optimal algorithm is suitable for large input sizes and the latency-optimal algorithm is for small input sizes, many interesting inputs might be of sizes in between the two limits. How do design optimal algorithms in such cases? Let us assume that a \chunkstep{c}{s} algorithm implementing a collective on a given topology exists. Using a similar reasoning as above, this algorithm will take time
-$$ s\cdot \alpha + \frac{s\cdot D \cdot \beta}{c}$$
-Intuitively, we need to reduce $s$ to improve the latency of the algorithm and increase $c$ to improve the bandwidth utilization of the algorithm, while the constraints of the topology and the implemented collective will restrict the feasible pairs $(c,s)$. For instance, as argued above, $s \geq 2$ and $\frac{s}{c} \geq \frac{7}{6}$ when implementing \allgather on the \dgxone topology. In other words, for a given $s$, $c \leq \left\lfloor\frac{6 \cdot s}{7} \right\rfloor$.
-\todo{maybe need to justify why all algorithms can be expressed as \chunkstep{c}{s} performance-wise. Suppose different ranks have different number of steps, which takes different durations. Even though you can find the smallest time slice and the corresponding greatest common divisor logical chunk size, the steps now are "logical" steps, and you don't always pay the $\alpha$ cost.}
-\todo{our algorithms are BSP. With the concept of rounds, each step might take different amount
-of time. Since 1 bw and 2 bw have 2 as their lcm, having equal chunks makes sense. Maybe we should have this in Section 2?}
-
-
-By trading latency by increasing $s$, one can search for the largest $c$ for which a feasible \chunkstep{c}{s} exists. Each such algorithm maximizes the bandwidth utilization for a given latency. We can increase $s$ till we reach a bandwidth-optimal algorithm. Together, these form a {\em Pareto frontier} of feasible algorithms. Which of these algorithms to use will depend on the size of the input data $D$, the latency $\alpha$ of the network, and the bandwidth $\beta$ of the network.
-
-\subsection{Summary of the Paper}
-In this paper, we propose a systematic method to synthesize algorithms in the Pareto-frontier spanning form the latency-optimal algorithm to the bandwidth-optimal algorithm for a given collective on an input topology. We characterize a class of algorithms that captures a broad set of known algorithms and prove Pareto-optimality of both known algorithms and synthesized new algorithms. We automatically generate an implementation of these algorithms that is competitive with manually hand-tuned communication kernels in use today.
-
-\end{comment}
 
 
 %\subsection{Synthesizing Optimal Algorithms}
