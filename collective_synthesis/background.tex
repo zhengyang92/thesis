@@ -6,19 +6,6 @@ This section provides an overview of synthesizing latency- and bandwidth-optimal
 \label{sec:background-collectives}
 Collective communication primitives allow nodes in a networked system to perform operations on shared data. As an example, if each node has some input data, the \allgather primitive transfers these data to all of the nodes.  One way to implement this is for each node to independently send its data to all other nodes. But, an algorithm in which the nodes collectively work together can be more efficient. The efficiency of such algorithms depends on the network topology.
 
-\begin{comment}
-    For instance, given a set of nodes each having an array of data, the \allreduce primitive computes the sum (or some specified associative operation) of all these arrays and stores the result in each of these arrays.
-
-Computing the primitives such as \allreduce requires the nodes to communicate. This communication usually happens in smaller chunks of the input array. Given $N$ nodes, say we split the input array into $N$ chunks, where $c_{i,j}$ represents the $i$th chunk at node $j$. One way to compute \allreduce is as follows. First, we compute at node $i$, a partial sum $d_i = \sum_j c_{i,j}$. These reductions can be performed by arranging $N$ nodes in a spanning tree and communicating chunks $c_{i,j}$ along the tree. Note, there are $N$ parallel reductions each possibly using a different spanning tree. This arrangement of reduced data is called the \reducescatter primitive. Once we have the chunks $d_i$, we can perform an \allgather operation by ensuring each node has a copy of $d_i$. In essence, \allgather involves $N$ simultaneous broadcasts of $d_i$ from node $i$. Thus, we have implemented \allreduce by performing an \reducescatter followed by an \allgather.
-\todo{I think the ``$N$ parallel reductions each possibly using a different spanning tree'' makes this confusing---is this describing an approach where each node reduces $1/N$ of the chunks?}
-\todo{say "compute at node $i$, a partial sum" of chunk $i$.}
-\todo{they're are a part of the sum of arrays. they are not really partial sums, in the sense that, e.g., only data from half of the nodes are added.}
-\todo{"there are $N$ parallel reductions"=>these $N$ parallel reductions}
-
-Implementing a collective communication primitive depends on the topology. For instance, when executing parallel reductions or broadcasts in the implementation above, the algorithm has to choose different spanning trees to utilize the bandwidth on all links in the topology. Similarly, the algorithm has to choose the ideal chunk size to use for communication. We will demonstrate these choices for the \dgxone topology described below.
-\todo{"Implementing" $\ldots$ efficiently}
-\todo{"has to chose ": might have to choose}
-\end{comment}
 
 \subsection{Topology}
 The network topology specifies how the nodes are connected with each other and the latency and bandwidth constraints on the links connecting them. Consider the \dgxone topology shown in Figure~\ref{fig:dgx1-topo}. It consists of $8$ GPUs (or nodes, in the above formalism) split into two groups $\{0,1,2,3\}$ and $\{4,5,6,7\}$. The nodes in each group are fully connected. In addition, there are four inter-group links as shown in the figure. These nodes are connected through

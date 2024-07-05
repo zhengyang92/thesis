@@ -100,7 +100,7 @@ they interact with the underlying hardware.
 
 \newcolumntype{H}{>{\setbox0=\hbox\bgroup}c<{\egroup}@{}}
 
-\begin{table}
+\begin{table}[tbp]
   \begin{tabularx}{\columnwidth}{@{}Xlll@{}}
 \toprule
 Collective &$\chunk$ & $\steps$ & $\rounds$ \\
@@ -181,7 +181,7 @@ and \reduce.
 %See Section~\ref{sec:pareto:optimal} for a discussion of how latency
 %and bandwidth optimality relate to Pareto-optimality.
 
-\begin{table}
+\begin{table}[tbp]
   \begin{tabularx}{\columnwidth}{@{}lHlllXHr@{}}
 \toprule
 Collective & Topology & $\chunk$ & $\steps$ & $\rounds$ & Optimality &
@@ -264,7 +264,7 @@ Running Time & Time \\
 \label{fig:dgxone:syn}
 \end{table}
 
-\begin{table}
+\begin{table}[tbp]
   \begin{tabularx}{\columnwidth}{@{}lHlllXHr@{}}
 \toprule
 Collective & Topology & $\chunk$ & $\steps$ & $\rounds$ & Optimality &
@@ -346,7 +346,7 @@ number of thread blocks and report the best performing combination for
 both \tool{} and NCCL. See Section~\ref{sec:lowering} for more
 details.
 
-\begin{figure}[h]
+\begin{figure}[tbp]
   \centering
   \subfloat[Average latency\label{fig:dgx1-res-allgather-avglat}]{
     \includegraphics[page=1,width=0.84\columnwidth]{figures/evals-camera-ready}
@@ -380,7 +380,7 @@ $1.14\times$ faster on larger sizes. It is possible for \tool{} to
 automatically switch between multiple implementations based on the
 input size. In which case, \tool{} will consistently outperform NCCL.
 
-\begin{figure}[h]
+\begin{figure}[tbp]
   \centering
   \subfloat[Average latency\label{fig:dgx1-res-allreduce-avglat}] {
     \includegraphics[page=3,width=0.84\columnwidth]{figures/evals-camera-ready}
@@ -393,7 +393,7 @@ input size. In which case, \tool{} will consistently outperform NCCL.
   \label{fig:dgx1-res-allreduce}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[tbp]
   \centering
   \subfloat[Average latency\label{fig:dgx1-res-alltoall-avglat}]{
     \includegraphics[page=5,width=0.84\columnwidth]{figures/evals-camera-ready}
