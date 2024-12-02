@@ -3,29 +3,16 @@
 Optimizing compilers emit better code than non-optimizing compilers
 do, but even so their output is usually far from optimal.
 %
-My work started when I noticed substantial opportunities for
+Our work started when we noticed substantial opportunities for
 improvement in the output of LLVM's autovectorizer.
 %
-As a step towards fixing these, I created \minotaur{}: a synthesis-based
+As a step towards fixing these, we created \minotaur{}: a synthesis-based
 superoptimizer for the LLVM intermediate
-representation~\cite{llvm} that focuses on LLVM's portable
-vector operations as well as its Intel-specific intrinsics.
+representation~\cite{LLVM:CGO04} that focuses on LLVM's portable
+vector operations as well as its x86-64-specific SIMD intrinsics.
 %
 Our goal is to automatically discover useful optimizations that are
 missed by LLVM\@.
-%
-\minotaur's primary intended audience is compiler developers, who can then
-implement the missing transformations.
-%
-Even so, \minotaur{} can also be used as a drop-in replacement for
-Clang\@.
-%
-Since it must solve numerous program synthesis problems at compile
-time, \minotaur{} is hundreds of times slower than \texttt{clang -O3}
-when its cache is cold.
-%
-However, with a warm cache it is just 3\% slower, when building the
-SPEC CPU 2017 benchmarks.
 
 
 \minotaur{} works on code fragments that do not span multiple loop
@@ -62,15 +49,15 @@ do {
 \end{quote}}
 
 % checked with godbolt 2/27/2024
-When this loop is compiled by LLVM~18 for a target supporting AVX2
+When it is compiled by LLVM~18 for a target supporting AVX2
 vector extensions, this code is found inside the loop:
 
 % original
 {\begin{quote}
 \begin{verbatim}
-%1 = shufflevector <32 x i8> %0, poison, <31, 30, ... , 2, 1, 0>
-%2 = icmp eq <32 x i8> %1, <46, 46, ... , 46, 46, 46>
-%3 = shufflevector <32 x i1> %2, poison, <31, 30, ... , 2, 1, 0>
+%1 = shufflevector <32 x i8> %0, poison, <31, 30, 29, 28, 27, ... 4, 3, 2, 1, 0>
+%2 = icmp eq <32 x i8> %1, <46, 46, 46, 46, 46, ... 46, 46, 46, 46, 46>
+%3 = shufflevector <32 x i1> %2, poison, <31, 30, 29, 28, 27, ... 4, 3, 2, 1, 0>
 \end{verbatim}
 \end{quote}}
 
@@ -102,7 +89,7 @@ but significantly cheaper (three uOps), form:
 %original
 {\begin{quote}
 \begin{verbatim}
-%1 = icmp eq <32 x i8> %0, <46, 46, ... , 46, 46, 46>
+%3 = icmp eq <32 x i8> %0, <46, 46, 46, 46, 46, ... 46, 46, 46, 46, 46>
 \end{verbatim}
 \end{quote}}
 
@@ -117,40 +104,37 @@ but significantly cheaper (three uOps), form:
 Although SIMD operations are \minotaur's main focus, it also discovers
 optimizations for scalar code.
 %
-For example, this instruction sequence can be found in the OpenBLAS
-numerical library:
+For example, this code, from the SPEC CPU 2017 benchmark 619.lbm,
+computes the difference between two floating-point values, and then
+checks if the result is greater than zero:
 
-{\begin{quote}
-\begin{verbatim}
-%1 = fmul float %0, 2.000000e+00
-%2 = fcmp oge float %1, 0.000000e+00
+% https://github.com/llvm/llvm-project/issues/85245
+{\begin{quote}\begin{verbatim}
+%0 = fsub float %x, %y
+%1 = fcmp ogt float %0, 0.000000e+00
 \end{verbatim}
 \end{quote}}
 
-It multiplies a single-precision input value \texttt{\%0} by 2.0, and
-then checks if the result is greater than 0.0.
-%
-This can be performed more efficiently by simply comparing the
-original value against 0.0:
+\minotaur{} found that this code is equivalent to checking if the second
+value is less than the first:
 
-{\begin{quote}
-\begin{verbatim}
-%2 = fcmp oge float %0, 0.000000e+00
+{\begin{quote}\begin{verbatim}
+%1 = fcmp ogt float %x, %y
 \end{verbatim}
 \end{quote}}
 
-The optimized code is shorter and uses fewer processor resources: four
-uOps instead of eight.
+It is perhaps surprising that LLVM, in 2024, could not perform this
+simple rewrite, which reduces the computation cost from seven uOps to
+five.
 %
-It is perhaps surprising that LLVM, in 2024, cannot perform this
-simple rewrite; \minotaur{} discovers many such missed optimizations.
+However, it has now been implemented in upstream LLVM as a result of
+our work.
 
-
- \begin{figure}[tbp]
-     \includegraphics[width=\linewidth]{figures/flowchart.pdf}
-     \caption{Overview of how \minotaur{} works, and how it fits into the
-       LLVM optimization pipeline}
-     \label{fig:workflow}
+\begin{figure}[tbp]
+    \includegraphics[width=\linewidth]{figures/flowchart.pdf}
+    \caption{Overview of how \minotaur{} works, and how it fits into the
+      LLVM optimization pipeline}
+    \label{fig:workflow}
 \end{figure}
 
 Figure~\ref{fig:workflow} illustrates \minotaur's high-level structure,
@@ -167,16 +151,16 @@ LLVM function, and also caches the rewrite.
 
 
 Reasoning about the correctness of optimizations at the level of LLVM
-IR can be very difficult; I have repurposed Alive2~\cite{alive2} to
+IR can be very difficult; we have repurposed Alive2~\cite{alive2} to
 serve as a verification backend.
 %
-To Alive2, I added formal semantics for 165
-Intel-architecture-specific SIMD intrinsics.
+To Alive2, we added formal semantics for Intel-architecture-specific
+SIMD intrinsics.
 %
 Reasoning about the relative costs of code sequences is another
 difficult problem; the solution adopted by \minotaur{} is to reuse the
 LLVM Machine Code Analyzer~\cite{llvmmca}, which has adequately
-accurate pipline models for various modern processors.
+accurate pipeline models for various modern processors.
 %
 These tools, along with the LLVM compiler itself, form the
 foundation upon which \minotaur{} is built.
@@ -184,7 +168,7 @@ foundation upon which \minotaur{} is built.
 
 \textbf{Research contributions:}
 %
-First, I designed and implemented a domain-specific program
+First, we designed and implemented a domain-specific program
 transformer that extracts an SSA value from an LLVM function, along
 with context about how that value was computed.
 %
@@ -192,17 +176,31 @@ Extracting enough context to permit interesting optimizations, without
 extracting so much context that the underlying SMT solver was
 overwhelmed, was an interesting empirical problem.
 %
-Second, I created a synthesis engine that searches for cheaper code
+Second, we created a synthesis engine that searches for cheaper code
 sequences; it enumerates partially symbolic candidates where the
-instructions are concrete, but data values are symbolic.
+instructions are concrete, but constants are symbolic.
 %
-Third, I developed infrastructure for caching optimizations and also
-for applying them to code that is being compiled.
+For this part of our work, we created formal semantics for 165 LLVM
+intrinsic functions that correspond to SIMD operations supported by
+x86-64 processors, and added these to Alive2.
 %
-All together, these elements run inside of an LLVM optimization pass.
+We also modified Alive2 to support synthesis of literal constants.
 %
-Finally, I performed a detailed evaluation of \minotaur's ability to
-speed up code, showing that it can find numerous optimziations that
-LLVM fails to perform, and also that it can achieve speedups on a
-variety of real-world libraries and benchmarks.
+Third, to mitigate the large performance overhead of running program
+synthesis at compile time, we developed infrastructure for caching
+optimizations.
+%
+Thus, while \minotaur{} can be hundreds of times slower than \texttt{clang
+  -O3} when its cache is cold, with a warm cache it is just 3\%
+slower, when building the SPEC CPU 2017 benchmarks.
 
+
+
+We performed a detailed evaluation of \minotaur's ability to speed up
+code, showing that it can find numerous optimizations that LLVM fails
+to perform, and also that it can achieve speedups on a variety of
+real-world libraries and benchmarks.
+%
+\minotaur{} is also useful for compiler developers, and in fact several
+optimizations it has discovered have now been implemented in upstream
+LLVM\@.

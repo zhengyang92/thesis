@@ -38,7 +38,7 @@ Informally, we can think of $C$ as summarizing a subcomputation in
 $F$, that is (hopefully) tractable for an SMT solver to reason about.
 
 
-When an instruction is part of $C$ but its inputs are not, then these
+When an instruction is part of $C$ but its inputs are not, they
 become free inputs---these are implemented by adding them as
 parameters to $C$.
 %
@@ -66,7 +66,7 @@ and \texttt{srem} is the signed integer modulus operator:
 
 %%% https://gcc.godbolt.org/z/Wes9sPKGW
 
-{\small\begin{quote}
+{mall\begin{quote}
 \begin{verbatim}
 define i64 @f(i64 %x, i64 %y, i64 %z) {
   %a = sdiv i64 %x, %y
@@ -86,7 +86,7 @@ mind that \minotaur{} does not actually construct $R$---we show it here to
 make the explanation concrete):
 
 \begin{multicols}{2}
-{\small\begin{quote}
+{\begin{quote}
 \begin{verbatim}
 define i64 @r0(i64 %x, i64 %y, i64 %z) {
   %m = sdiv i64 %x, %y
@@ -98,7 +98,7 @@ define i64 @r0(i64 %x, i64 %y, i64 %z) {
 \end{verbatim}
 \end{quote}}
 \columnbreak
-{\small\begin{quote}
+{\begin{quote}
 \begin{verbatim}
 define i64 @c0(i64 %t1) {
   %t2 = xor i64 %t1, -1
@@ -114,7 +114,7 @@ to support any optimizations.
 If we cut \texttt{f} with respect to \texttt{\%c} with $B = 1$ then we get:
 
 \begin{multicols}{2}
-{\small\begin{quote}
+{\begin{quote}
 \begin{verbatim}
 define i64 @r1(i64 %x, i64 %y, i64 %z) {
   %m = sdiv i64 %x, %y
@@ -125,7 +125,7 @@ define i64 @r1(i64 %x, i64 %y, i64 %z) {
 \end{verbatim}
 \end{quote}}
 \columnbreak
-{\small\begin{quote}
+{\begin{quote}
 \begin{verbatim}
 define i64 @c1(i64 %t1) {
   %t2 = xor i64 %t1, -1
@@ -142,7 +142,7 @@ return its argument.
 If we increase the depth bound to two, then we would get:
 
 \begin{multicols}{2}
-{\small\begin{quote}
+{\begin{quote}
 \begin{verbatim}
 define i64 @r2(i64 %x, i64 %y, i64 %z) {
   %o = call i64 @c2(i64 %x, i64 %y)
@@ -152,7 +152,7 @@ define i64 @r2(i64 %x, i64 %y, i64 %z) {
 \end{verbatim}
 \end{quote}}
 \columnbreak
-{\small\begin{quote}
+{\begin{quote}
 \begin{verbatim}
 define i64 @c2(i64 %t1, i64 %t2) {
   %t3 = sdiv i64 %t1, %t2
@@ -206,68 +206,73 @@ loop.
 
 
 \begin{algorithm}[tbp]
-  \caption{Cut Extraction Algorithm}
+  \small
+  \caption{\small{Extract a cut from an LLVM function}}
   \begin{algorithmic}[1]
-  \Function{ExtractCut}{\emph{F}: Function, \emph{I}: Instruction, \emph{B}: $\mathbb{N}$}
+  \Function{ExtractCut}{{F}: Function, {I}: Instruction, {B}: $\mathbb{N}$}
   \If{$I$ is in a loop}
-    \State {\emph{AllowedBasicBlocks} $\gets $ all basic blocks in \emph{I}'s loop (innermost loop if nested)}
+    \State {{AllowedBasicBlocks} $\gets $ all basic blocks in {I}'s loop (innermost loop if nested)}
   \Else
-    \State {\emph{AllowedBasicBlocks} $\gets$ all basic blocks in \emph{F} that is not in a loop}
+    \State {{AllowedBasicBlocks} $\gets$ all basic blocks in {F} that is not in a loop}
   \EndIf
-  \State {\emph{Harvested} $\gets \emptyset $}
-  \State {\emph{Unknown} $\gets \emptyset $}
-  \State {\emph{Visited} $\gets \emptyset $}
-  \State {\emph{WorkList} $\gets$ \{ (\emph{I}, 0) \}}
-  \While{\emph{WorkList} is not empty}
-  \Comment{stage 1, instruction extraction}
-  \State {(\emph{WI}, \emph{Depth}) $\gets $ \emph{WorkList}.pop()}
-  \If {\emph{WI} $\in$ \emph{Visited}}
+  \State {{Harvested} $\gets \emptyset $}
+  \State {{Unknown} $\gets \emptyset $}
+  \State {{Visited} $\gets \emptyset $}
+  \State {{WorkList} $\gets$ \{ ({I}, 0) \}}
+  \\
+  \\
+  \Comment{Phase 1: Instruction extraction}
+  \While{{WorkList} is not empty}
+  \State {({WI}, {Depth}) $\gets $ {WorkList}.pop()}
+  \If {{WI} $\in$ {Visited}}
   \State \textbf{continue}
   \EndIf
-  \State {Insert \emph{WI} into \emph{Visited}}
-  \If{\emph{Depth} $>$ \emph{B}}
-  \State {Insert \emph{WI} into \emph{Unknown}}
+  \State {Insert {WI} into {Visited}}
+  \If{{Depth} $>$ {B}}
+  \State {Insert {WI} into {Unknown}}
   \State {\textbf{continue}}
   \EndIf
-  \If{\emph{WI} is not supported}
-  \State {Insert \emph{WI} into \emph{Unknown}}
+  \If{{WI} is not supported}
+  \State {Insert {WI} into {Unknown}}
   \State {\textbf{continue}}
   \EndIf
-  \State {\emph{BB} $\gets$ \emph{WI}'s basic block}
-  \If{\emph{BB} $\notin$ \emph{AllowedBasicBlocks}} %$L$ $\land$ WI is not in $I$'s innermost loop}
-  \State {Insert \emph{WI} into \emph{Unknown}}
+  \State {{BB} $\gets$ {WI}'s basic block}
+  \If{{BB} $\notin$ {AllowedBasicBlocks}} %$L$ $\land$ WI is not in $I$'s innermost loop}
+  \State {Insert {WI} into {Unknown}}
   \State {\textbf{continue}}
   \EndIf
-  \State {Insert \emph{WI} into \emph{Harvested}}
-  \If{\emph{WI} is a Load instruction}
-    \State {\emph{M} $\gets$ \emph{WI}'s linked \texttt{MemoryPhi} or \texttt{MemoryDef}}
-    \If {\emph{M} is a \texttt{MemoryDef} $\wedge$ \emph{M} is a store}
-    \State {\emph{MI} $\gets$ \emph{M}'s stored value}
-    \State {Push (\emph{MI}, \emph{Depth} + 1) into \emph{WorkList} }
+  \State {Insert {WI} into {Harvested}}
+  \If{{WI} is a Load instruction}
+    \State {{M} $\gets$ {WI}'s linked \texttt{MemoryPhi} or \texttt{MemoryDef}}
+    \If {{M} is a \texttt{MemoryDef} $\wedge$ {M} is a store}
+    \State {{MI} $\gets$ {M}'s stored value}
+    \State {Push ({MI}, {Depth} + 1) into {WorkList} }
   \EndIf
 
   \Else
-    \ForAll{operand \emph{Op} in \emph{WI}}
-    \State {Push (\emph{Op}, \emph{Depth} + 1) into \emph{WorkList} }
+    \ForAll{operand {Op} in {WI}}
+    \State {Push ({Op}, {Depth} + 1) into {WorkList} }
 
     \EndFor
   \EndIf
 
-  \State {\emph{T} $ \gets$ terminator of \emph{WI}'s basic block}
-    \If {\emph{T} is a conditional branch instruction}
-    \State {\emph{TI} $\gets$ \emph{T}'s condition value}
-    \State {Push (\emph{TI}, \emph{Depth} + 1) into \emph{WorkList} }
+  \State {{T} $ \gets$ terminator of {WI}'s basic block}
+    \If {{T} is a conditional branch instruction}
+    \State {{TI} $\gets$ {T}'s condition value}
+    \State {Push ({TI}, {Depth} + 1) into {WorkList} }
     \EndIf
 
   \EndWhile
-  \State {Insert every terminator instruction in \emph{F} to \emph{Harvested}}
-  \State {Clone \emph{F} into \emph{C}}
-  \Comment{stage 2, construct a loop-free LLVM function}
-  \State {Delete instructions in \emph{C} except those in \emph{Harvested}}
-  \State {Delete all back-edges in \emph{C}}
-  \State {Add values in \emph{Unknown} to \emph{C} as function arguments}
-  \State {Create return instruction for \emph{I} in \emph{C}}
-  \State {\textbf{return} \emph{C}}
+  \State {Insert every terminator instruction in {F} to {Harvested}}
+  \\
+  \\
+  \Comment{Phase 2: Construct a loop-free LLVM function}
+  \State {Clone {F} into {C}}
+  \State {Delete instructions in {C} except those in {Harvested}}
+  \State {Delete all back-edges in {C}}
+  \State {Add values in {Unknown} to {C} as function arguments}
+  \State {Create return instruction for {I} in {C}}
+  \State {\textbf{return} {C}}
   \EndFunction
   \end{algorithmic}
   \label{alg:slicing}
@@ -279,13 +284,13 @@ loop.
 Algorithm~\ref{alg:slicing} shows the procedure that \minotaur{} uses to
 extract a cut.
 %
-It works in two stages.
+It works in two phases.
 %
-In the first stage, \minotaur{} determines which instructions will be part
+In the first, \minotaur{} determines which instructions will be part
 of the cut, using a depth-bounded depth-first search.
 %
 During the search, two sets, \emph{Harvest} and \emph{Unknown}, are
-propagated which will be used in the second stage for constructing the
+propagated which will be used in the second phase for constructing the
 cut.
 %
 \minotaur{} uses LLVM's LoopInfo pass~\cite{loopinfo} to identify loops in the
@@ -295,7 +300,8 @@ If instruction $I$ is in a loop, \minotaur{} will only extract
 instructions that are defined inside the loop.
 If the loop is nested, \minotaur{} will only extract instructions that are
 defined inside the innermost loop.
-\minotaur{} will give up if the loop is irregular.
+%
+\minotaur{} gives up if the loop is irregular.
 %
 If $I$ is not in a loop, \minotaur{} will skip the instructions that are in a loop.
 %
@@ -318,7 +324,7 @@ potentially influence the loaded value.
 %
 MemorySSA marks memory operations with one of the three memory access tags:
 \texttt{MemoryDef}, \texttt{MemoryUse}, and \texttt{MemoryPhi}.
-Each memory operation is associated with a version of memory state.
+Each memory operation is associated with a version of the memory state.
 %
 A \texttt{MemoryDef} can be a store, a memory fence, or any operation
 that creates a new version of the memory state.
@@ -332,24 +338,21 @@ or \texttt{MemoryPhi}; a load instruction is always a
 \texttt{MemoryUse}.
 %
 Because it must overapproximate, \minotaur{} is conservative when finding
-the load-affecting store: it starts from the loads
-\texttt{MemoryUse}'s memory version and walks along the MemorySSA's
-def-use chain,
+load-affecting stores: it starts from the loads
+in \texttt{MemoryUse}'s memory version and walks along the MemorySSA's
+def-use chain.
 %
-and when the associated memory operation is a \texttt{MemoryDef}, it
+When the associated memory operation is a \texttt{MemoryDef}, it
 checks if the operation is a store and pushes the stored value into
-the worklist.
-%
-\minotaur{} gives up when the associated memory version is tagged with
-\texttt{MemoryPhi}, or when the version is tagged with
-\texttt{MemoryDef} but the operation is not a store instruction.
+the worklist, to provide \minotaur{} a more specific context to optimize
+the load instruction.
 
 
-In the second stage, \minotaur{} builds the extracted function; it does
+In the second phase, \minotaur{} builds the extracted function; it does
 this by cloning the original function and then deleting all
 instructions that are not in the cut.
 %
-\minotaur{} then deletes all the loop backedges so that the extracted
+\minotaur{} then deletes all loop backedges, so that the extracted
 function is loop-free.
 %
 Finally, a return instruction is added to return the value computed by
@@ -357,7 +360,7 @@ the instruction that is the basis for the cut.
 
 \begin{figure}[tbp]
   \centering
-  \includegraphics[width=\linewidth]{figures/slice.pdf}
+  \includegraphics[width=0.8\linewidth]{figures/slice.pdf}
   \caption{Example of cut extraction}
   \label{fig:cut}
 \end{figure}

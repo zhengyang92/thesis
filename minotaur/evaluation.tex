@@ -1,7 +1,12 @@
 \section{Evaluation}
 \label{sec:evaluation}
 
-This section evaluates \minotaur{}.
+Our primary evaluation metric for \minotaur{} is its ability to speed up
+legacy application code, compared to an optimized build using LLVM~18.
+%
+Secondarily, we look at \minotaur's impact on compile time, optimizations
+that have been integrated into upstream LLVM based on our work, and
+other issues.
 
 
 \subsection{Correctness}
@@ -9,15 +14,15 @@ This section evaluates \minotaur{}.
 Every optimization discovered by \minotaur{} has been formally verified by
 Alive2.
 %
-Even so, bugs might remain in the instruction semantics that I have
-added to Alive2, in our cut extractor, in our rewrite mechanism, or in
-Alive2 itself.
+Even so, bugs might remain in the instruction semantics that we have
+added to Alive2, in our cut extractor, in our rewrite mechanism, in
+Alive2, or in Z3\@.
 %
-To defend against implementation errors, I have compiled numerous
+To defend against implementation errors, we have compiled numerous
 open source applications using \minotaur, and then run those applications'
 test suites, to ensure that they were not miscompiled.
 %
-Furthermore, I have compiled SPEC CPU 2017 using \minotaur{} and
+Furthermore, we have compiled SPEC CPU 2017 using \minotaur{} and
 used the SPEC drivers to ensure that all of its benchmarks behave
 as expected.
 
@@ -41,7 +46,7 @@ as expected.
 %   \subfloat[Targeting AMD Zen 3; geomean=1.021x\label{plot:loops-amd}]{
 %     \includegraphics[page=2,width=\linewidth]{figures/data.pdf}
 %   }
-%   \caption{Speedups---estimated by LLVM-MCA---due to running \minotaur{}
+%   \caption{Speedups---estimated by LLVM-MCA---due to running \tool{}
 %     on a loop micro-benchmark suite}
 % \end{figure*}
 
@@ -53,10 +58,10 @@ can be overwhelmed, leading to timeouts; if cuts are too small, then
 they form an insufficient basis for driving an optimization.
 %
 To determine a good value for $B$, the depth parameter to the cut
-extraction procedure shown in Algorithm~\ref{alg:slicing}, I
+extraction procedure shown in Algorithm~\ref{alg:slicing}, we
 performed an empirical study.
 %
-I started with FlexC's benchmark suite~\cite{woodruff2023rewriting},
+We started with FlexC's benchmark suite~\cite{woodruff2023rewriting},
 a collection of 2,386 compilable, non-trivial C functions containing
 loops from FFMPEG, FreeImage, DarkNet, xz, bzip2, and the LivermoreC
 benchmark.
@@ -69,7 +74,7 @@ When compiled to LLVM IR, these functions contain a total of 123,062
 instructions; thus, our cut extractor was invoked 123,062 times for
 each depth bound.
 %
-I chose this code as the basis for our experiment because it is
+We chose this code as the basis for our experiment because it is
 derived from real applications while also being small enough to
 keep compile times manageable (compared to, e.g., SPEC CPU 2017,
 which is much larger).
@@ -78,15 +83,15 @@ which is much larger).
 \begin{figure}[tbp]
   \centering
   \subfloat[Unique cuts extracted\label{fig:loop-expression}]{
-    \includegraphics[width=0.5\linewidth]{figures/spec/expression-count.pdf}
+    \includegraphics[width=0.32\linewidth]{figures/cuts.pdf}
   }
   \hfill
   \subfloat[Unique opts. synthesized\label{fig:loop-optimization}]{
-    \includegraphics[width=0.5\linewidth]{figures/spec/optimization-count.pdf}
+    \includegraphics[width=0.32\linewidth]{figures/synthesized.pdf}
   }
   \hfill
   \subfloat[Compilation time\label{fig:loop-buildtime}]{
-    \includegraphics[width=0.5\linewidth]{figures/spec/compilation-time.pdf}
+    \includegraphics[width=0.32\linewidth]{figures/comptime.pdf}
   }
   \caption{Evaluating the effect of varying $B$, the depth bound for
     cut extraction}
@@ -94,11 +99,11 @@ which is much larger).
 \end{figure}
 
 
-I then ran \minotaur{} on these functions with all depth bounds from
+We then ran \minotaur{} on these functions with all depth bounds from
 0--7, measuring the number of unique cuts that were extracted, the
 number of optimizations found, and the compilation time.
 %
-I used a one-minute timeout for individual Z3 queries, and I also
+We used a one-minute timeout for individual Z3 queries, and we also
 gave \minotaur{} a total of up to five minutes to synthesize an optimized
 version of each cut.
 %
@@ -116,153 +121,173 @@ Finally, the total compile time increases smoothly with the depth
 bound, eventually leveling off as most solver queries time out.
 
 
-For the experiments in the rest of the evaluation section, I chose
-$B=4$ because this gets pretty close to the maximum observed number of
+For the experiments in the rest of the evaluation section, we chose
+$B=4$ because this gets close to the maximum observed number of
 optimizations without requiring exorbitant compile times.
 %
 It seems likely that there is room for improvement in this aspect of
 \minotaur: perhaps the depth bound should be determined adaptively.
 %
-In this scenario, I would extract more and more components into the
+In this scenario, we would extract more and more components into the
 cut, until either an optimization is found or else the solver begins
 to time out.
 %
-I leave explorations of this nature for future work.
+We leave explorations of this nature for future work.
+
+
+\subsection{What Kind of Optimizations Matter Most?}
+
+To determine which of \minotaur's optimizations matter most, we performed
+an ablation study, again using the FlexC benchmark suite that we
+described in Section~\ref{sec:loops}.
+%
+We split the optimizations that \minotaur{} found into five
+categories: memory, floating-point vector, floating-point scalar,
+integer vector, and integer scalar.
+%
+Then, we ran \minotaur{} in a way that omitted each of these categories of
+optimizations.
+%
+As shown in Table~\ref{tab:ablation}, integer vector optimizations
+produce the most rewrites, and also produce the majority of the
+observed speedup.
 
 
 \subsection{Speedups for Benchmarks and Applications}
 
-In this section, I show how \minotaur{} speeds up real-world benchmarks
+In this section, we show how \minotaur{} speeds up real-world benchmarks
 and applications.
 
-\subsubsection{Experimental setup}
+\paragraph{Experimental setup}
 %
-We used two machines for our evaluation: one with an Intel Xeon Gold
-6210U processor running at 2.5\,GHz (this implements the Cascade Lake
-microarchitecture~\cite{cascadelake}) and the other with an
-AMD Ryzen 5950x processor
-running at 3.4\,GHz (this implements the Zen~3 microarchitecture~\cite{zen3}).
-The Intel machine supports the AVX-512 instruction set.
+We used two machines for our evaluation.
+%
+The first has an Intel Xeon Gold 6210U processor running at 2.5\,GHz,
+and has 20 cores; this implements the Cascade Lake
+microarchitecture~\cite{cascadelake} and supports the AVX-512
+instruction set.
+%
+The second has an AMD Ryzen 5950X processor running at 3.4\,GHz, and
+has 16 cores; this processor implements the Zen~3
+microarchitecture~\cite{zen3}.
 %
 Both machines run Linux and were idle except for a single core running
-our benchmarks.
+our benchmarks (however, when measuring compile times, as reported in
+Table~\ref{tab:compiletime}, we used all cores).
 %
-To reduce the performance variation caused by frequency scaling, I
-disabled turbo boost on the Intel machine and the core performance
+To reduce the performance variation caused by frequency scaling, we
+disabled turbo boost on the Intel machine and core performance
 boost on the AMD machine.
 %
-I invoked LLVM with the \texttt{-march=native} compilation flag to
-ask it to take maximum advantage of processor features; I left other
+We also disabled simultaneous multithreading on both machines.
+
+
+We invoked LLVM with the \texttt{-march=native} compilation flag to
+ask it to take maximum advantage of processor features; we left other
 compilation flags unchanged, except where noted.
 %
 All benchmarks are compiled at the \texttt{-O3} optimization level.
 %
-I set the timeout for Z3~\cite{z3} queries to one minute.
+We set the timeout for Z3~\cite{z3} queries to one minute.
 %
 Finally, for each instruction that it tries to optimize, \minotaur{} gives
 up if no solution is found within five minutes.
 
 
-\subsubsection{Benchmark selection}
+\paragraph{Benchmark selection}
 %
-I evaluate on SPEC CPU 2017~\cite{spec2017} because it is a widely
-accepted standard benchmark.
+We evaluate on SPEC CPU 2017\footnote{\url{https://www.spec.org/cpu2017/}}
+because it is a widely accepted standard
+benchmark.
 %
-I only evaluate on the \emph{speed} subset of the SPEC suite, and we omit
+We only evaluate on the \emph{speed} subset of the SPEC suite, and we omit
 648.exchange, 607.cactuBSSN, 621.wrf, 627.cam4, 628.pop2, 649.fotonik3d,
 and 654.roms as they contain Fortran code.
 %
-I additionally use GMP, the GNU Multiple Precision Library, and libYUV,
+We additionally use GMP, the GNU Multiple Precision
+Library,\footnote{\url{https://gmplib.org/}} and
+libYUV,\footnote{\url{https://chromium.googlesource.com/libyuv/libyuv/}}
 which is used by Google Chrome/Chromium for manipulating images in the
 YUV format.
 %
-I chose these libraries because they have been heavily tuned for
-performance, they rely on loops, and they come with performance
-benchmark suites that I could simply reuse.
+We chose these libraries because they have been heavily tuned for
+performance, they are loop-intensive, and they come with performance
+benchmark suites that we could simply reuse.
 
 
-\subsubsection{Compile times}
+\paragraph{Compile times}
 %
-\begin{table}[t]
-  \centering
-  \begin{tabular}{| r | r r r | r r |}
-    \hline
-    % \multirow{2}{*}{}& \multicolumn{5}{c|}{Intel Cascade Lake}\\
-    % \cline{2-6}
-    & \multicolumn{3}{c|}{Compilation time (min)} & \multicolumn{2}{c|}{Optimizations found}   \\
-    \hline
-    Benchmarks & cold cache & warm & clang & \# cut & \# opt. \\
-    \hline\hline
-    SPEC CPU 2017 & 2,337 & 3 & 3 & 109,177 & 2,683\\
-    \hline
-    gmp-6.2.1 & 440 & $<$ 1 & $<$ 1 & 9,170 & 336 \\
-    \hline
-    libYUV & 2,196 & $<$ 1 & $<$ 1 & 6,849 & 334  \\
-    % \hline
-    % OpenBLAS-0.3.26 & 554 & < 1 & < 1 & 8,683 &  & 670 & < 1 & < 1 & 9,182 & 156 \\
-    \hline
-  \end{tabular}
-  \caption{Compile-time statistics for Intel Cascade Lake}
-  \label{tab:compiletime-intel}
-\end{table}
-
-\begin{table}[t]
-  \centering
-  \begin{tabular}{| r | r r r | r r |}
-    \hline
-    % \multirow{2}{*}{}& \multicolumn{5}{c|}{AMD Zen3} \\
-    % \cline{2-6}
-    & \multicolumn{3}{c|}{Compilation time (min)} & \multicolumn{2}{c|}{Optimizations found}  \\
-    \hline
-    Benchmarks & cold cache & warm & clang & \# cut & \# opt. \\
-    \hline\hline
-    SPEC CPU 2017 & 2,580 & 3 & 3 & 114,612 & 2,820 \\
-    \hline
-    gmp-6.2.1& 445 & $<$ 1 & $<$ 1 & 9,265 & 387\\
-    \hline
-    libYUV & 2,193 & $<$ 1 & $<$ 1 & 6,809 & 357 \\
-    % \hline
-    % OpenBLAS-0.3.26 & 554 & < 1 & < 1 & 8,683 &  & 670 & < 1 & < 1 & 9,182 & 156 \\
-    \hline
-  \end{tabular}
-  \caption{Compile-time statistics for AMD Zen3}
-  \label{tab:compiletime-amd}
-\end{table}
-
-
-Table~\ref{tab:compiletime-intel} and~\ref{tab:compiletime-amd} show
-how long it takes \minotaur{} to process our benchmarks, along with
-the number of potentially optimizable values and the number of
-optimizations found.
+Table~\ref{tab:compiletime} shows how long it takes \minotaur{} to build
+our benchmarks, along with the number of potentially optimizable
+values and the number of optimizations found.
 %
-In most cases, \minotaur{} found more optimizations when targeting the AMD
-processor.
+The compile times are for parallel builds; we set the \textsc{make}'s
+\texttt{-j} flag and SPEC CPU 2017's \texttt{build\_ncpus}
+configuration to the number of cores on the machine.
 %
-I believe this is because LLVM is more mature targeting
-AVX2 than AVX512.
-%
-Solving queries with 256-bit vectors is also less likely to cause Z3
-to timeout than are 512-bit vectors.
-%
-Minotaur is quite slow when it runs with a cold cache because it
-performs a large number of solver queries.
+Minotaur is very slow when it runs with a cold cache because it
+performs many solver queries.
 %
 However, with a warm cache, it is only 3\% slower than baseline \texttt{clang}.
 
 
+In most cases, \minotaur{} found more optimizations when targeting the AMD
+processor.
+%
+We believe this is because LLVM is more mature targeting
+AVX2 than AVX-512.
+%
+Queries with 256-bit vectors are also less likely to timeout in Z3 than
+are queries with 512-bit vectors.
 
-\subsubsection{Optimizing GMP with \minotaur{}}
+\begin{table}[t]
+  \centering
+  \caption{Results of an ablation study based on optimization categories}
+  \begin{tabular}{ r | r r r r r r}
+    & memory & FP vector & FP scalar& integer vector & integer scalar & overall \\
+    \hline
+    Number of rewrites & 3 & 17 & 4 & 191 & 109 & 324 \\
+    Geomean speedup & 1.0605x & 1.0600x & 1.0572x & 1.0142x & 1.0506x & 1.0610x \\
+    Contribution to speedup & 0.65\% & 1.64\% & 5.90\% & 75.57\% & 16.23\% & 100\% \\
+  \end{tabular}
+  \label{tab:ablation}
+\end{table}
+
+
+\begin{table}[t]
+  \centering
+  \caption{\minotaur's effect on compilation time}
+  \begin{tabular}{r | r r r | r r | r r r | r r}
+    \multirow{2}{*}{} & \multicolumn{5}{c|}{Intel Cascade Lake} & \multicolumn{5}{c}{AMD Zen 3} \\
+    %\cline{2-11}
+    & \multicolumn{3}{c|}{Compile time (minutes)} & \multicolumn{2}{c|}{Stats} & \multicolumn{3}{c|}{Compile time (minutes)} & \multicolumn{2}{c}{Stats}  \\
+    %\hline
+    Benchmarks & Cold & Warm & Clang & \# Cuts & \# Opts. & Cold & Warm & Clang & \# Cuts & \# Opts. \\
+    \hline
+    SPEC CPU 2017 & 2,337 & 3 & 3 & 109,177 & 2,683 & 2,580 & 3 & 3 & 114,612 & 2,820 \\
+    %\hline
+    gmp-6.2.1 & 440 & < 1 & < 1 & 9,170 & 336 & 445 & < 1 & < 1 & 9,265 & 387\\
+    %\hline
+    libYUV & 2,196 & < 1 & < 1 & 6,849 & 334  & 2,193 & < 1 & < 1 & 6,809 & 357 \\
+    % \hline
+    % OpenBLAS-0.3.26 & 554 & < 1 & < 1 & 8,683 &  & 670 & < 1 & < 1 & 9,182 & 156 \\
+  \end{tabular}
+  \label{tab:compiletime}
+\end{table}
+
+
+\paragraph{Optimizing GMP with \minotaur{}}
 
 \begin{figure}[tbp]
   \centering
   \subfloat[Speedups on Intel Cascade Lake, geomean = 1.073x\label{plot:gmp-intel}]{
-    \includegraphics[page=1,width=\linewidth]{figures/data.pdf}
+    \includegraphics[width=\linewidth]{figures/gmp-intel.pdf}
   }
   \hfill
   \subfloat[Speedups on AMD Zen 3, geomean = 1.065x\label{plot:gmp-amd}]{
-    \includegraphics[page=2,width=\linewidth]{figures/data.pdf}
+    \includegraphics[width=\linewidth]{figures/gmp-amd.pdf}
   }
-  \caption{GNU Multiple Precision Library (GMP) speedups}
+  \caption{GNU Multiple Precision Library (GMP) speedups, on a logarithmic scale}
   \label{fig:gmp}
 \end{figure}
 
@@ -270,11 +295,11 @@ However, with a warm cache, it is only 3\% slower than baseline \texttt{clang}.
 GMP provides a portable C-language implementation and then, for
 several platforms, a faster assembly language implementation.
 %
-For this evaluation, I selected the C implementation, because \minotaur{}
+For this evaluation, we selected the C implementation, because \minotaur{}
 works on LLVM IR and cannot process assembly code at all.
 %
-The benchmark suite that I used is
-GMPbench.%\footnote{\url{https://gmplib.org/gmpbench}}
+The benchmark suite that we used is
+GMPbench.\footnote{\url{https://gmplib.org/gmpbench}}
 %
 Figure~\ref{fig:gmp} summarizes the results.
 %
@@ -288,18 +313,19 @@ resulted in one benchmark slowing down, and the rest of benchmarks
 speeding up, for an overall mean speedup of 6.5\%.
 
 
-\subsubsection{Optimizing libYUV with \minotaur{}}
+\paragraph{Optimizing libYUV with \minotaur{}}
+
 
 \begin{figure}[tbp]
   \centering
   \subfloat[Speedups on Intel Cascade Lake, geomean = 1.022x\label{plot:libyuv-intel}]{
-    \includegraphics[page=3,width=\linewidth]{figures/data.pdf}
+    \includegraphics[width=\linewidth]{figures/yuv-intel.pdf}
   }
   \hfill
   \subfloat[Speedups on AMD Zen 3, geomean = 1.029x\label{plot:libyuv-amd}]{
-    \includegraphics[page=4,width=\linewidth]{figures/data.pdf}
+    \includegraphics[width=\linewidth]{figures/yuv-amd.pdf}
   }
-  \caption{LibYUV speedups}
+  \caption{LibYUV speedups, on a logarithmic scale}
   \label{fig:yuv}
 \end{figure}
 
@@ -307,7 +333,7 @@ speeding up, for an overall mean speedup of 6.5\%.
 This library has an extensive test suite, part of which is explicitly
 intended for performance testing; we used this part as a benchmark.
 %
-Each of them scales, rotates, or converts a 1280\,x\,728 pixel
+Each test program scales, rotates, or converts a 1280\,x\,728 pixel
 image 1,000 times.
 %
 Figure~\ref{fig:yuv} shows the results of this experiment.
@@ -329,7 +355,7 @@ performance; most commits to its repository over the last several
 years have been performance-related.
 %
 Our hypothesis is that this manual tuning has already eaten up most of
-the performance gains that I would have hoped to gain from \minotaur{}.
+the performance gains that we would have hoped to gain from \minotaur{}.
 %
 For some time now, Google's released versions of Chrome have been
 compiled using LLVM; the Chrome engineers have had ample time to
@@ -361,32 +387,59 @@ performance-critical libraries.
 
 \begin{figure}[tbp]
   \centering
-  \subfloat[Speedups on Cascade Lake; geomean = 1.015x\label{fig:spec-intel-speed-ups}]{
-    \includegraphics[width=0.8\linewidth]{figures/spec/spec-intel.pdf}
+  \subfloat[Speedups on Cascade Lake\label{fig:spec-intel-speed-ups}]{
+    \includegraphics[width=0.48\linewidth]{figures/spec-intel.pdf}
   }
   \hfill
-  \subfloat[Speedups on Zen 3; geomean = 1.012x\label{fig:spec-amd-speed-ups}]{
-    \includegraphics[width=0.8\linewidth]{figures/spec/spec-amd.pdf}
+  \subfloat[Speedups on Zen 3\label{fig:spec-amd-speed-ups}]{
+    \includegraphics[width=0.48\linewidth]{figures/spec-amd.pdf}
   }
-  \caption{SPEC CPU2017 benchmark performance}
+  \caption{SPEC CPU2017 benchmark performance, on a logarithmic scale}
   \label{fig:spec}
 \end{figure}
 
-\subsubsection{Optimizing SPEC CPU2017 with \minotaur{}}
+\paragraph{Optimizing SPEC CPU 2017 with \minotaur{}}
 
 Figure~\ref{fig:spec} shows the effect of optimizing the benchmarks
 from SPEC CPU2017 using \minotaur.
 %
-When optimizing for, and running on, the Intel processor, I observed
+When optimizing for, and running on, the Intel processor, we observed
 a mean speedup of 1.5\%.
 %
-When optimizing for, and running on, the AMD processor, I observed a
+When optimizing for, and running on, the AMD processor, we observed a
 mean speedup of 1.2\%.
 %
 It is notoriously difficult to speed up the SPEC CPU benchmarks
 because compiler engineers have already put considerable effort into
 achieving good code generation for them.
 
+
+\subsection{Impact on Upstream LLVM}
+
+In several cases where an optimization discovered by \minotaur{} seemed to
+be simple and broadly applicable, we have reported its absence as an
+LLVM defect, using the project's issue tracker.
+%
+This section summarizes the results of this informal LLVM-improvement
+project.
+
+
+
+%
+Five of these (including the one we presented in Section~1) have now
+been implemented in LLVM\@.
+%
+Three of them are in the code review phase: a patch exists and is
+being discussed by developers.
+%
+Finally, two of them are being discussed, but a candidate patch does
+not yet exist.
+
+
+We also reported five missing vector optimizations.
+%
+One of these has been fixed, one has a patch that is under review, and
+three are still being discussed.
 
 
 \subsection{Optimizations Discovered by \minotaur}
@@ -397,12 +450,11 @@ presenting some optimizations that it found while compiling benchmark
 programs.
 %
 None of these optimizations can be performed by the version of LLVM
-that \minotaur{} is based on,
-%\footnote{\minotaur{} uses LLVM~18.1.0 for all results in this paper.}
-at its \texttt{-O3} optimization level.
+that \minotaur{} is based on,\footnote{\minotaur{} uses LLVM~18.1.0 for all
+results in this paper.}  at its \texttt{-O3} optimization level.
 %
-I present optimizations in an SSA format that is close to LLVM IR,
-but I have edited it slightly for compactness and legibility.
+We present optimizations in an SSA format that is close to LLVM IR,
+but we have edited it slightly for compactness and legibility.
 
 \iffalse
 One might be inclined to ask, while reading this section, ``Why is
@@ -454,10 +506,7 @@ of the operation from four to one.
 \paragraph*{Example 2}
 %https://godbolt.org/z/vjjr7MGzb
 
-This code is from libYUV, ``... an open source project that includes
-YUV scaling and conversion
-functionality'':
-%m\footnote{\url{https://chromium.googlesource.com/libyuv/libyuv/}}
+This code is from libYUV:
 
 {\begin{quote}\begin{verbatim}
 %0 = call @llvm.x86.avx2.pmadd.wd(%x, <0,1,0,1, ...>)
@@ -574,10 +623,7 @@ formal specification.
 \paragraph*{Example 5}
 
 This is an optimization discovered
-by \minotaur{} when it was used to compile GMP, the GNU Multiple Precision
-Arithmetic Library, a widely-used library for arbitrary precision
-integer computation:
-%q\footnote{\url{https://gmplib.org/}}
+by \minotaur{} when it was used to compile GMP:
 
 % before 19 after 13
 
@@ -606,7 +652,7 @@ ret i64 %2
 % %
 % \caption{On the left, LLVM IR extracted from GMP; when compiled to
 %   x86-64 code and run on an Intel Cascade Lake processor, its
-%   predicted execution cost is 19 uOps. On the right, \minotaur's
+%   predicted execution cost is 19 uOps. On the right, \tool's
 %   optimized version of this code, which requires 13 uOps on the same
 %   target.}
 % \label{fig:ctpop}
@@ -658,27 +704,6 @@ number \texttt{\%x} and then checks if the result is zero.
 
 \paragraph*{Example 7}
 
-This code is from the SPEC CPU 2017 benchmark 619.lbm:
-
-% https://github.com/llvm/llvm-project/issues/85245
-{\begin{quote}\begin{verbatim}
-%0 = fsub float %x, %y
-%1 = fcmp ogt float %0, 0.000000e+00
-ret i1 %3
-  =>
-%0 = fcmp ogt float %x, %y
-ret i1 %0
-\end{verbatim}
-\end{quote}}
-
-The original code computes the difference between two floating-point
-values, and then checks if the result is greater than zero. \minotaur{}
-found that this code is equivalent to checking if the second value is
-less than the first.
-
-
-\paragraph*{Example 8}
-
 This code comes from 619.lbm in SPEC CPU 2017:
 
 % https://github.com/llvm/llvm-project/issues/85267
@@ -697,10 +722,12 @@ The original code multiplies a floating-point value \texttt{\%x} by a
 constant, and then checks if the result is less than another constant.
 \minotaur{} found that this code is equivalent to checking if \texttt{\%x}
 is less than or equal to a third constant.
-It is tricky to reason about floating-point literals, and \minotaur{} is able to
-reason and synthesize the correct literals correctly.
+%
+This example shows that \minotaur{} can reason about and synthesize floating
+point literals.
 
-\paragraph*{Example 9}
+
+\paragraph*{Example 8}
 
 This code comes from 638.imagick in SPEC CPU 2017:
 
@@ -722,12 +749,26 @@ the NaN and signed zero propagation rules in floating-point arithmetic.
 This example shows that \minotaur{} is able to reason about these corner
 cases and synthesize the correct code.
 
-% \paragraph*{Example 10}
+\paragraph*{Example 9}
 
+This code comes from FlexC's benchmark suite:
 
-%TODO: Add one final example
-% place holder for a good example
+{\begin{quote}\begin{verbatim}
+%0 = extractelement <4 x ptr> %x, i32 0
+%1 = extractelement <4 x ptr> %x, i32 3
+%2 = load i32, ptr %0
+%3 = load i32, ptr %1
+%4 = insertelement <4 x i32> zeroinitializer, i32 %2, i32 0
+%5 = insertelement <4 x i32> %4, i32 %3, i32 3
+ret <4 x i32> %5
+  =>
+%0 = call @llvm.masked.gather(%0, 4, <true, false, false, true>, zeroinitializer)
+ret <4 x i32> %0
+\end{verbatim}
+\end{quote}}
 
-
-
-
+The original code extracts two pointers from a vector of pointers,
+loads the values from these pointers, and then inserts these values
+into a vector of integers. \minotaur{} found that this code is equivalent
+to performing a masked gather operation, which loads values from
+memory using a vector of pointers and a mask.

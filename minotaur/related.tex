@@ -29,12 +29,23 @@ transformations than Souper is able to perform.
 %
 Additionally, Souper's undefined behavior model does not capture all
 of the subtleties of undefined behavior in LLVM, whereas we reuse
-Alive2's model, which is probably the most widely used formalization
-of these semantics, and is generally recognized as being correct.
+Alive2's model, which is the most widely used formalization of these
+semantics, and the one that is most widely recognized as being
+correct.
 %
 Finally, \minotaur{} focuses on vector-related transformations, whereas
 Souper supports neither LLVM's portable vector instruction set nor its
 platform-specific intrinsics.
+%
+It is worth noting that, over the years, the LLVM developers have
+implemented numerous optimizations discovered by Souper.
+%
+These are all, of course, present in LLVM~18, the compiler that is the
+baseline for our experimental evaluation.
+%
+In other words, \minotaur{} is an effective superoptimizer on top of a
+previous solver-based superoptimizer (and Souper was effective on top
+of an even earlier LLVM superoptimizer~\cite{Sands11}).
 
 
 \minotaur{} is also strongly inspired by Bansal and Aiken's
@@ -51,8 +62,8 @@ there are many differences in the details, particularly in \minotaur's
 slice extractor which allows its synthesis specification to
 approximate the original code's effect much more closely.
 %
-Another assembly superoptimizer, STOKE~\cite{stoke,stoke-fp,conditionally},
-is not as closely related; it is based on randomly
+Another assembly superoptimizer, STOKE~\cite{stoke, stoke-fp,
+  conditionally}, is not as closely related; it is based on randomly
 perturbing assembly-language functions.
 %
 STOKE can potentially perform transformations that Minotaur cannot,
