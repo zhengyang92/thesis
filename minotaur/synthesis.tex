@@ -79,7 +79,7 @@ already very difficult.
 \end{table}
 
 \begin{algorithm}[tbp]
-  \caption{Minotaur's Synthesis Procedure}
+  \caption{Minotaur's Synthesis Procedure.}
   \label{alg:enumerate}
   \begin{algorithmic}[1]
   \Function{SynthesizeRefinements}{Cut: Function, InstLimit: $\mathbb{N}$, TimeLimit: $\mathbb{N}$}
@@ -103,10 +103,6 @@ already very difficult.
   \Comment{omitted for brevity}
     \State {...}
   \EndFor
-
-  \\
-  \\
-  \Comment{Phase 2: Generate partially-symbolic candidates}
 
   \State {WorkList $\gets$ \{ (ret hole), (ret sym-const) \} }
 
@@ -136,9 +132,6 @@ already very difficult.
 
   \EndWhile
 
-  \\
-  \\
-  \Comment{Phase 3: Refinement checking and constant synthesis}
   \State {Sort Candidates by TargetTransformInfoCost}
   \State {StartTime $\gets$ time()}
   \State {Refinements $\gets \emptyset$}

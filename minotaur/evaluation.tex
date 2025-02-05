@@ -244,11 +244,11 @@ are queries with 512-bit vectors.
   \centering
   \caption{Results of an ablation study based on optimization categories}
   \begin{tabular}{ r | r r r r r r}
-    & memory & FP vector & FP scalar& integer vector & integer scalar & overall \\
+    & memory & FP vector & FP scalar& int vector & int scalar & overall \\
     \hline
-    Number of rewrites & 3 & 17 & 4 & 191 & 109 & 324 \\
-    Geomean speedup & 1.0605x & 1.0600x & 1.0572x & 1.0142x & 1.0506x & 1.0610x \\
-    Contribution to speedup & 0.65\% & 1.64\% & 5.90\% & 75.57\% & 16.23\% & 100\% \\
+    Rewrites & 3 & 17 & 4 & 191 & 109 & 324 \\
+    Geomean & 1.0605x & 1.0600x & 1.0572x & 1.0142x & 1.0506x & 1.0610x \\
+    Contribution & 0.65\% & 1.64\% & 5.90\% & 75.57\% & 16.23\% & 100\% \\
   \end{tabular}
   \label{tab:ablation}
 \end{table}
@@ -266,11 +266,10 @@ are queries with 512-bit vectors.
     \hline
     SPEC CPU 2017 & 2,337 & 3 & 3 & 109,177 & 2,683 & 2,580 & 3 & 3 & 114,612 & 2,820 \\
     %\hline
-    gmp-6.2.1 & 440 & < 1 & < 1 & 9,170 & 336 & 445 & < 1 & < 1 & 9,265 & 387\\
+    gmp-6.2.1 & 440 &  1 &  1 & 9,170 & 336 & 445 & 1 & 1 & 9,265 & 387\\
     %\hline
-    libYUV & 2,196 & < 1 & < 1 & 6,849 & 334  & 2,193 & < 1 & < 1 & 6,809 & 357 \\
-    % \hline
-    % OpenBLAS-0.3.26 & 554 & < 1 & < 1 & 8,683 &  & 670 & < 1 & < 1 & 9,182 & 156 \\
+    libYUV & 2,196 &  1 &  1 & 6,849 & 334  & 2,193  1 & 1 & 6,809 & 357 \\
+
   \end{tabular}
   \label{tab:compiletime}
 \end{table}
