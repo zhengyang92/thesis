@@ -298,11 +298,11 @@ are queries with 512-bit vectors.
 \begin{figure}[tbp]
   \centering
   \subfloat[Speedups on Intel Cascade Lake, geomean = 1.073x\label{plot:gmp-intel}]{
-    \includegraphics[width=\linewidth]{figures/gmp-intel.pdf}
+    \includegraphics[width=0.9\linewidth]{figures/gmp-intel.pdf}
   }
   \hfill
   \subfloat[Speedups on AMD Zen 3, geomean = 1.065x\label{plot:gmp-amd}]{
-    \includegraphics[width=\linewidth]{figures/gmp-amd.pdf}
+    \includegraphics[width=0.9\linewidth]{figures/gmp-amd.pdf}
   }
   \caption{GNU Multiple Precision Library (GMP) speedups, on a logarithmic scale}
   \label{fig:gmp}
@@ -336,11 +336,11 @@ speeding up, for an overall mean speedup of 6.5\%.
 \begin{figure}[tbp]
   \centering
   \subfloat[Speedups on Intel Cascade Lake, geomean = 1.022x\label{plot:libyuv-intel}]{
-    \includegraphics[width=\linewidth]{figures/yuv-intel.pdf}
+    \includegraphics[width=0.9\linewidth]{figures/yuv-intel.pdf}
   }
   \hfill
   \subfloat[Speedups on AMD Zen 3, geomean = 1.029x\label{plot:libyuv-amd}]{
-    \includegraphics[width=\linewidth]{figures/yuv-amd.pdf}
+    \includegraphics[width=0.9\linewidth]{figures/yuv-amd.pdf}
   }
   \caption{LibYUV speedups, on a logarithmic scale}
   \label{fig:yuv}
@@ -569,7 +569,7 @@ code requires $8$.
 This code is from libYUV:
 
 %https://godbolt.org/z/7ooobqofK
-{\begin{quote}\begin{verbatim}
+{\begin{quoting}\begin{Verbatim}
 %0 = shufflevector <32 x i8> %x, poison, <3, 7, 11, 15, 19, 23, 27, 31>
 %1 = lshr %0, <6, 6, 6, 6, 6, 6, 6, 6>
 %2 = zext 8 x i8> %1 to <8 x i32>
@@ -578,8 +578,8 @@ ret <8 x i32> %2
 %0 = bitcast <32 x i8> %x to <8 x i32>
 %1 = call @llvm.x86.avx2.psrli.d(<8 x i32> %0, 30)
 ret <8 x i32> %1
-\end{verbatim}
-\end{quote}}
+\end{Verbatim}
+\end{quoting}}
 
 The \texttt{shufflevector} instruction in the unoptimized code selects
 every fourth byte-sized element from the input \texttt{\%x}.
