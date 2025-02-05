@@ -182,8 +182,8 @@ and \reduce.
 %and bandwidth optimality relate to Pareto-optimality.
 
 \begin{table}[tbp]
-  \caption{\dgxone collectives with chunks ($\chunk$), steps ($\steps$) and rounds ($\rounds$).  }
-  \begin{tabularx}{\columnwidth}{@{}lHlllXHr@{}}
+\caption{\dgxone collectives with chunks ($\chunk$), steps ($\steps$) and rounds ($\rounds$).  }
+\begin{tabularx}{\columnwidth}{@{}lHlllXHr@{}}
 \toprule
 Collective & Topology & $\chunk$ & $\steps$ & $\rounds$ & Optimality &
 Running Time & Time \\
@@ -266,6 +266,7 @@ Running Time & Time \\
 \end{table}
 
 \begin{table}[tbp]
+  \caption{\amd collectives with chunks ($\chunk$), steps ($\steps$) and rounds ($\rounds$). }
   \begin{tabularx}{\columnwidth}{@{}lHlllXHr@{}}
 \toprule
 Collective & Topology & $\chunk$ & $\steps$ & $\rounds$ & Optimality &
@@ -304,7 +305,6 @@ Running Time & Time \\
 \beta$& 8.2 s\\
 \bottomrule
 \end{tabularx}
-\caption{\amd collectives with chunks ($\chunk$), steps ($\steps$) and rounds ($\rounds$). }
 %For \reducescatter and \scatter $\chunk$ should be multiplied by 8.
 \label{fig:amd:syn}
 \end{table}
