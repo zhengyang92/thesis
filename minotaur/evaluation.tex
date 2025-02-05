@@ -256,19 +256,37 @@ are queries with 512-bit vectors.
 
 \begin{table}[t]
   \centering
-  \caption{\minotaur's effect on compilation time}
-  \begin{tabular}{r | r r r | r r | r r r | r r}
-    \multirow{2}{*}{} & \multicolumn{5}{c|}{Intel Cascade Lake} & \multicolumn{5}{c}{AMD Zen 3} \\
+  \caption{\minotaur's effect on compilation time on Intel Cascade Lake}
+  \begin{tabular}{r | r r r | r r }
     %\cline{2-11}
-    & \multicolumn{3}{c|}{Compile time (minutes)} & \multicolumn{2}{c|}{Stats} & \multicolumn{3}{c|}{Compile time (minutes)} & \multicolumn{2}{c}{Stats}  \\
+    & \multicolumn{3}{c|}{Compile time (minutes)} & \multicolumn{2}{c}{Stats} \\
     %\hline
-    Benchmarks & Cold & Warm & Clang & \# Cuts & \# Opts. & Cold & Warm & Clang & \# Cuts & \# Opts. \\
+    Benchmarks & Cold & Warm & Clang & \# Cuts & \# Optimizations \\
     \hline
-    SPEC CPU 2017 & 2,337 & 3 & 3 & 109,177 & 2,683 & 2,580 & 3 & 3 & 114,612 & 2,820 \\
+    SPEC CPU 2017 & 2,337 & 3 & 3 & 109,177 & 2,683  \\
     %\hline
-    gmp-6.2.1 & 440 &  1 &  1 & 9,170 & 336 & 445 & 1 & 1 & 9,265 & 387\\
+    gmp-6.2.1 & 440 &  1 &  1 & 9,170 & 336 \\
     %\hline
-    libYUV & 2,196 &  1 &  1 & 6,849 & 334  & 2,193  1 & 1 & 6,809 & 357 \\
+    libYUV & 2,196 &  1 &  1 & 6,849 & 334  \\
+  \end{tabular}
+  \label{tab:compiletime}
+\end{table}
+
+\begin{table}[t]
+  \centering
+  \caption{\minotaur's effect on compilation time on AMD Zen 3}
+  \begin{tabular}{r | r r r | r r}
+
+    %\cline{2-11}
+    & \multicolumn{3}{c|}{Compile time (minutes)} & \multicolumn{2}{c}{Stats} \\
+    %\hline
+    Benchmarks & Cold & Warm & Clang & \# Cuts & \# Optimizations \\
+    \hline
+    SPEC CPU 2017 & 2,580 & 3 & 3 & 114,612 & 2,820 \\
+    %\hline
+    gmp-6.2.1 &  445 & 1 & 1 & 9,265 & 387\\
+    %\hline
+    libYUV  & 2,193 & 1 & 1 & 6,809 & 357 \\
 
   \end{tabular}
   \label{tab:compiletime}
