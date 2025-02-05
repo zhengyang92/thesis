@@ -100,7 +100,8 @@ they interact with the underlying hardware.
 \newcolumntype{H}{>{\setbox0=\hbox\bgroup}c<{\egroup}@{}}
 
 \begin{table}[tbp]
-  \begin{tabularx}{\columnwidth}{@{}Xlll@{}}
+\caption{NCCL hand-written collectives and their chunks and steps. }
+\begin{tabularx}{\columnwidth}{@{}Xlll@{}}
 \toprule
 Collective &$\chunk$ & $\steps$ & $\rounds$ \\
 \midrule
@@ -109,7 +110,7 @@ Collective &$\chunk$ & $\steps$ & $\rounds$ \\
 \broadcast/\reduce  & $6m$ & $6+m$ & $6+m$ \\
 \bottomrule
 \end{tabularx}
-\caption{NCCL hand-written collectives and their chunks and steps. }
+
 \label{table:nccl}
 \end{table}
 
@@ -181,6 +182,7 @@ and \reduce.
 %and bandwidth optimality relate to Pareto-optimality.
 
 \begin{table}[tbp]
+  \caption{\dgxone collectives with chunks ($\chunk$), steps ($\steps$) and rounds ($\rounds$).  }
   \begin{tabularx}{\columnwidth}{@{}lHlllXHr@{}}
 \toprule
 Collective & Topology & $\chunk$ & $\steps$ & $\rounds$ & Optimality &
@@ -258,7 +260,7 @@ Running Time & Time \\
   \beta$& 24.3 s\\
 \bottomrule
 \end{tabularx}
-\caption{\dgxone collectives with chunks ($\chunk$), steps ($\steps$) and rounds ($\rounds$).  }
+
 %For \reducescatter and \scatter $\chunk$ should be multiplied by 8.
 \label{fig:dgxone:syn}
 \end{table}
