@@ -94,7 +94,7 @@ which is much larger).
     \includegraphics[width=0.32\linewidth]{figures/comptime.pdf}
   }
   \caption{Evaluating the effect of varying $B$, the depth bound for
-    cut extraction}
+    cut extraction.}
   \label{fig:loop}
 \end{figure}
 
@@ -173,7 +173,7 @@ microarchitecture~\cite{zen3}.
 %
 Both machines run Linux and were idle except for a single core running
 our benchmarks (however, when measuring compile times, as reported in
-Table~\ref{tab:compiletime}, we used all cores).
+Table~\ref{tab:compiletimeintel} and Table~\ref{tab:compiletimeamd}, we used all cores).
 %
 To reduce the performance variation caused by frequency scaling, we
 disabled turbo boost on the Intel machine and core performance
@@ -217,9 +217,10 @@ benchmark suites that we could simply reuse.
 
 \paragraph{Compile times}
 %
-Table~\ref{tab:compiletime} shows how long it takes \minotaur{} to build
-our benchmarks, along with the number of potentially optimizable
-values and the number of optimizations found.
+Table~\ref{tab:compiletimeintel} and Table~\ref{tab:compiletimeamd}
+shows how long it takes \minotaur{} to build our benchmarks, along
+with the number of potentially optimizable values and the number of
+optimizations found.
 %
 The compile times are for parallel builds; we set the \textsc{make}'s
 \texttt{-j} flag and SPEC CPU 2017's \texttt{build\_ncpus}
@@ -242,7 +243,7 @@ are queries with 512-bit vectors.
 
 \begin{table}[t]
   \centering
-  \caption{Results of an ablation study based on optimization categories}
+  \caption{Results of an ablation study based on optimization categories.}
   \begin{tabular}{ r | r r r r r r}
     & memory & FP vector & FP scalar& int vector & int scalar & overall \\
     \hline
@@ -256,7 +257,7 @@ are queries with 512-bit vectors.
 
 \begin{table}[t]
   \centering
-  \caption{\minotaur's effect on compilation time on Intel Cascade Lake}
+  \caption{\minotaur's effect on compilation time on Intel Cascade Lake.}
   \begin{tabular}{r | r r r | r r }
     %\cline{2-11}
     & \multicolumn{3}{c|}{Compile time (minutes)} & \multicolumn{2}{c}{Stats} \\
@@ -269,12 +270,12 @@ are queries with 512-bit vectors.
     %\hline
     libYUV & 2,196 &  1 &  1 & 6,849 & 334  \\
   \end{tabular}
-  \label{tab:compiletime}
+  \label{tab:compiletimeintel}
 \end{table}
 
 \begin{table}[t]
   \centering
-  \caption{\minotaur's effect on compilation time on AMD Zen 3}
+  \caption{\minotaur's effect on compilation time on AMD Zen 3.}
   \begin{tabular}{r | r r r | r r}
 
     %\cline{2-11}
@@ -289,7 +290,7 @@ are queries with 512-bit vectors.
     libYUV  & 2,193 & 1 & 1 & 6,809 & 357 \\
 
   \end{tabular}
-  \label{tab:compiletime}
+  \label{tab:compiletimeamd}
 \end{table}
 
 
@@ -304,7 +305,7 @@ are queries with 512-bit vectors.
   \subfloat[Speedups on AMD Zen 3, geomean = 1.065x\label{plot:gmp-amd}]{
     \includegraphics[width=0.9\linewidth]{figures/gmp-amd.pdf}
   }
-  \caption{GNU Multiple Precision Library (GMP) speedups, on a logarithmic scale}
+  \caption{GNU Multiple Precision Library (GMP) speedups, on a logarithmic scale.}
   \label{fig:gmp}
 \end{figure}
 
@@ -342,7 +343,7 @@ speeding up, for an overall mean speedup of 6.5\%.
   \subfloat[Speedups on AMD Zen 3, geomean = 1.029x\label{plot:libyuv-amd}]{
     \includegraphics[width=0.9\linewidth]{figures/yuv-amd.pdf}
   }
-  \caption{LibYUV speedups, on a logarithmic scale}
+  \caption{LibYUV speedups, on a logarithmic scale.}
   \label{fig:yuv}
 \end{figure}
 
@@ -379,28 +380,7 @@ compiled using LLVM; the Chrome engineers have had ample time to
 ensure that this compiler achieves decent code generation for
 performance-critical libraries.
 
-% \begin{figure*}[tbp]
-%   \centering
-%   \subfloat[Normalized speedup; geomean = 1.013x\label{fig:spec-intel-speed-ups}]{
-%     \includegraphics[width=0.45\linewidth]{figures/spec/spec-intel.pdf}
-%   }
-%   \hfill
-%   \subfloat[Compilation time in seconds\label{fig:spec-intel-compilation-time}]{
-%     \includegraphics[width=0.45\linewidth]{figures/spec/spec-intel-compiletime.pdf}
-%   }
-%   \caption*{Targeting Intel Cascade Lake\label{fig:spec-intel}}
-%   \hfill
-%   \subfloat[Normalized speedup; geomean = 1.012x\label{fig:spec-amd-speed-ups}]{
-%     \includegraphics[width=0.45\linewidth]{figures/spec/spec-amd.pdf}
-%   }
-%   \hfill
-%   \subfloat[Compilation time in seconds\label{fig:spec-amd-compilation-time}]{
-%     \includegraphics[width=0.45\linewidth]{figures/spec/spec-amd-compiletime.pdf}
-%   }
-%   \caption*{Targeting AMD Zen 3\label{fig:spec-amd}}
-%   \caption{SPEC CPU2017 benchmark performance and compilation time}
-%   \label{fig:spec}
-% \end{figure*}
+
 
 \begin{figure}[tbp]
   \centering
@@ -411,7 +391,7 @@ performance-critical libraries.
   \subfloat[Speedups on Zen 3\label{fig:spec-amd-speed-ups}]{
     \includegraphics[width=0.48\linewidth]{figures/spec-amd.pdf}
   }
-  \caption{SPEC CPU2017 benchmark performance, on a logarithmic scale}
+  \caption{SPEC CPU2017 benchmark performance, on a logarithmic scale.}
   \label{fig:spec}
 \end{figure}
 
@@ -498,7 +478,7 @@ optimizations.
 
 This code is from perlbench in SPEC:
 
-{\begin{quote}\begin{verbatim}
+{\begin{quoting}\begin{Verbatim}
 %0 = zext <16 x i8> %x to <16 x i16>
 %1 = zext <16 x i8> %y to <16 x i16>
 %2 = call @llvm.x86.avx2.pavg.w(%0, %1)
@@ -507,8 +487,8 @@ ret <16 x i8> %3
   =>
 %0 = call @llvm.x86.sse2.pavg.b(%x, %y)
 ret <16 x i8> %0
-\end{verbatim}
-\end{quote}}
+\end{Verbatim}
+\end{quoting}}
 
 The unoptimized code zero-extends each 8-bit element of the two input
 vectors to 16~bits, calls the AVX2 variant of \texttt{pavg} to perform
@@ -607,7 +587,7 @@ This code, from compiling perlbench from SPEC CPU 2017, illustrates
 
 % control flow divergence
 %https://godbolt.org/z/e8jTsTMMz
-{\begin{quote}\begin{verbatim}
+{\begin{quoting}\begin{Verbatim}
 entry:
   br i1 %c, label %body, label %if.end
 body:
@@ -620,8 +600,8 @@ if.end:
     =>
   %r = call @llvm.x86.avx2.pavg.b(%a, %b)
   ret <32 x i8> %r
-\end{verbatim}
-\end{quote}}
+\end{Verbatim}
+\end{quoting}}
 
 The intent of the code is to compute the element-wise average of input
 vectors \texttt{\%a} and \texttt{\%b}, with a Boolean value
@@ -644,7 +624,7 @@ by \minotaur{} when it was used to compile GMP:
 
 % before 19 after 13
 
-{\begin{quote}\begin{verbatim}
+{\begin{quoting}\begin{Verbatim}
 %0 = lshr i64 %x, 1
 %1 = and i64 %0, 0x5555555555555555
 %2 = sub i64 %x, %1
@@ -661,8 +641,8 @@ ret i64 %9
 %1 = call @llvm.ctpop(<8 x i8> %0)
 %2 = bitcast <8 x i8> %1 to i64
 ret i64 %2
-\end{verbatim}
-\end{quote}}
+\end{Verbatim}
+\end{quoting}}
 
 %
 % \vspace{0.1in}
@@ -701,7 +681,7 @@ procedure would miss this one.
 This code comes from 644.nab in SPEC CPU 2017:
 
 % https://github.com/llvm/llvm-project/issues/85250
-{\begin{quote}\begin{verbatim}
+{\begin{quoting}\begin{Verbatim}
 %0 = fcmp oge float %x, 0.000000e+00
 %1 = fneg float %x
 %2 = select i1 %0, float %0, float %2
@@ -710,8 +690,8 @@ ret i1 %3
   =>
 %1 = fcmp oeq float %x, 0.000000e+00
 ret i1 %oeq
-\end{verbatim}
-\end{quote}}
+\end{Verbatim}
+\end{quoting}}
 
 The original code computes the absolute value of a floating-point
 number \texttt{\%x} and then checks if the result is zero.
@@ -725,15 +705,15 @@ This code comes from 619.lbm in SPEC CPU 2017:
 
 % https://github.com/llvm/llvm-project/issues/85267
 
-{\begin{quote}\begin{verbatim}
+{\begin{quoting}\begin{Verbatim}
 %0 = fmul float %x, 0x3FF0CCCCC0000000
 %1 = fcmp olt float %t1, 0x3FE20418A0000000
 ret i1 %1
   =>
 %0 = fcmp ole float %x, 0x3FE12878E0000000
 ret i1 %0
-\end{verbatim}
-\end{quote}}
+\end{Verbatim}
+\end{quoting}}
 
 The original code multiplies a floating-point value \texttt{\%x} by a
 constant, and then checks if the result is less than another constant.
@@ -748,15 +728,15 @@ point literals.
 
 This code comes from 638.imagick in SPEC CPU 2017:
 
-{\begin{quote}\begin{verbatim}
+{\begin{quoting}\begin{Verbatim}
 %0 = fmul float %x, 0.000000e+00
 %1 = fmul float %0, 3.000000e+00
 ret float %1
   =>
 %0 = fmul float %x, 0.000000e+00
 ret i1 %0
-\end{verbatim}
-\end{quote}}
+\end{Verbatim}
+\end{quoting}}
 
 The original code multiplies a floating-point value \texttt{\%x} by
 zero, and then multiplies the result by 3.0. \minotaur{} found that this
@@ -770,7 +750,7 @@ cases and synthesize the correct code.
 
 This code comes from FlexC's benchmark suite:
 
-{\begin{quote}\begin{verbatim}
+{\begin{quoting}\begin{Verbatim}
 %0 = extractelement <4 x ptr> %x, i32 0
 %1 = extractelement <4 x ptr> %x, i32 3
 %2 = load i32, ptr %0
@@ -781,8 +761,8 @@ ret <4 x i32> %5
   =>
 %0 = call @llvm.masked.gather(%0, 4, <true, false, false, true>, zeroinitializer)
 ret <4 x i32> %0
-\end{verbatim}
-\end{quote}}
+\end{Verbatim}
+\end{quoting}}
 
 The original code extracts two pointers from a vector of pointers,
 loads the values from these pointers, and then inserts these values

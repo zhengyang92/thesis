@@ -56,7 +56,7 @@ described in Section~\ref{sec:rewrite}.
 \begin{figure}[tbp]
   \centering
   \includegraphics[width=0.6\linewidth]{figures/cut-depth.pdf}
-  \caption{Example of cutting an LLVM function}
+  \caption{Example of cutting an LLVM function.}
   \label{fig:cut-depth}
 \end{figure}
 
@@ -66,8 +66,8 @@ and \texttt{srem} is the signed integer modulus operator:
 
 %%% https://gcc.godbolt.org/z/Wes9sPKGW
 
-{mall\begin{quote}
-\begin{verbatim}
+{\begin{quoting}
+\begin{Verbatim}
 define i64 @f(i64 %x, i64 %y, i64 %z) {
   %a = sdiv i64 %x, %y
   %b = xor i64 %a, -1
@@ -75,8 +75,8 @@ define i64 @f(i64 %x, i64 %y, i64 %z) {
   %d = srem i64 %c, %z
   ret i64 %d
 }
-\end{verbatim}
-\end{quote}}
+\end{Verbatim}
+\end{quoting}}
 
 Figure~\ref{fig:cut-depth} illustrates various cuts of this function.
 %
@@ -85,9 +85,8 @@ we get the following decomposition (however, again, please bear in
 mind that \minotaur{} does not actually construct $R$---we show it here to
 make the explanation concrete):
 
-\begin{multicols}{2}
-{\begin{quote}
-\begin{verbatim}
+{\begin{quoting}
+\begin{Verbatim}
 define i64 @r0(i64 %x, i64 %y, i64 %z) {
   %m = sdiv i64 %x, %y
   %n = xor i64 %m, -1
@@ -95,74 +94,70 @@ define i64 @r0(i64 %x, i64 %y, i64 %z) {
   %p = srem i64 %o, %z
   ret i64 %p
 }
-\end{verbatim}
-\end{quote}}
-\columnbreak
-{\begin{quote}
-\begin{verbatim}
+\end{Verbatim}
+\end{quoting}}
+{\begin{quoting}
+\begin{Verbatim}
 define i64 @c0(i64 %t1) {
   %t2 = xor i64 %t1, -1
   ret i64 %t2
 }
-\end{verbatim}
-\end{quote}}
-\end{multicols}
+\end{Verbatim}
+\end{quoting}}
 
 This is not useful, the cut \texttt{c0} contains too little context
 to support any optimizations.
 %
 If we cut \texttt{f} with respect to \texttt{\%c} with $B = 1$ then we get:
 
-\begin{multicols}{2}
-{\begin{quote}
-\begin{verbatim}
+{\begin{quoting}
+\begin{Verbatim}
 define i64 @r1(i64 %x, i64 %y, i64 %z) {
   %m = sdiv i64 %x, %y
   %o = call i64 @c1(i64 %m)
   %p = srem i64 %o, %z
   ret i64 %p
 }
-\end{verbatim}
-\end{quote}}
-\columnbreak
-{\begin{quote}
-\begin{verbatim}
+\end{Verbatim}
+\end{quoting}}
+
+{\begin{quoting}
+\begin{Verbatim}
 define i64 @c1(i64 %t1) {
   %t2 = xor i64 %t1, -1
   %t3 = xor i64 %t2, -1
   ret i64 %t3
 }
-\end{verbatim}
-\end{quote}}
-\end{multicols}
+\end{Verbatim}
+\end{quoting}}
+
 
 This decomposition is useful: \texttt{c1} can be optimized to simply
 return its argument.
 %
 If we increase the depth bound to two, then we would get:
 
-\begin{multicols}{2}
-{\begin{quote}
-\begin{verbatim}
+
+{\begin{quoting}
+\begin{Verbatim}
 define i64 @r2(i64 %x, i64 %y, i64 %z) {
   %o = call i64 @c2(i64 %x, i64 %y)
   %p = srem i64 %o, %z
   ret i64 %p
 }
-\end{verbatim}
-\end{quote}}
-\columnbreak
-{\begin{quote}
-\begin{verbatim}
+\end{Verbatim}
+\end{quoting}}
+{\begin{quoting}
+\begin{Verbatim}
 define i64 @c2(i64 %t1, i64 %t2) {
   %t3 = sdiv i64 %t1, %t2
   %t4 = xor i64 %t3, -1
   %t5 = xor i64 %t4, -1
   ret i64 %t5
 }
-\end{verbatim}
-\end{quote}}
-\end{multicols}
+\end{Verbatim}
+\end{quoting}}
+
 
 Here the cut \texttt{c2} can again be optimized (it can just return
 \texttt{\%t3}), but now the solver must reason about a 64-bit signed
@@ -206,8 +201,7 @@ loop.
 
 
 \begin{algorithm}[tbp]
-  \small
-  \caption{\small{Extract a cut from an LLVM function}}
+  \caption{Extract a cut from an LLVM function.}
   \begin{algorithmic}[1]
   \Function{ExtractCut}{{F}: Function, {I}: Instruction, {B}: $\mathbb{N}$}
   \If{$I$ is in a loop}
@@ -219,7 +213,6 @@ loop.
   \State {{Unknown} $\gets \emptyset $}
   \State {{Visited} $\gets \emptyset $}
   \State {{WorkList} $\gets$ \{ ({I}, 0) \}}
-  \\
   \\
   \Comment{Phase 1: Instruction extraction}
   \While{{WorkList} is not empty}
@@ -264,7 +257,7 @@ loop.
 
   \EndWhile
   \State {Insert every terminator instruction in {F} to {Harvested}}
-  \\
+
   \\
   \Comment{Phase 2: Construct a loop-free LLVM function}
   \State {Clone {F} into {C}}
@@ -361,7 +354,7 @@ the instruction that is the basis for the cut.
 \begin{figure}[tbp]
   \centering
   \includegraphics[width=0.8\linewidth]{figures/slice.pdf}
-  \caption{Example of cut extraction}
+  \caption{Example of cut extraction.}
   \label{fig:cut}
 \end{figure}
 
