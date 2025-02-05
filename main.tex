@@ -84,8 +84,12 @@
 \usepackage {hyperref}
 \usepackage{enumitem}
 \setlist[itemize]{noitemsep, nosep}
+\setlist[enumerate]{noitemsep, nosep}
 
-
+\renewcommand{\quote}{\list{}{\rightmargin=\leftmargin\topsep=0pt}\item\relax}
+\usepackage[noorphans,vskip=0.5ex]{quoting}
+\usepackage{fancyvrb}
+\newcommand{\mytilde}{$\sim$}
 
 %%% ====================================================================
 %%% Support for a subject index:

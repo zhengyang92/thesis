@@ -58,7 +58,7 @@ operation.
 Alive2 does not support the other fast-math flags, such as \texttt{arcp},
 \texttt{contract}, \texttt{reassoc} or \texttt{afn}.
 
-\section{Supporting Platform Independent SIMD operations}
+\section{Supporting Target Independent Vector Operations}
 
 LLVM uses a typed, SSA-based intermediate representation (IR).
 %
@@ -153,10 +153,10 @@ contaminate non-dependent vector elements.
 
 \renewcommand\algorithmicdo{}
 \begin{algorithm}[tbp]
-    \caption{semantics of \texttt{@llvm.x86.\{avx|avx2|avx512\}.pavg.\{b|w\}}}
+    \caption{Semantics of \texttt{@llvm.x86.\{avx|avx2|avx512\}.pavg.\{b|w\}}}
     \label{semantic:pavg}
     \begin{algorithmic}[1]
-    \State{\textsc{pavg$<$lanes, bits, masked$>g$}($S_{a}$, $S_{b}$, PassThrough, Mask)}
+    \State{\textsc{pavg$<$lanes, bits, masked$>$}($S_{a}$, $S_{b}$, PassThrough, Mask)}
     \For{each $i$ in range [0 to \textsc{lanes} - 1]}
     \If {\textsc{masked} $\wedge \neg$ Mask[$i$] }
         \State {$S_{ret}$[$i$].val $\gets$ PassThrough[$i$].val}
@@ -171,7 +171,7 @@ contaminate non-dependent vector elements.
 \end{algorithm}
 
 \begin{algorithm}[tbp]
-    \caption{semantics of \texttt{@llvm.x86.\{sse2|avx2|avx512\}.pmadd.wd}}
+    \caption{Semantics of \texttt{@llvm.x86.\{sse2|avx2|avx512\}.pmadd.wd}}
     \label{semantic:pmadd}
     \begin{algorithmic}[1]
     \State{\textsc{pmadd.wd$<$lanes, masked$>$}($S_{a}$, $S_{b}$, PassThrough, Mask)}
@@ -189,7 +189,7 @@ contaminate non-dependent vector elements.
 \end{algorithm}
 
 
-\section{Validating Semantics with Randomized Differential Testing}
+\section{Validating Semantics with Randomized Testing}
 
 We made heavy use of randomized differential testing to ensure that
 our new intrinsics correctly implement the intended semantics.
@@ -319,13 +319,13 @@ task is posed to the solver as an exists-forall call.
 %
 For example, consider the following partial-finished transformation:
 
-{\begin{quote}
-\begin{verbatim}
+{\begin{quoting}
+\begin{Verbatim}
 %1 = mul <4 x i32> %a, <i32 8, i32 8, i32 8, i32 8>
   =>
 %1 = shl <4 x i32> %a, %c
-\end{verbatim}
-\end{quote}}
+\end{Verbatim}
+\end{quoting}}
 
 
 In order to get \texttt{\%c}, my modified Alive2 asks the question: ``Does
@@ -338,10 +338,10 @@ replacement for the specification and, also, the model produced by the
 SMT solver contains literal values for the symbolic constants, giving
 a complete, sound optimization.
 
-{\begin{quote}
-\begin{verbatim}
+{\begin{quoting}
+\begin{Verbatim}
 %1 = mul <4 x i32> %a, <i32 8, i32 8, i32 8, i32 8>
   =>
 %1 = shl <4 x i32> %a, <i32 3, i32 3, i32 3, i32 3>
-\end{verbatim}
-\end{quote}}
+\end{Verbatim}
+\end{quoting}}
