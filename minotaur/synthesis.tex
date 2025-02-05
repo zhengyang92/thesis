@@ -61,7 +61,7 @@ already very difficult.
 
 \begin{table}[tbp]
   \centering
-  \caption{Operations that \minotaur{} can synthesize}
+  \caption{Operations that \minotaur{} can synthesize.}
   \begin{tabular}{ r | l }
     \textbf{Operation Type} & \textbf{Instructions} \\
     \hline
@@ -205,7 +205,7 @@ rapidly perform certain floating point operations.
 \begin {figure}[tbp]
   \centering
   \includegraphics[width=0.8\linewidth]{figures/solve_literal.pdf}
-  \caption{Example of synthesizing a rewrite that contains literal constants}
+  \caption{Example of synthesizing a rewrite that contains literal constants.}
   \label{fig:synthesizing}
 \end{figure}
 
@@ -330,26 +330,30 @@ other, offline mode can run all synthesis jobs in parallel.
 
 \begin{figure}[tbp]
   \begin{tabular}{r c l}
-    \emph{Op} &::=& \emph{Inst} | \emph{Constant} | \emph{Value} \\
-    \emph{Inst}  &::=& (\emph{UnaryOp} \emph{Op}, \emph{Type}) | (\emph{BinaryOp} \emph{Op}, \emph{Op}, \emph{Type}) | (\emph{Conversion} \emph{Op}, \emph{Type}) |\\
-              && (insertelement \emph{Op}, \emph{Op}, \emph{Op}) | (extractelement \emph{Op}, \emph{Op}) | (shufflevector \emph{Op}, \emph{Op}, \emph{Constant}) |\\
-              && (\emph{Comparison} \emph{Op} \emph{Op}) | (select \emph{Op}, \emph{Op}, \emph{Op}) | (\emph{Intrinsic} \emph{Op}, \emph{Op}) \\
+    \emph{Op} &::=& \emph{Inst} $|$ \emph{Constant} $|$ \emph{Value} \\
+    \emph{Inst}  &::=& (\emph{UnaryOp} \emph{Op}, \emph{Type}) $|$ (\emph{BinaryOp} \emph{Op}, \emph{Op}, \emph{Type}) $|$   \\
+              && (insertelement \emph{Op}, \emph{Op}, \emph{Op}) $|$  (extractelement \emph{Op}, \emph{Op}) $|$ \\
+              && (shufflevector \emph{Op}, \emph{Op}, \emph{Constant}) $|$ (\emph{Conversion} \emph{Op}, \emph{Type}) $|$\\
+              && (\emph{Comparison} \emph{Op} \emph{Op}) $|$  (select \emph{Op}, \emph{Op}, \emph{Op}) $|$  (\emph{Intrinsic} \emph{Op}, \emph{Op}) \\
     \emph{Constant} &::=& (const \emph{Type} \texttt{number-literal}) \\
     \emph{Value} &::=& (val \emph{Type} \texttt{llvm-identifier}) \\
 
-    \emph{Type} &::=& \emph{ScalarType} | <elements $\times$ \emph{ScalarType}> \\
-    \emph{ScalarType} &::=& i1 | i8 | i16 | i32 | i64 | half | float | double | fp128 \\
-    \emph{BinaryOp} &::=& xor | and | or | add | sub | mul | udiv | sdiv | ashr | lshr | shl | umax | umin | smax | smin\\
-                && fadd | fsub | fmul | fdiv | copysign | fmaximum | fminimum | fmaxnum | fminnum \\
-    \emph{UnaryOp} &::=& ctpop | ctlz | cttz | bswap | bitreverse | ret\\
-                      && fneg | fabs | fceil | ffloor | frint | fround | ftrunc | fnearbyint | froundeven \\
-    \emph{Conversion} &::=& zext | sext | trunc |\\
-                    && fptrunc | fpext | fptosi | sitofp | fptoui | uitofp \\
-    \emph{Comparison} &::=& eq | ne | ult | ule | slt | sle |\\
-                && oeq | ogt | oge | olt | ole | one | ord | ueq | ugt | uge | ult | ule | une | uno \\
-    \emph{Intrinsic} &::=& ssse3.phadd.d.128 | avx2.pavg.b | avx512.pmaddubs.w.512 | \dots (165 intrinsics in total) \\
+    \emph{Type} &::=& \emph{ScalarType} $|$  <elements $\times$ \emph{ScalarType}> \\
+    \emph{ScalarType} &::=& i1 $|$  i8 $|$  i16 | i32 $|$  i64 $|$  half $|$  float $|$  double $|$  fp128 \\
+    \emph{BinaryOp} &::=& xor $|$  and $|$  or $|$  add $|$  sub $|$  mul $|$  udiv $|$  sdiv $|$  ashr $|$   \\
+                 && lshr $|$  shl $|$  umax $|$  umin $|$  smax $|$  smin\\
+                && fadd $|$  fsub $|$  fmul $|$  fdiv $|$ copysign $|$ \\
+                &&    fmaximum $|$  fminimum $|$  fmaxnum $|$  fminnum \\
+    \emph{UnaryOp} &::=& ctpop $|$  ctlz $|$  cttz $|$  bswap $|$  bitreverse $|$ fneg $|$  fabs $|$  fceil $|$ \\
+                      &&   ffloor $|$  frint $|$  fround $|$  ftrunc $|$  fnearbyint $|$  froundeven \\
+    \emph{Conversion} &::=& zext $|$  sext $|$  trunc $|$ \\
+                    && fptrunc $|$  fpext $|$  fptosi $|$  sitofp $|$  fptoui $|$  uitofp \\
+    \emph{Comparison} &::=& eq $|$  ne $|$  ult $|$  ule $|$  slt $|$  sle $|$ \\
+                && oeq $|$  ogt $|$  oge $|$  olt $|$  ole $|$  one $|$  ord $|$ \\
+                && ueq $|$  ugt $|$  uge $|$  ult $|$  ule $|$  une $|$  uno \\
+    \emph{Intrinsic} &::=&  avx2.pavg.b $|$  avx512.pmaddubs.w.512 $|$  \dots (165 intrinsics in total) \\
   \end{tabular}
-  \caption{Syntax for Minotaur rewrites}
+  \caption{Syntax for \minotaur{} rewrites.}
   \label{fig:syntax}
   %\Description[syntax]{Minotaur syntax}
 \end{figure}
