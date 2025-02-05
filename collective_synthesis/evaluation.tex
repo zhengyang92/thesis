@@ -39,13 +39,12 @@ sockets, as well as 8 AMD MI50 GPUs, each with 32 GB of HBM2 memory. 4
 GPUs are connected to each socket with PCIe links, denoted by a box in
 Figure~\ref{fig:amd-topo}. Like NVIDIA, AMD also provides a
 proprietary high-speed interconnect called xGMI that links GPUs
-together.  Each blue line is an xGMI link between a pair of GPUs.
-Note that the xGMI connections build two disconnected islands: 3 GPUs
-per island are on 1 socket while a lone GPU is on the \emph{other}
-socket (i.e., GPU 1 and 5). The Gigabyte system uses PCIe 4.0 x16
-links with measured bandwidth ($\sim$27 GB/s) that approaches xGMI's
-measured bandwidth ($\sim$33 GB/s). As such, we use PCIe to connect
-the rings.
+together.  Each blue line is an xGMI link between a pair of GPUs. Note
+that the xGMI connections build two disconnected islands: 3 GPUs per
+island are on 1 socket while a lone GPU is on the \emph{other} socket
+(i.e., GPU 1 and 5). The Gigabyte system uses PCIe 4.0 x16 links with
+measured bandwidth ($\sim$27 GB/s) that approaches xGMI's measured
+bandwidth ($\sim$33 GB/s). As such, we use PCIe to connect the rings.
 
 \subsection{Modeling Bandwidth Constraints}
 The hardware in this chapter has distinct and interesting topologies.
@@ -259,7 +258,7 @@ Running Time & Time \\
   \beta$& 24.3 s\\
 \bottomrule
 \end{tabularx}
-\caption{\dgxone collectives with chunks ($\chunk$), steps ($\steps$) and rounds ($\rounds$). Time includes both encoding and solving. }
+\caption{\dgxone collectives with chunks ($\chunk$), steps ($\steps$) and rounds ($\rounds$).  }
 %For \reducescatter and \scatter $\chunk$ should be multiplied by 8.
 \label{fig:dgxone:syn}
 \end{table}
@@ -303,7 +302,7 @@ Running Time & Time \\
 \beta$& 8.2 s\\
 \bottomrule
 \end{tabularx}
-\caption{\amd collectives with chunks ($\chunk$), steps ($\steps$) and rounds ($\rounds$). Time includes both encoding and solving.}
+\caption{\amd collectives with chunks ($\chunk$), steps ($\steps$) and rounds ($\rounds$). }
 %For \reducescatter and \scatter $\chunk$ should be multiplied by 8.
 \label{fig:amd:syn}
 \end{table}
