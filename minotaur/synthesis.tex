@@ -61,21 +61,19 @@ already very difficult.
 
 \begin{table}[tbp]
   \centering
-  \caption{Operations that \minotaur{} can synthesize. The data movement
-  and SIMD intrinsic instructions require vector operands. The rest
-  of the operations apply to both scalar and vector values.}
+  \caption{Operations that \minotaur{} can synthesize}
   \begin{tabular}{ r | l }
     \textbf{Operation Type} & \textbf{Instructions} \\
     \hline
     Unary integer & ctpop, ctlz, cttz, bitreverse, bswap \\
-    Unary floating point & fneg, fabs, fceil, ffloor, frint, fround, fnearbyint, froundeven \\
+    Unary FP & fneg, fabs, fceil, ffloor, frint, fround, fnearbyint, froundeven \\
     Binary integer & add, sub, mul, udiv, sdiv, umax, umin, smax, smin\\
-    Binary floating point & fadd, fsub, fmul, fdiv, frem, fmaximum, fminimum, fmaxnum, fminnum \\
+    Binary FP & fadd, fsub, fmul, fdiv, frem, fmaximum, fminimum, ... \\
     Bitwise & and, or, xor, shl, lshr, ashr \\
     Comparison & icmp, fcmp, select \\
     Conversion & zext, sext, trunc, fptrunc, fpext, fptosi, sitofp, fptoui, uitofp \\
     Data movement & extractelement, insertelement, shufflevector \\
-    SIMD intrinsics & 165 vector intrinsics mapping to SSE, AVX, AVX2, and AVX-512 instructions \\
+    SIMD intrinsics & 165 vector intrinsics mapping to intel vector instructions \\
   \end{tabular}
   \label{tab:operations}
 \end{table}
