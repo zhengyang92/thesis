@@ -48,10 +48,10 @@ signed doubleword integer values.''
 \renewcommand\algorithmicdo{}
 \begin{algorithm}[tbp]
   \small
-    \caption{Semantics of \texttt{@llvm.x86.\{avx|avx2|avx512\}.pavg.\{b|w\}}}
+    \caption{Semantics of \texttt{@llvm.x86.\{avx|avx2|avx512\}.pavg.\{b|w\}}.}
     \label{semantic:pavg}
     \begin{algorithmic}[1]
-    \State{\textsc{pavg<lanes, bits, masked>}($S_{a}$, $S_{b}$, PassThrough, Mask)}
+    \State{\textsc{pavg$<$lanes, bits, masked$>$}($S_{a}$, $S_{b}$, PassThrough, Mask)}
     \For{each $i$ in range [0 to \textsc{lanes} - 1]}
     \If {\textsc{masked} $\wedge \neg$ Mask[$i$] }
         \State {$S_{ret}$[$i$].val $\gets$ PassThrough[$i$].val}
@@ -67,10 +67,10 @@ signed doubleword integer values.''
 
 \begin{algorithm}[tbp]
   \small
-    \caption{Semantics of \texttt{@llvm.x86.\{sse2|avx2|avx512\}.pmadd.wd}}
+    \caption{Semantics of \texttt{@llvm.x86.\{sse2|avx2|avx512\}.pmadd.wd}.}
     \label{semantic:pmadd}
     \begin{algorithmic}[1]
-    \State{\textsc{pmadd.wd<lanes, masked>}($S_{a}$, $S_{b}$, PassThrough, Mask)}
+    \State{\textsc{pmadd.wd$<$lanes, masked$>$}($S_{a}$, $S_{b}$, PassThrough, Mask)}
     \For{each $i$ in range [0 to \textsc{lanes}  - 1]}
     \If {\textsc{masked} $\wedge \neg$ Mask[$i$] }
         \State {$S_{ret}$[$i$].val $\gets$ PassThrough[$i$].val}
@@ -104,12 +104,10 @@ that are widely used and that an SMT solver can reason about fairly
 efficiently.
 %
 This includes special vertical operations that do not overlap with
-LLVM's platform-independent vector instructions (such as
-\texttt{@llvm.x86.avx2.psign.b}), special data movement intrinsics that
-operate differently than LLVM's \texttt{shufflevector} (such as
-\texttt{@llvm.x86.avx512.packsswb.512}), and special horizontal
-operations that are only available in x86 processors (such as
-\texttt{@llvm.x86.avx512.vpdpbusd.512}).
+LLVM's platform-independent vector instructions, special data movement
+intrinsics that operate differently than LLVM's
+\texttt{shufflevector}, and special horizontal operations that are
+only available in x86 processors.
 %
 We have not supported dedicated cryptographic operations (that an SMT
 solver is unlikely to be able to make use of within a reasonable
