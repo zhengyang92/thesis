@@ -947,8 +947,20 @@ note = {Accessed: 05/22/2024}
 }
 
 @article{minotaur,
-  title={Minotaur: A SIMD-oriented synthesizing superoptimizer},
-  author={Liu, Zhengyang and Mada, Stefan and Regehr, John},
-  journal={arXiv preprint arXiv:2306.00229},
-  year={2023}
+author = {Liu, Zhengyang and Mada, Stefan and Regehr, John},
+title = {Minotaur: A SIMD-Oriented Synthesizing Superoptimizer},
+year = {2024},
+issue_date = {October 2024},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {8},
+number = {OOPSLA2},
+url = {https://doi.org/10.1145/3689766},
+doi = {10.1145/3689766},
+abstract = {A superoptimizing compiler—-one that performs a meaningful search of the program space as part of the optimization process—-can find optimization opportunities that are missed by even the best existing optimizing compilers. We created Minotaur: a superoptimizer for LLVM that uses program synthesis to improve its code generation, focusing on integer and floating-point SIMD code. On an Intel Cascade Lake processor, Minotaur achieves an average speedup of 7.3\% on the GNU Multiple Precision library (GMP)’s benchmark suite, with a maximum speedup of 13\%. On SPEC CPU 2017, our superoptimizer produces an average speedup of 1.5\%, with a maximum speedup of 4.5\% for 638.imagick. Every optimization produced by Minotaur has been formally verified, and several optimizations that it has discovered have been implemented in LLVM as a result of our work.},
+journal = {Proc. ACM Program. Lang.},
+month = oct,
+articleno = {326},
+numpages = {25},
+keywords = {SIMD, peephole optimization, program synthesis, superoptimization}
 }
