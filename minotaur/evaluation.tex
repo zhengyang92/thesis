@@ -80,7 +80,7 @@ keep compile times manageable (compared to, e.g., SPEC CPU 2017,
 which is much larger).
 
 
-\begin{figure}[tbp]
+\begin{figure}[bp]
   \centering
   \subfloat[Unique cuts extracted\label{fig:loop-expression}]{
     \includegraphics[width=0.32\linewidth]{figures/cuts.pdf}
@@ -158,7 +158,7 @@ observed speedup.
 In this section, we show how \minotaur{} speeds up real-world benchmarks
 and applications.
 
-\paragraph{Experimental setup}
+\subsubsection{Experimental setup}
 %
 We used two machines for our evaluation.
 %
@@ -194,28 +194,25 @@ Finally, for each instruction that it tries to optimize, \minotaur{} gives
 up if no solution is found within five minutes.
 
 
-\paragraph{Benchmark selection}
+\subsubsection{Benchmark selection}
 %
-We evaluate on SPEC CPU 2017\footnote{\url{https://www.spec.org/cpu2017/}}
-because it is a widely accepted standard
+We evaluate on SPEC CPU 2017 because it is a widely accepted standard
 benchmark.
 %
-We only evaluate on the \emph{speed} subset of the SPEC suite, and we omit
-648.exchange, 607.cactuBSSN, 621.wrf, 627.cam4, 628.pop2, 649.fotonik3d,
-and 654.roms as they contain Fortran code.
+We only evaluate on the \emph{speed} subset of the SPEC suite, and we
+omit 648.exchange, 607.cactuBSSN, 621.wrf, 627.cam4, 628.pop2,
+649.fotonik3d, and 654.roms as they contain Fortran code.
 %
-We additionally use GMP, the GNU Multiple Precision
-Library,\footnote{\url{https://gmplib.org/}} and
-libYUV,\footnote{\url{https://chromium.googlesource.com/libyuv/libyuv/}}
-which is used by Google Chrome/Chromium for manipulating images in the
-YUV format.
+We additionally use GMP, the GNU Multiple Precision Library, and
+libYUV, which is used by Google Chrome/Chromium for manipulating
+images in the YUV format.
 %
 We chose these libraries because they have been heavily tuned for
 performance, they are loop-intensive, and they come with performance
 benchmark suites that we could simply reuse.
 
 
-\paragraph{Compile times}
+\subsubsection{Compile times}
 %
 Table~\ref{tab:compiletimeintel} and Table~\ref{tab:compiletimeamd}
 shows how long it takes \minotaur{} to build our benchmarks, along
@@ -294,7 +291,7 @@ are queries with 512-bit vectors.
 \end{table}
 
 
-\paragraph{Optimizing GMP with \minotaur{}}
+\subsubsection{Optimizing GMP with \minotaur{}}
 
 \begin{figure}[tbp]
   \centering
@@ -331,21 +328,10 @@ resulted in one benchmark slowing down, and the rest of benchmarks
 speeding up, for an overall mean speedup of 6.5\%.
 
 
-\paragraph{Optimizing libYUV with \minotaur{}}
+\subsubsection{Optimizing libYUV with \minotaur{}}
 
 
-\begin{figure}[tbp]
-  \centering
-  \subfloat[Speedups on Intel Cascade Lake, geomean = 1.022x\label{plot:libyuv-intel}]{
-    \includegraphics[width=0.9\linewidth]{figures/yuv-intel.pdf}
-  }
-  \hfill
-  \subfloat[Speedups on AMD Zen 3, geomean = 1.029x\label{plot:libyuv-amd}]{
-    \includegraphics[width=0.9\linewidth]{figures/yuv-amd.pdf}
-  }
-  \caption{LibYUV speedups, on a logarithmic scale.}
-  \label{fig:yuv}
-\end{figure}
+
 
 
 This library has an extensive test suite, part of which is explicitly
@@ -379,23 +365,23 @@ For some time now, Google's released versions of Chrome have been
 compiled using LLVM; the Chrome engineers have had ample time to
 ensure that this compiler achieves decent code generation for
 performance-critical libraries.
-
-
-
 \begin{figure}[tbp]
   \centering
-  \subfloat[Speedups on Cascade Lake\label{fig:spec-intel-speed-ups}]{
-    \includegraphics[width=0.48\linewidth]{figures/spec-intel.pdf}
+  \subfloat[Speedups on Intel Cascade Lake, geomean = 1.022x\label{plot:libyuv-intel}]{
+    \includegraphics[width=0.9\linewidth]{figures/yuv-intel.pdf}
   }
   \hfill
-  \subfloat[Speedups on Zen 3\label{fig:spec-amd-speed-ups}]{
-    \includegraphics[width=0.48\linewidth]{figures/spec-amd.pdf}
+  \subfloat[Speedups on AMD Zen 3, geomean = 1.029x\label{plot:libyuv-amd}]{
+    \includegraphics[width=0.9\linewidth]{figures/yuv-amd.pdf}
   }
-  \caption{SPEC CPU2017 benchmark performance, on a logarithmic scale.}
-  \label{fig:spec}
+  \caption{LibYUV speedups, on a logarithmic scale.}
+  \label{fig:yuv}
 \end{figure}
 
-\paragraph{Optimizing SPEC CPU 2017 with \minotaur{}}
+
+
+
+\subsubsection{Optimizing SPEC CPU 2017 with \minotaur{}}
 
 Figure~\ref{fig:spec} shows the effect of optimizing the benchmarks
 from SPEC CPU2017 using \minotaur.
@@ -410,6 +396,18 @@ It is notoriously difficult to speed up the SPEC CPU benchmarks
 because compiler engineers have already put considerable effort into
 achieving good code generation for them.
 
+\begin{figure}[tbp]
+  \centering
+  \subfloat[Speedups on Cascade Lake\label{fig:spec-intel-speed-ups}]{
+    \includegraphics[width=0.48\linewidth]{figures/spec-intel.pdf}
+  }
+  \hfill
+  \subfloat[Speedups on Zen 3\label{fig:spec-amd-speed-ups}]{
+    \includegraphics[width=0.48\linewidth]{figures/spec-amd.pdf}
+  }
+  \caption{SPEC CPU2017 benchmark performance, on a logarithmic scale.}
+  \label{fig:spec}
+\end{figure}
 
 \subsection{Impact on Upstream LLVM}
 

@@ -10,7 +10,7 @@ When a candidate is found that refines the original cut, \minotaur{}
 consults a cost model.
 %
 If the new code is cheaper than the original cut, \minotaur{} applies the
-rewrite to the function that is being optimized.
+rewrite to the function.
 
 \subsection{Designing an Appropriate Synthesis Procedure}
 
@@ -59,7 +59,7 @@ already very difficult.
 
 \subsection{Synthesis in Minotaur}
 
-\begin{table}[tbp]
+\begin{table}[bp]
   \centering
   \caption{Operations that \minotaur{} can synthesize.}
   \begin{tabular}{ r | l }
@@ -201,12 +201,7 @@ low-level optimizations such as those that use bitwise operations to
 rapidly perform certain floating point operations.
 
 
-\begin {figure}[tbp]
-  \centering
-  \includegraphics[width=0.8\linewidth]{figures/solve_literal.pdf}
-  \caption{Example of synthesizing a rewrite that contains literal constants.}
-  \label{fig:synthesizing}
-\end{figure}
+
 
 In Phase~3 of Algorithm~\ref{alg:synthesis}, \minotaur{} uses Alive2 to
 eliminate every candidate that does not refine the specification.
@@ -241,7 +236,12 @@ However, these failed to outperform exists-forall queries, in the
 version of Z3 that we used (4.12.4).
 %
 Figure~\ref{fig:synthesizing} illustrates \minotaur's synthesis procedure.
-
+\begin {figure}[bp]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figures/solve_literal.pdf}
+  \caption{Example of synthesizing a rewrite that contains literal constants.}
+  \label{fig:synthesizing}
+\end{figure}
 
 \subsection{Identifying Profitable Rewrites}
 

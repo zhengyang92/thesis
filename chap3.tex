@@ -236,7 +236,7 @@ the source and target functions by a specified factor. Thus, it will
 find any failure of refinement that is triggered within the specified
 bound, and will miss refinement failures that require more loop
 iterations to manifest. Alive2 implements Tarjan-Havlak’s loop
-analysis algorithm [14] for recognizing the loops in a function and
+analysis algorithm~\cite{havlak} for recognizing the loops in a function and
 their nesting relation. The result of the analysis is a loop nesting
 forest (a collection of trees). In a nesting tree, each node
 represents a loop header and its children are the headers of the

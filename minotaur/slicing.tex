@@ -53,12 +53,6 @@ described in Section~\ref{sec:rewrite}.
 
 \subsection{Example}
 
-\begin{figure}[tbp]
-  \centering
-  \includegraphics[width=0.8\linewidth]{figures/cut-depth.pdf}
-  \caption{Example of cutting an LLVM function.}
-  \label{fig:cut-depth}
-\end{figure}
 
 Consider this LLVM function that takes three 64-bit arguments and
 returns a 64-bit value, where \texttt{sdiv} is signed integer division
@@ -104,6 +98,7 @@ define i64 @c0(i64 %t1) {
 }
 \end{Verbatim}
 \end{quoting}}
+
 
 This is not useful, the cut \texttt{c0} contains too little context
 to support any optimizations.
@@ -158,6 +153,13 @@ define i64 @c2(i64 %t1, i64 %t2) {
 \end{Verbatim}
 \end{quoting}}
 
+
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=0.5\linewidth]{figures/cut-depth.pdf}
+  \caption{Example of cutting an LLVM function.}
+  \label{fig:cut-depth}
+\end{figure}
 
 Here the cut \texttt{c2} can again be optimized (it can just return
 \texttt{\%t3}), but now the solver must reason about a 64-bit signed
@@ -351,12 +353,6 @@ function is loop-free.
 Finally, a return instruction is added to return the value computed by
 the instruction that is the basis for the cut.
 
-\begin{figure}[tbp]
-  \centering
-  \includegraphics[width=0.95\linewidth]{figures/slice.pdf}
-  \caption{Example of cut extraction.}
-  \label{fig:cut}
-\end{figure}
 
 
 Figure~\ref{fig:cut} shows an example of cut extraction
@@ -380,3 +376,10 @@ small window of sequential instructions.
 It is also considerably more aggressive than Souper~\cite{souper},
 which had a very limited view of control flow and refused to consider
 memory operations, vector operations, and floating-point operations.
+
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=0.95\linewidth]{figures/slice.pdf}
+  \caption{Example of cut extraction.}
+  \label{fig:cut}
+\end{figure}
