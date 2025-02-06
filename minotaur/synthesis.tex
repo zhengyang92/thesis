@@ -83,13 +83,12 @@ already very difficult.
   \label{alg:enumerate}
   \begin{algorithmic}[1]
   \Function{SynthesizeRefinements}{Cut: Function, InstLimit: $\mathbb{N}$, TimeLimit: $\mathbb{N}$}
-  \\
-  \Comment {Phase 1: Populate the instruction pool}
+
 
   \State {Inputs $\gets$ all the SSA definitions in Cut}
   \State{InstPool $\gets \emptyset$}
   \ForAll {op in binary operations listed in Table~\ref{tab:operations}}
-    \State {InstPool $\gets$ InstPool $\cup$ \{ (op hole, hole), (op sym-const, hole), (op hole, sym-const) \} }
+    \State {InstPool $\gets$ InstPool $\cup$ \{ (op hole, hole), (op sym-const, hole)\} }
     \ForAll {input1 in Inputs}
       \State {InstPool $\gets$ InstPool $\cup$ \{ (op input1, sym-const), (op sym-const, input1) \}}
       \State {InstPool $\gets$ InstPool $\cup$ \{ (op input1, hole), (op hole, input1) \}}
@@ -144,7 +143,7 @@ already very difficult.
     \Else
       \State {Build exists-forall query to get a model for symbolic constants}
       \If {satisfiable}
-        \State {C' $\gets$ C with symbolic constants substituted by the constants in the model}
+        \State {C' $\gets$ C with constants substituted by the constants in the model}
         \State {Refinements $\gets$ Refinements $\cup$ \{ C' \}}
       \EndIf
     \EndIf

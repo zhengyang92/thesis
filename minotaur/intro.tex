@@ -26,7 +26,7 @@ compression/decompression utility gzip, where \texttt{name} is the
 base address of a string and \texttt{p} is a pointer into the string:
 
 \iffalse
-\begin{verbatim}
+\begin{Verbatim}
 void make_simple_name(char *name) {
   char *p = strrchr(name, '.');
   if (p == NULL) return;
@@ -35,40 +35,40 @@ void make_simple_name(char *name) {
       if (*--p == '.') *p = '_';
   } while (p != name);
 }
-\end{verbatim}
+\end{Verbatim}
 \fi
 
 %https://godbolt.org/z/cfbTsMrcv
 %https://alive2.llvm.org/ce/z/Q9JPSg
-{\begin{quote}
-\begin{verbatim}
+{\begin{quoting}
+\begin{Verbatim}
 do {
   if (*--p == '.') *p = '_';
 } while (p != name);
-\end{verbatim}
-\end{quote}}
+\end{Verbatim}
+\end{quoting}}
 
 % checked with godbolt 2/27/2024
 When it is compiled by LLVM~18 for a target supporting AVX2
 vector extensions, this code is found inside the loop:
 
 % original
-{\begin{quote}
-\begin{verbatim}
-%1 = shufflevector <32 x i8> %0, poison, <31, 30, 29, 28, 27, ... 4, 3, 2, 1, 0>
-%2 = icmp eq <32 x i8> %1, <46, 46, 46, 46, 46, ... 46, 46, 46, 46, 46>
-%3 = shufflevector <32 x i1> %2, poison, <31, 30, 29, 28, 27, ... 4, 3, 2, 1, 0>
-\end{verbatim}
-\end{quote}}
+{\begin{quoting}
+\begin{Verbatim}
+%1 = shufflevector <32 x i8> %0, poison, <31, 30, 29, 28, ... 1, 0>
+%2 = icmp eq <32 x i8> %1, <46, 46, 46, 46, ... , 46, 46>
+%3 = shufflevector <32 x i1> %2, poison, <31, 30, 29, 28, ... 1, 0>
+\end{Verbatim}
+\end{quoting}}
 
 %shorter
-% {\small\begin{quote}
-% \begin{verbatim}
+% {\small\begin{quoting}
+% \begin{Verbatim}
 % %1 = shufflevector %0, <31, 30, 29, ... , 0>
 % %2 = icmp eq %1, <46, 46, 46, ... , 46>
 % %3 = shufflevector %2, <31, 30, 29, ... , 0>
-% \end{verbatim}
-% \end{quote}}
+% \end{Verbatim}
+% \end{quoting}}
 
 The first shufflevector reverses a 32-byte chunk of the string, the
 \texttt{icmp} instruction checks which elements of the chunk are equal
@@ -87,18 +87,18 @@ reversals are unnecessary, and rewrites the code in this equivalent,
 but significantly cheaper (three uOps), form:
 
 %original
-{\begin{quote}
-\begin{verbatim}
-%3 = icmp eq <32 x i8> %0, <46, 46, 46, 46, 46, ... 46, 46, 46, 46, 46>
-\end{verbatim}
-\end{quote}}
+{\begin{quoting}
+\begin{Verbatim}
+%3 = icmp eq <32 x i8> %0, <46, 46, 46, 46, ... , 46, 46>
+\end{Verbatim}
+\end{quoting}}
 
 %shorter
-% {\small\begin{quote}
-% \begin{verbatim}
+% {\small\begin{quoting}
+% \begin{Verbatim}
 % %1 = icmp eq %0, <46, 46, 46, ... , 46>
-% \end{verbatim}
-% \end{quote}}
+% \end{Verbatim}
+% \end{quoting}}
 
 
 Although SIMD operations are \minotaur's main focus, it also discovers
@@ -109,19 +109,19 @@ computes the difference between two floating-point values, and then
 checks if the result is greater than zero:
 
 % https://github.com/llvm/llvm-project/issues/85245
-{\begin{quote}\begin{verbatim}
+{\begin{quoting}\begin{Verbatim}
 %0 = fsub float %x, %y
 %1 = fcmp ogt float %0, 0.000000e+00
-\end{verbatim}
-\end{quote}}
+\end{Verbatim}
+\end{quoting}}
 
 \minotaur{} found that this code is equivalent to checking if the second
 value is less than the first:
 
-{\begin{quote}\begin{verbatim}
+{\begin{quoting}\begin{Verbatim}
 %1 = fcmp ogt float %x, %y
-\end{verbatim}
-\end{quote}}
+\end{Verbatim}
+\end{quoting}}
 
 It is perhaps surprising that LLVM, in 2024, could not perform this
 simple rewrite, which reduces the computation cost from seven uOps to
