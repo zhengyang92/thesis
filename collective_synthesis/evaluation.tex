@@ -26,12 +26,6 @@ not use them due to the wide disparity between per-GPU NVLink and PCIe
 bandwidth ($\sim$150~GB/s vs. $\sim$14~GB/s). We also run synthesis on
 this platform.
 
-\begin{figure}
-\includegraphics[page=2,width=\columnwidth]{figures/topos}
-\caption{Topology of a Gigabyte MI50 8 GPU AMD System.}
-\label{fig:amd-topo}
-\end{figure}
-
 \subsubsection{Gigabyte Z52: 8 AMD MI50 GPUs}
 A Gigabyte Z52 system is a consumer grade multi-GPU system. It has two
 64-core AMD EPYC 7002 processors with 1 TB DRAM split across the two
@@ -45,6 +39,13 @@ island are on 1 socket while a lone GPU is on the \emph{other} socket
 (i.e., GPU 1 and 5). The Gigabyte system uses PCIe 4.0 x16 links with
 measured bandwidth ($\sim$27 GB/s) that approaches xGMI's measured
 bandwidth ($\sim$33 GB/s). As such, we use PCIe to connect the rings.
+
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[page=2,width=0.8\columnwidth]{figures/topos}
+  \caption{Topology of a Gigabyte MI50 8 GPU AMD System.}
+  \label{fig:amd-topo}
+  \end{figure}
 
 \subsection{Modeling Bandwidth Constraints}
 The hardware in this chapter has distinct and interesting topologies.
@@ -347,18 +348,6 @@ number of thread blocks and report the best performing combination for
 both \tool{} and NCCL. See Section~\ref{sec:lowering} for more
 details.
 
-\begin{figure}[tbp]
-  \centering
-  \subfloat[Average latency\label{fig:dgx1-res-allgather-avglat}]{
-    \includegraphics[page=1,width=0.84\columnwidth]{figures/evals-camera-ready}
-  }
-  \hfill
-  \subfloat[Speedup\label{fig:dgx1-res-allgather-speedup}] {
-    \includegraphics[page=2,width=0.84\columnwidth]{figures/evals-camera-ready}
-  }
-  \caption{\allgather performance comparison with NCCL.}
-  \label{fig:dgx1-res-allgather}
-\end{figure}
 
 Figure~\ref{fig:dgx1-res-allgather} compares \tool's generated code
 for \allgather with NCCL's \allgather. A point on
@@ -380,6 +369,19 @@ $2.2\times$ faster than NCCL's \allgather on small sizes and
 $1.14\times$ faster on larger sizes. It is possible for \tool{} to
 automatically switch between multiple implementations based on the
 input size. In which case, \tool{} will consistently outperform NCCL.
+
+\begin{figure}[tbp]
+  \centering
+  \subfloat[Average latency\label{fig:dgx1-res-allgather-avglat}]{
+    \includegraphics[page=1,width=0.84\columnwidth]{figures/evals-camera-ready}
+  }
+  \hfill
+  \subfloat[Speedup\label{fig:dgx1-res-allgather-speedup}] {
+    \includegraphics[page=2,width=0.84\columnwidth]{figures/evals-camera-ready}
+  }
+  \caption{\allgather performance comparison with NCCL.}
+  \label{fig:dgx1-res-allgather}
+\end{figure}
 
 \begin{figure}[tbp]
   \centering

@@ -15,7 +15,8 @@ from related \broadcasting ones.
 \subsection{$k$-synchronous Algorithms}
 \label{sec:ksync}
 %automation.
-\begin{figure}
+
+\begin{figure}[bp]
     \includegraphics[width=\columnwidth]{figures/allgatherex.pdf}
     \caption{A $1$-synchronous algorithm for \allgather on a ring topology.}
     \label{fig:allgatherex}
@@ -125,62 +126,7 @@ bandwidth constraint by $r_i$.
 \newcommand{\relScattered}{Scattered\xspace}
 \newcommand{\relTranspose}{Transpose\xspace}
 \newcommand{\chunkReduce}{\left\lfloor\frac{i}{\size}\right\rfloor}
-\begin{table}
-    \center
-    \begin{tabularx}{\columnwidth}{@{}Xl@{}}
-        \toprule
-        Name & Relation \\
-        \midrule
-        \relAll & $\range{\gchunk}\times\range{\size}$ \\
-        \relRoot & $\range{\gchunk}\times\{n_\mathit{root}\}$ \\
-        \relScattered & $\{(c,n)\in\range{\gchunk}\times\range{\size}
-        \setwhere n=c\bmod \size\}$ \\
-        \relTranspose & $\{(c,n)\in\range{\gchunk}\times\range{\size}
-        \setwhere n=\left\lfloor\frac{c}{\size}\right\rfloor\bmod
-        \size\}$ \\
-        \bottomrule
-    \end{tabularx}
-    \caption{Common relations in pre- and post-conditions of collective primitives.}
-    \label{tbl:relations}
-\end{table}
-\begin{table}
-    \begin{tabularx}{\columnwidth}{@{}Xll@{}}
-        \toprule
-        Collective & $\pre$ & $\post$ \\
-        \midrule
-        \gathercoll & \relScattered & \relRoot  \\
-        \allgather & \relScattered & \relAll  \\
-        \alltoall & \relScattered & \relTranspose  \\
-        \broadcast & \relRoot & \relAll \\
-        \scatter & \relRoot & \relScattered  \\
-        \bottomrule
-    \end{tabularx}
-    \caption{Specifications of collective primitives.}
-    \label{tbl:collectives}
-\end{table}
 
-\begin{comment}
-    \begin{table}
-    \begin{tabularx}{\columnwidth}{@{}Xlll@{}}
-        \toprule
-        Collective & $\pre$ & $\post$ & $\chunk(c)$ \\
-        \midrule
-        \gathercoll & \relScattered & \relRoot & $c$ \\
-        \allgather & \relScattered & \relAll & $c$ \\
-        \alltoall & \relScattered & \relTranspose & $c$ \\
-        \broadcast & \relRoot & \relAll & $c$ \\
-        \scatter & \relRoot & \relScattered & $c$ \\
-        \reduce & \relScattered & \relRoot & $\chunkReduce$ \\[2pt] %
-        make sure floor symbols don't stick together
-        \allreduce & \relScattered & \relAll & $\chunkReduce$ \\[2pt]
-        \reducescatter & \relScattered & \relTranspose &
-        $\chunkReduce$ \\[2pt]
-        \bottomrule
-    \end{tabularx}
-    \caption{Specifications of collective primitives as \collectiveproblem instances using a small set of common relations for pre- and post-conditions.}
-    \label{tbl:collectives}
-\end{table}
-\end{comment}
 \subsubsection{Collective Specification}
 \label{sec:specifications}
 The $\pre$ relation specifies the nodes where the chunks reside at the
@@ -275,6 +221,41 @@ $\size$ identifiers to the same chunk, thus reducing them together in
 the result.
 \end{comment}
 
+
+\begin{table}[bp]
+    \center
+    \caption{Common relations in pre- and post-conditions of collective primitives.}
+    \begin{tabularx}{\columnwidth}{@{}Xl@{}}
+        \toprule
+        Name & Relation \\
+        \midrule
+        \relAll & $\range{\gchunk}\times\range{\size}$ \\
+        \relRoot & $\range{\gchunk}\times\{n_\mathit{root}\}$ \\
+        \relScattered & $\{(c,n)\in\range{\gchunk}\times\range{\size}
+        \setwhere n=c\bmod \size\}$ \\
+        \relTranspose & $\{(c,n)\in\range{\gchunk}\times\range{\size}
+        \setwhere n=\left\lfloor\frac{c}{\size}\right\rfloor\bmod
+        \size\}$ \\
+        \bottomrule
+    \end{tabularx}
+    \label{tbl:relations}
+\end{table}
+\begin{table}[bp]
+    \caption{Specifications of collective primitives.}
+    \begin{tabularx}{\columnwidth}{@{}Xll@{}}
+        \toprule
+        Collective & $\pre$ & $\post$ \\
+        \midrule
+        \gathercoll & \relScattered & \relRoot  \\
+        \allgather & \relScattered & \relAll  \\
+        \alltoall & \relScattered & \relTranspose  \\
+        \broadcast & \relRoot & \relAll \\
+        \scatter & \relRoot & \relScattered  \\
+        \bottomrule
+    \end{tabularx}
+    \label{tbl:collectives}
+\end{table}
+
 While \collectiveproblem uses a global number of chunks $\gchunk$, it
 is more typical in existing literature to consider the per-node number
 of chunks $\chunk$. We will use the per-node number when discussing
@@ -308,8 +289,7 @@ instance if $V_{\steps} \subseteq \post$ and the following bandwidth
 constraint hold
 \begin{align*}
     &\begin{aligned}
-        \forall &s\in\range{\steps},\,(L,b)\in\bw \qst \\
-        & |\{(c,n,n',s)\in \sends \setwhere (n,n')\in L\}|\leq b \cdot r_s
+        \forall &s\in\range{\steps},\,(L,b)\in\bw \qst, |\{(c,n,n',s)\in \sends \setwhere (n,n')\in L\}|\leq b \cdot r_s
     \end{aligned}
 \end{align*}
 %\todo{introduce in the order of correctness constraints and bandwidth

@@ -152,6 +152,18 @@ As shown in Table~\ref{tab:ablation}, integer vector optimizations
 produce the most rewrites, and also produce the majority of the
 observed speedup.
 
+\begin{table}[bp]
+  \centering
+  \caption{Results of an ablation study based on optimization categories.}
+  \begin{tabular}{ r | r r r r r r}
+    & memory & FP vector & FP scalar& int vector & int scalar & overall \\
+    \hline
+    Rewrites & 3 & 17 & 4 & 191 & 109 & 324 \\
+    Geomean & 1.0605x & 1.0600x & 1.0572x & 1.0142x & 1.0506x & 1.0610x \\
+    Contribution & 0.65\% & 1.64\% & 5.90\% & 75.57\% & 16.23\% & 100\% \\
+  \end{tabular}
+  \label{tab:ablation}
+\end{table}
 
 \subsection{Speedups for Benchmarks and Applications}
 
@@ -238,18 +250,6 @@ AVX2 than AVX-512.
 Queries with 256-bit vectors are also less likely to timeout in Z3 than
 are queries with 512-bit vectors.
 
-\begin{table}[t]
-  \centering
-  \caption{Results of an ablation study based on optimization categories.}
-  \begin{tabular}{ r | r r r r r r}
-    & memory & FP vector & FP scalar& int vector & int scalar & overall \\
-    \hline
-    Rewrites & 3 & 17 & 4 & 191 & 109 & 324 \\
-    Geomean & 1.0605x & 1.0600x & 1.0572x & 1.0142x & 1.0506x & 1.0610x \\
-    Contribution & 0.65\% & 1.64\% & 5.90\% & 75.57\% & 16.23\% & 100\% \\
-  \end{tabular}
-  \label{tab:ablation}
-\end{table}
 
 
 \begin{table}[t]
@@ -314,7 +314,7 @@ For this evaluation, we selected the C implementation, because \minotaur{}
 works on LLVM IR and cannot process assembly code at all.
 %
 The benchmark suite that we used is
-GMPbench.\footnote{\url{https://gmplib.org/gmpbench}}
+GMPbench.
 %
 Figure~\ref{fig:gmp} summarizes the results.
 %
@@ -396,18 +396,7 @@ It is notoriously difficult to speed up the SPEC CPU benchmarks
 because compiler engineers have already put considerable effort into
 achieving good code generation for them.
 
-\begin{figure}[tbp]
-  \centering
-  \subfloat[Speedups on Cascade Lake\label{fig:spec-intel-speed-ups}]{
-    \includegraphics[width=0.48\linewidth]{figures/spec-intel.pdf}
-  }
-  \hfill
-  \subfloat[Speedups on Zen 3\label{fig:spec-amd-speed-ups}]{
-    \includegraphics[width=0.48\linewidth]{figures/spec-amd.pdf}
-  }
-  \caption{SPEC CPU2017 benchmark performance, on a logarithmic scale.}
-  \label{fig:spec}
-\end{figure}
+
 
 \subsection{Impact on Upstream LLVM}
 
@@ -429,13 +418,23 @@ being discussed by developers.
 %
 Finally, two of them are being discussed, but a candidate patch does
 not yet exist.
-
-
 We also reported five missing vector optimizations.
 %
 One of these has been fixed, one has a patch that is under review, and
 three are still being discussed.
 
+\begin{figure}[tbp]
+  \centering
+  \subfloat[Speedups on Cascade Lake\label{fig:spec-intel-speed-ups}]{
+    \includegraphics[width=0.48\linewidth]{figures/spec-intel.pdf}
+  }
+  \hfill
+  \subfloat[Speedups on Zen 3\label{fig:spec-amd-speed-ups}]{
+    \includegraphics[width=0.48\linewidth]{figures/spec-amd.pdf}
+  }
+  \caption{SPEC CPU2017 benchmark performance, on a logarithmic scale.}
+  \label{fig:spec}
+\end{figure}
 
 \subsection{Optimizations Discovered by \minotaur}
 \label{sec:examples}
@@ -445,8 +444,7 @@ presenting some optimizations that it found while compiling benchmark
 programs.
 %
 None of these optimizations can be performed by the version of LLVM
-that \minotaur{} is based on,\footnote{\minotaur{} uses LLVM~18.1.0 for all
-results in this paper.}  at its \texttt{-O3} optimization level.
+that \minotaur{} is based on, at its \texttt{-O3} optimization level.
 %
 We present optimizations in an SSA format that is close to LLVM IR,
 but we have edited it slightly for compactness and legibility.
@@ -655,9 +653,7 @@ ret i64 %2
 %
 The original code performs a series of bit-level
 manipulations on a 64-bit integer value, with the net result of
-performing an 8-way vectorized 8-bit popcount operation.\footnote{The
-popcount, or Hamming weight, of a bitvector is the number of ``1''
-bits in it.}
+performing an 8-way vectorized 8-bit popcount operation.
 %
 The optimized code simply calls an intrinsic function to do the
 popcount; it costs 13 uOps instead of the original code's 19.

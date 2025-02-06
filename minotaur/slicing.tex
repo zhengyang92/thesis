@@ -99,6 +99,12 @@ define i64 @c0(i64 %t1) {
 \end{Verbatim}
 \end{quoting}}
 
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=0.6\linewidth]{figures/cut-depth.pdf}
+  \caption{Example of cutting an LLVM function.}
+  \label{fig:cut-depth}
+\end{figure}
 
 This is not useful, the cut \texttt{c0} contains too little context
 to support any optimizations.
@@ -154,12 +160,7 @@ define i64 @c2(i64 %t1, i64 %t2) {
 \end{quoting}}
 
 
-\begin{figure}[tbp]
-  \centering
-  \includegraphics[width=0.5\linewidth]{figures/cut-depth.pdf}
-  \caption{Example of cutting an LLVM function.}
-  \label{fig:cut-depth}
-\end{figure}
+
 
 Here the cut \texttt{c2} can again be optimized (it can just return
 \texttt{\%t3}), but now the solver must reason about a 64-bit signed
