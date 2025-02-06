@@ -124,7 +124,7 @@ chunks and executes the ring algorithm along each of the $6$ rings,
 with one chunk per ring. If $L$ is the size of the input data, each
 ring algorithm takes $7$ steps and communicates $\frac{L}{6}$ bytes.
 Thus, the cost of the $6$-ring algorithm is
-$$7\cdot \alpha + \frac{7}{6}\cdot L \cdot \beta$$.
+$$7\cdot \alpha + \frac{7}{6}\cdot L \cdot \beta.$$
 
 Each node has to receive at least $7 \cdot L$ amount of data, and it
 has an agglomerated incoming per-byte cost of $\beta/6$ (6 incoming
@@ -135,10 +135,11 @@ with the latency cost?
 
 Using the techniques described in this chapter, we have automatically
 synthesized an algorithm~(Section~\ref{fig:dgxone:syn}) with cost
-$$3\cdot \alpha + \frac{7}{6}\cdot L \cdot \beta$$ To the best of our
-knowledge, this algorithm was not previously known. Moreover, we prove
-that this algorithm is Pareto-optimal with respect to the class of
-algorithms we call $k$-synchronous
+$$3\cdot \alpha + \frac{7}{6}\cdot L \cdot \beta.$$
+%
+To the best of our knowledge, this algorithm was not previously known.
+Moreover, we prove that this algorithm is Pareto-optimal with respect
+to the class of algorithms we call $k$-synchronous
 algorithms~(Section~\ref{sec:ksync}).
 
 \subsection{Latency-Optimal Algorithm for \dgxone}
@@ -147,8 +148,9 @@ the synthesized algorithm. If each node communicates its data along a
 binary tree instead of a ring, it would take at least $3$ steps. Using
 the techniques described in this paper, we have automatically
 synthesized a better algorithm~(Section~\ref{fig:dgxone:syn}) with
-cost $$2\cdot \alpha + \frac{3}{2}\cdot L \cdot \beta$$ Since the
-\dgxone topology has a diameter of $2$, this algorithm is
+cost $$2\cdot \alpha + \frac{3}{2}\cdot L \cdot \beta.$$
+%
+Since the \dgxone topology has a diameter of $2$, this algorithm is
 latency-optimal. To the best of our knowledge, a latency-optimal
 algorithm for the \dgxone was not previously known. This algorithm is
 Pareto-optimal with respect to the class of $k$-synchronous

@@ -396,7 +396,7 @@ i.e., the pairs of nodes with non-zero bandwidth between them.
 Pseudo-Boolean constraints allow one to use Boolean variables as $0,1$
 integers which we will use in the exposition below.
 
-The following two constraints enforce the pre- and post-conditions
+The following two constraints enforce the pre- and post-conditions:
 %Now we describe the constraints required for the encoding. Chunks
 %must have a starting time of zero on all associated nodes in the
 %pre-condition. For each $(c,n_{\mathit{pre}})\in\pre$ add the
@@ -635,7 +635,7 @@ along a unit-bandwidth link. If the input data of $L$ bytes is divided
 into $\chunk$ chunks, a step $s$ with $r_s$ rounds takes $\alpha +
 \frac{r_s}{\chunk}\cdot L \cdot \beta$ time. Therefore, the entire
 algorithm will finish in time
-$$ \steps \cdot \alpha + \frac{\rounds}{\chunk} \cdot L \cdot \beta $$.
+$$ \steps \cdot \alpha + \frac{\rounds}{\chunk} \cdot L \cdot \beta. $$
 %In effect, one can reduce the latency cost by reducing the number of
 %steps, and reduce the bandwidth cost either by increasing the number
 %of chunks or decreasing the number of rounds.
@@ -659,28 +659,7 @@ Pareto-optimal algorithms form a {\em Pareto-frontier} with different
 algorithms in the frontier being better than others for a given input
 size $L$ based on the $\alpha$ and $\beta$ parameters of the topology.
 
-\begin{algorithm}
-	\caption{Synthesizing Pareto-Optimal Algorithms}
-    \begin{algorithmic}[1]
-        \Procedure{Pareto-Synthesize}{$k, \mathit{Coll}, \size, \bw$}
-        \State $a_l = \mathit{Diameter(\size, \bw)}$ \State $b_l =
-        \mathit{InvBisectionBandwidth(\size, \bw)}$ \State $(\pre,
-        \post) = \mathit{Lookup(Coll)}$
-        \Comment{Table~\ref{tbl:collectives}} \For
-        {$\steps=a_l,a_l+1\ldots$} \State $A = \{(\rounds,\chunk) \mid
-        \steps \leq \rounds \leq \steps+k \wedge
-        \frac{\rounds}{\chunk} \geq b_l\}$ \For {$(R,\chunk) \in A$ in
-        ascending order of $\frac{R}{\chunk}$} \State
-        $\gchunk=\toglobal(\mathit{Coll},\chunk)$ \If
-        {$\mathit{SMT(\gchunk, \steps, \rounds, \size, \bw, \pre,
-        \post) = SAT}$} \State Report synthesized algorithm
-        $(\steps,\rounds,\chunk)$ \If {$\frac{\rounds}{\chunk} = b_l$}
-        \State {\bf return} \EndIf \State {\bf break} \EndIf \EndFor
-        \EndFor \EndProcedure
-	\end{algorithmic}
-\end{algorithm}
-
-The procedure above systematically synthesizes Pareto-optimal
+Algorithm~\ref{alg:pareto} systematically synthesizes Pareto-optimal
 $k$-synchronous algorithms. The inputs are the parameter $k$, the name
 of the collective to synthesize, and the topology parameters $\size,
 \bw$~(Section~\ref{sec:topology}). The procedure computes the latency
@@ -709,3 +688,26 @@ similar~(Section~\ref{sec:reduction}).
 %pairs for better bandwidth. The limit the to the bandwidth is the
 %lower bound, once we can reach it, there's no point increasing $S$,
 %because it increases the latency.}
+
+
+\begin{algorithm}
+	\caption{Synthesizing Pareto-Optimal Algorithms}
+    \label{alg:pareto}
+    \begin{algorithmic}[1]
+        \Procedure{Pareto-Synthesize}{$k, \mathit{Coll}, \size, \bw$}
+        \State $a_l = \mathit{Diameter(\size, \bw)}$ \State $b_l =
+        \mathit{InvBisectionBandwidth(\size, \bw)}$ \State $(\pre,
+        \post) = \mathit{Lookup(Coll)}$
+        \Comment{Table~\ref{tbl:collectives}} \For
+        {$\steps=a_l,a_l+1\ldots$} \State $A = \{(\rounds,\chunk) \mid
+        \steps \leq \rounds \leq \steps+k \wedge
+        \frac{\rounds}{\chunk} \geq b_l\}$ \For {$(R,\chunk) \in A$ in
+        ascending order of $\frac{R}{\chunk}$} \State
+        $\gchunk=\toglobal(\mathit{Coll},\chunk)$ \If
+        {$\mathit{SMT(\gchunk, \steps, \rounds, \size, \bw, \pre,
+        \post) = SAT}$} \State Report synthesized algorithm
+        $(\steps,\rounds,\chunk)$ \If {$\frac{\rounds}{\chunk} = b_l$}
+        \State {\bf return} \EndIf \State {\bf break} \EndIf \EndFor
+        \EndFor \EndProcedure
+	\end{algorithmic}
+\end{algorithm}
