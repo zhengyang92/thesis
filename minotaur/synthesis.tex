@@ -187,6 +187,7 @@ rapidly perform certain floating point operations.
   \centering
   \caption{Operations that \minotaur{} can synthesize.}
   \begin{tabular}{ r | l }
+    \toprule
     \textbf{Operation Type} & \textbf{Instructions} \\
     \hline
     Unary integer & ctpop, ctlz, cttz, bitreverse, bswap \\
@@ -198,6 +199,7 @@ rapidly perform certain floating point operations.
     Conversion & zext, sext, trunc, fptrunc, fpext, fptosi, sitofp, fptoui, uitofp \\
     Data movement & extractelement, insertelement, shufflevector \\
     SIMD intrinsics & 165 vector intrinsics mapping to intel vector instructions \\
+    \bottomrule
   \end{tabular}
   \label{tab:operations}
 \end{table}

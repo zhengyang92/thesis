@@ -156,11 +156,13 @@ observed speedup.
   \centering
   \caption{Results of an ablation study based on optimization categories.}
   \begin{tabular}{ r | r r r r r r}
+    \toprule
     & memory & FP vector & FP scalar& int vector & int scalar & overall \\
     \hline
     Rewrites & 3 & 17 & 4 & 191 & 109 & 324 \\
     Geomean & 1.0605x & 1.0600x & 1.0572x & 1.0142x & 1.0506x & 1.0610x \\
     Contribution & 0.65\% & 1.64\% & 5.90\% & 75.57\% & 16.23\% & 100\% \\
+    \bottomrule
   \end{tabular}
   \label{tab:ablation}
 \end{table}
@@ -257,6 +259,7 @@ are queries with 512-bit vectors.
   \caption{\minotaur's effect on compilation time on Intel Cascade Lake.}
   \begin{tabular}{r | r r r | r r }
     %\cline{2-11}
+    \toprule
     & \multicolumn{3}{c|}{Compile time (minutes)} & \multicolumn{2}{c}{Stats} \\
     %\hline
     Benchmarks & Cold & Warm & Clang & \# Cuts & \# Optimizations \\
@@ -266,6 +269,7 @@ are queries with 512-bit vectors.
     gmp-6.2.1 & 440 &  1 &  1 & 9,170 & 336 \\
     %\hline
     libYUV & 2,196 &  1 &  1 & 6,849 & 334  \\
+    \bottomrule
   \end{tabular}
   \label{tab:compiletimeintel}
 \end{table}
@@ -274,6 +278,7 @@ are queries with 512-bit vectors.
   \centering
   \caption{\minotaur's effect on compilation time on AMD Zen 3.}
   \begin{tabular}{r | r r r | r r}
+    \toprule
 
     %\cline{2-11}
     & \multicolumn{3}{c|}{Compile time (minutes)} & \multicolumn{2}{c}{Stats} \\
@@ -285,7 +290,7 @@ are queries with 512-bit vectors.
     gmp-6.2.1 &  445 & 1 & 1 & 9,265 & 387\\
     %\hline
     libYUV  & 2,193 & 1 & 1 & 6,809 & 357 \\
-
+    \bottomrule
   \end{tabular}
   \label{tab:compiletimeamd}
 \end{table}
