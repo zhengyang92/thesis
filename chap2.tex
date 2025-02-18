@@ -1,6 +1,14 @@
 \chapter{Background}
 \label{chap:background}
 
+This chapter provides the necessary background. It covers SMT
+solving with the Z3 theorem prover, translation validation techniques,
+LLVM’s handling of undefined behavior, and superoptimization.
+Additionally, this chapter discusses SIMD architectures,
+vectorization strategies, and collective communication
+libraries used in parallel computing. These topics establish the
+foundation for the subsequent chapters.
+
 \section {SMT Solving and the Z3 Theorem Prover}
 
 Satisfiability Modulo Theories (SMT)~\cite{barrett2018satisfiability}
@@ -41,6 +49,7 @@ This work focuses on translation validation in the context of LLVM
 IR~\cite{llvm}, specifically for transformations that involve
 vector instructions and SIMD operations, using the
 Alive2 Translation Validator~\cite{alive2}.
+
 
 \section {Undefined Behavior in LLVM IR}
 
