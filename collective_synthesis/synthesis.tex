@@ -71,7 +71,7 @@ the space of algorithms bounded by that $k$.
 %on the number of steps, while the bandwidth cost depends on the
 %number of rounds and the number of the chunks.
 
-\subsection{\broadcastingCap Collective Instance}
+\subsection{Non-Combining Collective Instance}
 Now we will provide a uniform formulation for representing
 $k$-synchronous algorithms for \broadcasting collectives. An instance
 of \collectiveproblem is a tuple
@@ -127,7 +127,7 @@ bandwidth constraint by $r_i$.
 \newcommand{\relTranspose}{Transpose\xspace}
 \newcommand{\chunkReduce}{\left\lfloor\frac{i}{\size}\right\rfloor}
 
-\subsubsection{Collective Specification}
+\subsubsection{Collective specification}
 \label{sec:specifications}
 The $\pre$ relation specifies the nodes where the chunks reside at the
 beginning of the algorithm and the $\post$ relation specifies the set
@@ -338,7 +338,7 @@ of sends to the bandwidth limit.
 %\label{sec:specifications}
 
 
-\subsection{SMT Encoding for \broadcastingCap Collectives}
+\subsection{SMT Encoding for Non-Combining Collectives}
 \label{sec:encoding}
 \begin{comment}
     While \collectiveproblem is amenable to a direct encoding into
@@ -376,7 +376,7 @@ i.e., the pairs of nodes with non-zero bandwidth between them.
 Pseudo-Boolean constraints allow one to use Boolean variables as $0,1$
 integers which we will use in the exposition below.
 
-The following two constraints enforce the pre- and post-conditions:
+The following two constraints enforce the pre- and post-conditions.
 %Now we describe the constraints required for the encoding. Chunks
 %must have a starting time of zero on all associated nodes in the
 %pre-condition. For each $(c,n_{\mathit{pre}})\in\pre$ add the
@@ -384,10 +384,10 @@ The following two constraints enforce the pre- and post-conditions:
 \begin{align}
 %    \forall (c,n) \in \range{\gchunk} \times \range{\size} (c,n) \in \pre &\equiv \start{c}{n}=0
     \forall (c,n) \in \pre \ \ \start{c}{n} &=0
-    \tag{C1}\label{eqn:bc-zero} \\
+    \tag{E1}\label{eqn:bc-zero} \\
     \forall (c,n) \in \post \ \ \start{c}{n}&\leq \steps
 %    \start{c}{n_{\mathit{post}}}&\leq\steps
-    \tag{C2}\label{eqn:bc-insteps}
+    \tag{E2}\label{eqn:bc-insteps}
 \end{align}
 If a chunk becomes available in a node, but is not part of the
 precondition, then the node should have received the chunk from some
@@ -397,7 +397,7 @@ redundantly receive the chunk more than once.
 %the following constraint:
 \begin{align}
     \forall (c,n) \not\in \pre \ \ \start{c}{n}&\leq \steps \Rightarrow \Sigma_{(n',n)\in\edges}\,\send{n'}{c}{n}=1
-    \tag{C3}\label{eqn:bc-hassender}
+    \tag{E3}\label{eqn:bc-hassender}
 \end{align}
 To send a chunk, it must exist on the source node before it is
 received on the destination node.
@@ -406,29 +406,29 @@ received on the destination node.
 \begin{align}
     \forall (c,n) \in E \ \ \send{n}{c}{n'}\Rightarrow\start{c}{n}<\start{c}{n'}
 %    \send{n}{c}{n'}\Rightarrow\start{c}{n}<\start{c}{n'}
-    \tag{C4}\label{eqn:bc-sendexisting}
+    \tag{E4}\label{eqn:bc-sendexisting}
 \end{align}
 %Constraints \ref{eqn:bc-zero}, \ref{eqn:bc-insteps},
 %\ref{eqn:bc-hassender} and \ref{eqn:bc-sendexisting} would be
 %sufficient to satisfy Condition~\ref{eqn:a1}.
 The following enforces the bandwidth constraint at all steps $1 \leq s
-\leq \steps$ and bandwidth constraint $(L,b)\in\bw$:
+\leq \steps$ and bandwidth constraint $(L,b)\in\bw$.
 %To satisfy Condition~\ref{eqn:a2}, we must ensure that the bandwidth
 %limitations of the topology are respected. For each step of the
 %algorithm $1 \leq t \leq \steps$ and bandwidth constraint
 %$(L,b)\in\bw$ add the constraint:
 \begin{align}
     \Sigma_{(c,(n,n'))\in\range{\gchunk}\times L}\left(\send{n}{c}{n'}\wedge\start{c}{n'}=s\right)\leq b \cdot r_s
-    \tag{C5}\label{eqn:bc-bw}
+    \tag{E5}\label{eqn:bc-bw}
 \end{align}
 %
 Note, we have multiplied the bandwidth constraints by $r_s$ to allow
 $r_s$ rounds at step $s$.
 %
-Finally, the following bounds the total rounds $\rounds$:
+Finally, the following bounds the total rounds $\rounds$.
 \begin{align}
     \Sigma_{1\leq s\leq\steps}(r_s)=\rounds
-    \tag{C6}\label{eqn:bc-rounds}
+    \tag{E6}\label{eqn:bc-rounds}
 \end{align}
 
 %\begin{comment}
@@ -440,7 +440,7 @@ model exists then an algorithm $(\rparts, \sends)$ can be constructed
 with:
 \begin{align*}
     \rparts&=M(r_0),\dotsc,M(r_{\steps-1}) \\
-    \sends&=\{(c,n,n',t) \setwhere M(\send{n}{c}{n'}) \wedge M(\start{c}{n}) = t+1 \}
+    \sends&=\{(c,n,n',t) \setwhere M(\send{n}{c}{n'}) \wedge M(\start{c}{n}) = t+1 \}.
 \end{align*}
 If the SMT solver says the problem is unsatisfiable, then no algorithm
 exists for the problem instance.
