@@ -59,27 +59,10 @@ already very difficult.
 
 \subsection{Synthesis in Minotaur}
 
-\begin{table}[bp]
-  \centering
-  \caption{Operations that \minotaur{} can synthesize.}
-  \begin{tabular}{ r | l }
-    \textbf{Operation Type} & \textbf{Instructions} \\
-    \hline
-    Unary integer & ctpop, ctlz, cttz, bitreverse, bswap \\
-    Unary FP & fneg, fabs, fceil, ffloor, frint, fround, fnearbyint, froundeven \\
-    Binary integer & add, sub, mul, udiv, sdiv, umax, umin, smax, smin\\
-    Binary FP & fadd, fsub, fmul, fdiv, frem, fmaximum, fminimum, ... \\
-    Bitwise & and, or, xor, shl, lshr, ashr \\
-    Comparison & icmp, fcmp, select \\
-    Conversion & zext, sext, trunc, fptrunc, fpext, fptosi, sitofp, fptoui, uitofp \\
-    Data movement & extractelement, insertelement, shufflevector \\
-    SIMD intrinsics & 165 vector intrinsics mapping to intel vector instructions \\
-  \end{tabular}
-  \label{tab:operations}
-\end{table}
+
 
 \begin{algorithm}[tbp]
-  \caption{Minotaur's Synthesis Procedure.}
+  \caption{Minotaur's synthesis procedure.}
   \label{alg:enumerate}
   \begin{algorithmic}[1]
   \Function{SynthesizeRefinements}{Cut: Function, InstLimit: $\mathbb{N}$, TimeLimit: $\mathbb{N}$}
@@ -200,6 +183,24 @@ This lack of type enforcement allows \minotaur{} to find interesting,
 low-level optimizations such as those that use bitwise operations to
 rapidly perform certain floating point operations.
 
+\begin{table}[tbp]
+  \centering
+  \caption{Operations that \minotaur{} can synthesize.}
+  \begin{tabular}{ r | l }
+    \textbf{Operation Type} & \textbf{Instructions} \\
+    \hline
+    Unary integer & ctpop, ctlz, cttz, bitreverse, bswap \\
+    Unary FP & fneg, fabs, fceil, ffloor, frint, fround, fnearbyint, froundeven \\
+    Binary integer & add, sub, mul, udiv, sdiv, umax, umin, smax, smin\\
+    Binary FP & fadd, fsub, fmul, fdiv, frem, fmaximum, fminimum, ... \\
+    Bitwise & and, or, xor, shl, lshr, ashr \\
+    Comparison & icmp, fcmp, select \\
+    Conversion & zext, sext, trunc, fptrunc, fpext, fptosi, sitofp, fptoui, uitofp \\
+    Data movement & extractelement, insertelement, shufflevector \\
+    SIMD intrinsics & 165 vector intrinsics mapping to intel vector instructions \\
+  \end{tabular}
+  \label{tab:operations}
+\end{table}
 
 
 

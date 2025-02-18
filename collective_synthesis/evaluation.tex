@@ -43,7 +43,7 @@ bandwidth ($\sim$33 GB/s). As such, we use PCIe to connect the rings.
 \begin{figure}[tbp]
   \centering
   \includegraphics[page=2,width=0.8\columnwidth]{figures/topos}
-  \caption{Topology of a Gigabyte MI50 8 GPU AMD System.}
+  \caption{Topology of a Gigabyte MI50 8 GPU AMD system.}
   \label{fig:amd-topo}
   \end{figure}
 
@@ -311,7 +311,7 @@ Running Time & Time \\
 \end{table}
 
 
-\subsubsection{Synthesizing All Collectives}
+\subsubsection{Synthesizing all collectives}
 Collective communication libraries need to support a large and diverse
 set of hardware architectures.  Efficiently implementing latency and
 bandwidth optimal algorithms for various topologies is time-consuming
@@ -320,7 +320,7 @@ extend the set of algorithms through search: \tool{} synthesizes
 algorithms for \alltoall, \gathercoll and \scatter where no such
 counterparts exist in NCCL.
 
-\subsubsection{Synthesis Time}
+\subsubsection{Synthesis time}
 The longest synthesis time is just over 2 minutes and most of the time
 under 10 seconds.  The synthesis problem is non-trivial and its
 complexity is defined by both the collective, as well as the hardware

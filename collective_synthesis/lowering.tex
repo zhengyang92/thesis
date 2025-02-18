@@ -38,7 +38,7 @@ are a few crucial choices that impact the communication performance.
 %Once the memory handles between connected GPUs are exchanged, there
 %are multiple ways to enable data transfers.
 
-\subsection{DMA engines and kernel copies:} Data may be moved either by
+\subsection{DMA Engines and Kernel Copies:} Data may be moved either by
 executing load or store instructions through a kernel, or by using a
 specialized DMA engine via \texttt{cudaMemcpy}. A kernel copy allows
 data movement and computation to be fused in a kernel while a DMA
@@ -51,7 +51,7 @@ data, etc.) and a variable-length payload. DMA engines are able to
 emit maximum-sized packets, but kernel copy packets are limited to the
 128-byte cache line size.
 
-\subsection{Push and pull models:} Each DMA engine is located on a
+\subsection{Push and Pull Models:} Each DMA engine is located on a
 particular GPU. Data movement between two GPUs can be executed by
 either the receiver's DMA engine (a {\em pull} model) or by the
 sender's DMA engine (a {\em push} model). Kernel copies have the same
@@ -71,7 +71,7 @@ model.
 
 %Our experiments suggest that the push model is faster than pull.
 
-\subsection{Single and multiple kernels:} One way to implement a
+\subsection{Single and Multiple Kernels:} One way to implement a
 synthesized algorithm is by emitting several kernels, one per step,
 which forces a global synchronization between steps and, as a
 consequence, introduces large overheads. Alternatively, \tool{} fuses
