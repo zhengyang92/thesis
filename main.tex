@@ -77,7 +77,7 @@
 \usepackage {comment}
 \usepackage {xspace}
 \usepackage {tabularx}
-\usepackage {cite}
+%\usepackage {cite}
 \usepackage {subfig}
 \usepackage {algorithm}
 \usepackage [noend]{algpseudocode}
@@ -293,7 +293,9 @@
 %%% This tells BibTeX to read siam.bst from the first directory where
 %%% it is found in the BSTINPUTS search path:
 
-\bibliographystyle{siam}
+%\bibliographystyle{chicago}
+\apptocmd{\thebibliography}{\renewcommand{\sc}{}}{}{}
+\bibliographystyle{acm}
 
 
 %%% This can also specify a comma-separated list (without embedded
