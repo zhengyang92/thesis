@@ -1,6 +1,6 @@
 @inproceedings{Weiser81,
 author = {Weiser, Mark},
-title = "{Program Slicing}",
+title = "{Program slicing}",
 year = {1981},
 isbn = {0897911466},
 publisher = {IEEE Press},
@@ -24,7 +24,7 @@ series = {ICSE '81}
 
 @article{denali02,
 author = {Joshi, Rajeev and Nelson, Greg and Randall, Keith},
-title = "{Denali: a Goal-Directed Superoptimizer}",
+title = "{Denali: A goal-directed superoptimizer}",
 year = {2002},
 issue_date = {May 2002},
 publisher = {Association for Computing Machinery},
@@ -37,8 +37,8 @@ pages = {304--314},
 }
 
 @inproceedings{Dutertre15,
-author = "Bruno Dutertre",
-title = "Solving Exists/Forall Problems With Yices",
+author = {Dutertre, Bruno},
+title = "Solving exists/forall problems with yices",
 year = 2015,
 booktitle = "The 13th International Workshop on Satisfiability Modulo Theories",
 }
@@ -46,7 +46,7 @@ booktitle = "The 13th International Workshop on Satisfiability Modulo Theories",
 
 @inproceedings{peep84,
 author = {Davidson, Jack W. and Fraser, Christopher W.},
-title = {{Automatic Generation of Peephole Optimizations}},
+title = "Automatic generation of peephole optimizations",
 year = {1984},
 doi = {10.1145/502874.502885},
 pages = {111--116},
@@ -57,11 +57,10 @@ booktitle = {Proceedings of the 1984 SIGPLAN Symposium on Compiler Construction}
 
 @inbook{alive2,
 author = {Lopes, Nuno P. and Lee, Juneyoung and Hur, Chung-Kil and Liu, Zhengyang and Regehr, John},
-title = {{Alive2: Bounded Translation Validation for LLVM}},
+title = "{Alive2: Bounded translation validation for LLVM}",
 year = {2021},
 isbn = {9781450383912},
 url = {https://doi.org/10.1145/3453483.3454030},
-abstract = {We designed, implemented, and deployed Alive2: a bounded translation validation tool for the LLVM compiler’s intermediate representation (IR). It limits resource consumption by, for example, unrolling loops up to some bound, which means there are circumstances in which it misses bugs. Alive2 is designed to avoid false alarms, is fully automatic through the use of an SMT solver, and requires no changes to LLVM. By running Alive2 over LLVM’s unit test suite, we discovered and reported 47 new bugs, 28 of which have been fixed already. Moreover, our work has led to eight patches to the LLVM Language Reference—the definitive description of the semantics of its IR—and we have participated in numerous discussions with the goal of clarifying ambiguities and fixing errors in these semantics. Alive2 is open source and we also made it available on the web, where it has active users from the LLVM community.},
 booktitle = {Proceedings of the 42nd ACM SIGPLAN International Conference on Programming Language Design and Implementation},
 pages = {65–79},
 numpages = {15}
@@ -69,12 +68,11 @@ numpages = {15}
 
 @inproceedings{taming,
 author = {Lee, Juneyoung and Kim, Yoonseung and Song, Youngju and Hur, Chung-Kil and Das, Sanjoy and Majnemer, David and Regehr, John and Lopes, Nuno P.},
-title = {{Taming Undefined Behavior in LLVM}},
+title = {{Taming undefined behavior in LLVM}},
 year = {2017},
 isbn = {9781450349888},
 url = {https://doi.org/10.1145/3062341.3062343},
 doi = {10.1145/3062341.3062343},
-abstract = { A central concern for an optimizing compiler is the design of its intermediate representation (IR) for code. The IR should make it easy to perform transformations, and should also afford efficient and precise static analysis. In this paper we study an aspect of IR design that has received little attention: the role of undefined behavior. The IR for every optimizing compiler we have looked at, including GCC, LLVM, Intel's, and Microsoft's, supports one or more forms of undefined behavior (UB), not only to reflect the semantics of UB-heavy programming languages such as C and C++, but also to model inherently unsafe low-level operations such as memory stores and to avoid over-constraining IR semantics to the point that desirable transformations become illegal. The current semantics of LLVM's IR fails to justify some cases of loop unswitching, global value numbering, and other important "textbook" optimizations, causing long-standing bugs. We present solutions to the problems we have identified in LLVM's IR and show that most optimizations currently in LLVM remain sound, and that some desirable new transformations become permissible. Our solutions do not degrade compile time or performance of generated code. },
 booktitle = {Proceedings of the 38th ACM SIGPLAN Conference on Programming Language Design and Implementation},
 pages = {633–647},
 numpages = {15},
@@ -84,8 +82,8 @@ series = {PLDI 2017}
 }
 
 @InProceedings{llvm,
-  author    = {Chris Lattner and Vikram Adve},
-  title     = "{{LLVM: A Compilation Framework for Lifelong Program Analysis \& Transformation}}",
+  author    = {Lattner, Chris and Adve, Vikram},
+  title     = "{{LLVM: A compilation framework for lifelong program analysis \& transformation}}",
   booktitle = "{Proceedings of the 2004 International Symposium on Code Generation and Optimization (CGO'04)}",
   address   = {Palo Alto, California},
   month     = {Mar},
@@ -101,7 +99,7 @@ series = {PLDI 2017}
 
 @inproceedings{rake,
 author = {Ahmad, Maaz Bin Safeer and Root, Alexander J. and Adams, Andrew and Kamil, Shoaib and Cheung, Alvin},
-title = {{Vector Instruction Selection for Digital Signal Processors Using Program Synthesis}},
+title = {{Vector instruction selection for digital signal processors using program synthesis}},
 year = {2022},
 isbn = {9781450392051},
 doi = {10.1145/3503222.3507714},
@@ -114,11 +112,10 @@ series = {ASPLOS 2022}
 
 @inbook{vegen,
 author = {Chen, Yishen and Mendis, Charith and Carbin, Michael and Amarasinghe, Saman},
-title = {{VeGen: A Vectorizer Generator for SIMD and Beyond}},
+title = {{VeGen: A vectorizer generator for SIMD and beyond}},
 year = {2021},
 isbn = {9781450383172},
 url = {https://doi.org/10.1145/3445814.3446692},
-abstract = {Vector instructions are ubiquitous in modern processors. Traditional compiler auto-vectorization techniques have focused on targeting single instruction multiple data (SIMD) instructions. However, these auto-vectorization techniques are not sufficiently powerful to model non-SIMD vector instructions, which can accelerate applications in domains such as image processing, digital signal processing, and machine learning. To target non-SIMD instruction, compiler developers have resorted to complicated, ad hoc peephole optimizations, expending significant development time while still coming up short. As vector instruction sets continue to rapidly evolve, compilers cannot keep up with these new hardware capabilities.  In this paper, we introduce Lane Level Parallelism (LLP), which captures the model of parallelism implemented by both SIMD and non-SIMD vector instructions. We present VeGen, a vectorizer generator that automatically generates a vectorization pass to uncover target-architecture-specific LLP in programs while using only instruction semantics as input. VeGen decouples, yet coordinates automatically generated target-specific vectorization utilities with its target-independent vectorization algorithm. This design enables us to systematically target non-SIMD vector instructions that until now require ad hoc coordination between different compiler stages. We show that VeGen can use non-SIMD vector instructions effectively, for example, getting speedup 3\texttimes{} (compared to LLVM’s vectorizer) on x265’s idct4 kernel.},
 booktitle = {Proceedings of the 26th ACM International Conference on Architectural Support for Programming Languages and Operating Systems},
 pages = {902–914},
 numpages = {13}
@@ -128,14 +125,13 @@ numpages = {13}
 
 @article{dfa_pruning,
 author = {Mukherjee, Manasij and Kant, Pranav and Liu, Zhengyang and Regehr, John},
-title = {{Dataflow-Based Pruning for Speeding up Superoptimization}},
+title = {{Dataflow-based pruning for speeding up superoptimization}},
 year = {2020},
 issue_date = {November 2020},
 volume = {4},
 number = {OOPSLA},
 url = {https://doi.org/10.1145/3428245},
 doi = {10.1145/3428245},
-abstract = {Superoptimization is a compilation strategy that uses search to improve code quality, rather than relying on a canned sequence of transformations, as traditional optimizing compilers do. This search can be seen as a program synthesis problem: from unoptimized code serving as a specification, the synthesis procedure attempts to create a more efficient implementation. An important family of synthesis algorithms works by enumerating candidates and then successively checking if each refines the specification, using an SMT solver. The contribution of this paper is a pruning technique which reduces the enumerative search space using fast dataflow-based techniques to discard synthesis candidates that contain symbolic constants and uninstantiated instructions. We demonstrate the effectiveness of this technique by improving the runtime of an enumerative synthesis procedure in the Souper superoptimizer for the LLVM intermediate representation. The techniques presented in this paper eliminate 65% of the solver calls made by Souper, making it 2.32x faster (14.54 hours vs 33.76 hours baseline, on a large multicore) at solving all 269,113 synthesis problems that Souper encounters when optimizing the C and C++ programs from SPEC CPU 2017.},
 journal = {Proc. ACM Program. Lang.},
 month = {nov},
 articleno = {177},
@@ -155,12 +151,11 @@ keywords = {abstract interpretation, program synthesis, superoptimization, pruni
 
 @inproceedings{Bansal06,
   author = {Bansal, Sorav and Aiken, Alex},
-  title = {{Automatic Generation of Peephole Superoptimizers}},
+  title = {{Automatic generation of peephole superoptimizers}},
   year = {2006},
   isbn = {1595934510},
   url = {https://doi.org/10.1145/1168857.1168906},
   doi = {10.1145/1168857.1168906},
-  abstract = {Peephole optimizers are typically constructed using human-written pattern matching rules, an approach that requires expertise and time, as well as being less than systematic at exploiting all opportunities for optimization. We explore fully automatic construction of peephole optimizers using brute force superoptimization. While the optimizations discovered by our automatic system may be less general than human-written counterparts, our approach has the potential to automatically learn a database of thousands to millions of optimizations, in contrast to the hundreds found in current peephole optimizers. We show experimentally that our optimizer is able to exploit performance opportunities not found by existing compilers; in particular, we show speedups from 1.7 to a factor of 10 on some compute intensive kernels over a conventional optimizing compiler.},
   booktitle = {Proceedings of the 12th International Conference on Architectural Support for Programming Languages and Operating Systems},
   pages = {394–403},
   numpages = {10},
@@ -171,12 +166,11 @@ keywords = {abstract interpretation, program synthesis, superoptimization, pruni
 
 @inproceedings{stoke,
 author = {Schkufza, Eric and Sharma, Rahul and Aiken, Alex},
-title = {{Stochastic Superoptimization}},
+title = {{Stochastic superoptimization}},
 year = {2013},
 isbn = {9781450318709},
 url = {https://doi.org/10.1145/2451116.2451150},
 doi = {10.1145/2451116.2451150},
-abstract = {We formulate the loop-free binary superoptimization task as a stochastic search problem. The competing constraints of transformation correctness and performance improvement are encoded as terms in a cost function, and a Markov Chain Monte Carlo sampler is used to rapidly explore the space of all possible programs to find one that is an optimization of a given target program. Although our method sacrifices completeness, the scope of programs we are able to consider, and the resulting quality of the programs that we produce, far exceed those of existing superoptimizers. Beginning from binaries compiled by llvm -O0 for 64-bit x86, our prototype implementation, STOKE, is able to produce programs which either match or outperform the code produced by gcc -O3, icc -O3, and in some cases, expert handwritten assembly.},
 booktitle = {Proceedings of the Eighteenth International Conference on Architectural Support for Programming Languages and Operating Systems},
 pages = {305–316},
 numpages = {12},
@@ -189,12 +183,11 @@ series = {ASPLOS '13}
 
 @inproceedings{ml_syn,
 author = {Cowan, Meghan and Moreau, Thierry and Chen, Tianqi and Bornholt, James and Ceze, Luis},
-title = {{Automatic Generation of High-Performance Quantized Machine Learning Kernels}},
+title = {{Automatic generation of high-performance quantized machine learning kernels}},
 year = {2020},
 isbn = {9781450370479},
 url = {https://doi.org/10.1145/3368826.3377912},
 doi = {10.1145/3368826.3377912},
-abstract = {Quantization optimizes machine learning inference for resource constrained environments by reducing the precision of its computation. In the extreme, even single-bit computations can produce acceptable results at dramatically lower cost. But this ultra-low-precision quantization is difficult to exploit because extracting optimal performance requires hand-tuning both high-level scheduling decisions and low-level implementations. As a result, practitioners settle for a few predefined quantized kernels, sacrificing optimality and restricting their ability to adapt to new hardware. This paper presents a new automated approach to implementing quantized inference for machine learning models. We integrate the choice of how to lay out quantized values into the scheduling phase of a machine learning compiler, allowing it to be optimized in concert with tiling and parallelization decisions. After scheduling, we use program synthesis to automatically generate efficient low-level operator implementations for the desired precision and data layout. We scale up synthesis using a novel reduction sketch that exploits the structure of matrix multiplication. On a ResNet18 model, our generated code outperforms an optimized floating-point baseline by up to 3.9\texttimes{}, and a state-of-the-art quantized implementation by up to 16.6\texttimes{}.},
 booktitle = {Proceedings of the 18th ACM/IEEE International Symposium on Code Generation and Optimization},
 pages = {305–316},
 numpages = {12},
@@ -205,12 +198,11 @@ series = {CGO 2020}
 
 @inproceedings{rosette,
 author = {Torlak, Emina and Bodik, Rastislav},
-title = {{Growing Solver-Aided Languages with Rosette}},
+title = {{Growing solver-aided languages with rosette}},
 year = {2013},
 isbn = {9781450324724},
 url = {https://doi.org/10.1145/2509578.2509586},
 doi = {10.1145/2509578.2509586},
-abstract = {SAT and SMT solvers have automated a spectrum of programming tasks, including program synthesis, code checking, bug localization, program repair, and programming with oracles. In principle, we obtain all these benefits by translating the program (once) to a constraint system understood by the solver. In practice, however, compiling a language to logical formulas is a tricky process, complicated by having to map the solution back to the program level and extend the language with new solver-aided constructs, such as symbolic holes used in synthesis.This paper introduces ROSETTE, a framework for designing solver-aided languages. ROSETTE is realized as a solver-aided language embedded in Racket, from which it inherits extensive support for meta-programming. Our framework frees designers from having to compile their languages to constraints: new languages, and their solver-aided constructs, are defined by shallow (library-based) or deep (interpreter-based) embedding in ROSETTE itself.We describe three case studies, by ourselves and others, of using ROSETTE to implement languages and synthesizers for web scraping, spatial programming, and superoptimization of bitvector programs.},
 booktitle = {Proceedings of the 2013 ACM International Symposium on New Ideas, New Paradigms, and Reflections on Programming \& Software},
 pages = {135–152},
 numpages = {18},
@@ -221,21 +213,19 @@ series = {Onward! 2013}
 
 @inproceedings{sparse,
 author = {Horro, Marcos and Pouchet, Louis-Noël and Rodríguez, Gabriel and Tourino, Juan},
-title = {{Custom High-Performance Vector Code Generation for Data-Specific Sparse Computations}},
+title = {{Custom high-performance vector code generation for data-specific sparse computations}},
 year = {2022},
-abstract = {Sparse computations, such as sparse matrix-dense vector multiplication, are notoriously hard to optimize due to their irregularity and memory-boundedness. Solutions to improve the performance of sparse computations have been proposed, ranging from hardwarebased such as gather-scatter instructions, to software ones such as generalized and dedicated sparse formats, used together with specialized executor programs for different hardware targets. These sparse computations are often performed on read-only sparse structures: while the data themselves are variable, the sparsity structure itself does not change. Indeed, sparse formats such as CSR have a typically high cost to insert/remove nonzero elements in the representation. The typical use case is to not modify the sparsity during possibly repeated computations on the same sparse structure. In this work, we exploit the possibility to generate a specialized executor program dedicated to the particular sparsity structure of an input matrix. It creates opportunities to remove indirection arrays and synthesize regular, vectorizable code for such computations. But, at the same time, it introduces challenges in code size and instruction generation, as well as effcient SIMD vectorization. We present novel techniques and extensive experimental results to effciently generate SIMD vector code for data-specific sparse computations, and study the limits in terms of applicability and performance of our techniques compared to state-of-practice highperformance libraries like Intel MKL.},
 booktitle = {Proceedings of the 31st International Conference on Parallel Architectures and Compilation Techniques},
 }
 
 
 @inproceedings{slp,
 author = {Larsen, Samuel and Amarasinghe, Saman},
-title = {{Exploiting Superword Level Parallelism with Multimedia Instruction Sets}},
+title = {{Exploiting superword level parallelism with multimedia instruction sets}},
 year = {2000},
 isbn = {1581131992},
 url = {https://doi.org/10.1145/349299.349320},
 doi = {10.1145/349299.349320},
-abstract = {Increasing focus on multimedia applications has prompted the addition of multimedia extensions to most existing general purpose microprocessors. This added functionality comes primarily with the addition of short SIMD instructions. Unfortunately, access to these instructions is limited to in-line assembly and library calls. Generally, it has been assumed that vector compilers provide the most promising means of exploiting multimedia instructions. Although vectorization technology is well understood, it is inherently complex and fragile. In addition, it is incapable of locating SIMD-style parallelism within a basic block.In this paper we introduce the concept of Superword Level Parallelism (SLP) ,a novel way of viewing parallelism in multimedia and scientific applications. We believe SLPP is fundamentally different from the loop level parallelism exploited by traditional vector processing, and therefore demands a new method of extracting it. We have developed a simple and robust compiler for detecting SLPP that targets basic blocks rather than loop nests. As with techniques designed to extract ILP, ours is able to exploit parallelism both across loop iterations and within basic blocks. The result is an algorithm that provides excellent performance in several application domains. In our experiments, dynamic instruction counts were reduced by 46%. Speedups ranged from 1.24 to 6.70.},
 booktitle = {Proceedings of the ACM SIGPLAN 2000 Conference on Programming Language Design and Implementation},
 pages = {145–156},
 numpages = {12},
@@ -247,12 +237,11 @@ series = {PLDI '00}
 
 @inproceedings{diospyros,
 author = {VanHattum, Alexa and Nigam, Rachit and Lee, Vincent T. and Bornholt, James and Sampson, Adrian},
-title = {{Vectorization for Digital Signal Processors via Equality Saturation}},
+title = {{Vectorization for digital signal processors via equality saturation}},
 year = {2021},
 isbn = {9781450383172},
 url = {https://doi.org/10.1145/3445814.3446707},
 doi = {10.1145/3445814.3446707},
-abstract = {Applications targeting digital signal processors (DSPs) benefit from fast implementations of small linear algebra kernels. While existing auto-vectorizing compilers are effective at extracting performance from large kernels, they struggle to invent the complex data movements necessary to optimize small kernels. To get the best performance, DSP engineers must hand-write and tune specialized small kernels for a wide spectrum of applications and architectures. We present Diospyros, a search-based compiler that automatically finds efficient vectorizations and data layouts for small linear algebra kernels. Diospyros combines symbolic evaluation and equality saturation to vectorize computations with irregular structure. We show that a collection of Diospyros-compiled kernels outperform implementations from existing DSP libraries by 3.1\texttimes{} on average, that Diospyros can generate kernels that are competitive with expert-tuned code, and that optimizing these small kernels offers end-to-end speedup for a DSP application.},
 booktitle = {Proceedings of the 26th ACM International Conference on Architectural Support for Programming Languages and Operating Systems},
 pages = {874–886},
 numpages = {13},
@@ -263,12 +252,11 @@ series = {ASPLOS '21}
 
 @inproceedings{swizzleinventor,
 author = {Phothilimthana, Phitchaya Mangpo and Elliott, Archibald Samuel and Wang, An and Jangda, Abhinav and Hagedorn, Bastian and Barthels, Henrik and Kaufman, Samuel J. and Grover, Vinod and Torlak, Emina and Bodik, Rastislav},
-title = {{Swizzle Inventor: Data Movement Synthesis for GPU Kernels}},
+title = {{Swizzle inventor: Data movement synthesis for GPU kernels}},
 year = {2019},
 isbn = {9781450362405},
 url = {https://doi.org/10.1145/3297858.3304059},
 doi = {10.1145/3297858.3304059},
-abstract = {Utilizing memory and register bandwidth in modern architectures may require swizzles --- non-trivial mappings of data and computations onto hardware resources --- such as shuffles. We develop Swizzle Inventor to help programmers implement swizzle programs, by writing program sketches that omit swizzles and delegating their creation to an automatic synthesizer. Our synthesis algorithm scales to real-world programs, allowing us to invent new GPU kernels for stencil computations, matrix transposition, and a finite field multiplication algorithm (used in cryptographic applications). The synthesized 2D convolution and finite field multiplication kernels are on average 1.5--3.2x and 1.1--1.7x faster, respectively, than expert-optimized CUDA kernels.},
 booktitle = {Proceedings of the Twenty-Fourth International Conference on Architectural Support for Programming Languages and Operating Systems},
 pages = {65–78},
 numpages = {14},
@@ -279,7 +267,7 @@ series = {ASPLOS '19}
 
 @article{halide,
 author = {Ragan-Kelley, Jonathan and Adams, Andrew and Sharlet, Dillon and Barnes, Connelly and Paris, Sylvain and Levoy, Marc and Amarasinghe, Saman and Durand, Fr\'{e}do},
-title = {{Halide: Decoupling Algorithms from Schedules for High-Performance Image Processing}},
+title = {{Halide: Decoupling algorithms from schedules for high-performance image processing}},
 year = {2017},
 issue_date = {January 2018},
 volume = {61},
@@ -287,7 +275,6 @@ number = {1},
 issn = {0001-0782},
 url = {https://doi.org/10.1145/3150211},
 doi = {10.1145/3150211},
-abstract = {Writing high-performance code on modern machines requires not just locally optimizing inner loops, but globally reorganizing computations to exploit parallelism and locality---doing things such as tiling and blocking whole pipelines to fit in cache. This is especially true for image processing pipelines, where individual stages do much too little work to amortize the cost of loading and storing results to and from off-chip memory. As a result, the performance difference between a naive implementation of a pipeline and one globally optimized for parallelism and locality is often an order of magnitude. However, using existing programming tools, writing high-performance image processing code requires sacrificing simplicity, portability, and modularity. We argue that this is because traditional programming models conflate the computations defining the algorithm with decisions about intermediate storage and the order of computation, which we call the schedule.We propose a new programming language for image processing pipelines, called Halide, that separates the algorithm from its schedule. Programmers can change the schedule to express many possible organizations of a single algorithm. The Halide compiler then synthesizes a globally combined loop nest for an entire algorithm, given a schedule. Halide models a space of schedules which is expressive enough to describe organizations that match or outperform state-of-the-art hand-written implementations of many computational photography and computer vision algorithms. Its model is simple enough to do so often in only a few lines of code, and small changes generate efficient implementations for x86, ARM, Graphics Processors (GPUs), and specialized image processors, all from a single algorithm.Halide has been public and open source for over four years, during which it has been used by hundreds of programmers to deploy code to tens of thousands of servers and hundreds of millions of phones, processing billions of images every day.},
 journal = {Commun. ACM},
 month = {dec},
 pages = {106–115},
@@ -297,7 +284,7 @@ numpages = {10}
 
 @article{peepholegeneration,
 author = {Davidson, Jack W. and Fraser, Christopher W.},
-title = {{Automatic Generation of Peephole Optimizations}},
+title = {{Automatic generation of peephole optimizations}},
 year = {2004},
 issue_date = {April 2004},
 volume = {39},
@@ -305,7 +292,6 @@ number = {4},
 issn = {0362-1340},
 url = {https://doi.org/10.1145/989393.989407},
 doi = {10.1145/989393.989407},
-abstract = {This paper describes a system that automatically generates peephole optimizations. A general peephole optimizer driven by a machine description produces optimizations at compile-compile time for a fast, pattern-directed, compile-time optimizer. They form part of a compiler that simplifies retargeting by substituting peephole optimization for case analysis.},
 journal = {SIGPLAN Not.},
 month = {apr},
 pages = {104–111},
@@ -314,12 +300,11 @@ numpages = {8}
 
 @inproceedings{massalin,
 author = {Massalin, Henry},
-title = {Superoptimizer: A Look at the Smallest Program},
+title = {Superoptimizer: A look at the smallest program},
 year = {1987},
 isbn = {0818608056},
 url = {https://doi.org/10.1145/36206.36194},
 doi = {10.1145/36206.36194},
-abstract = {Given an instruction set, the superoptimizer finds the shortest program to compute a function. Startling programs have been generated, many of them engaging in convoluted bit-fiddling bearing little resemblance to the source programs which defined the functions. The key idea in the superoptimizer is a probabilistic test that makes exhaustive searches practical for programs of useful size. The search space is defined by the processor's instruction set, which may include the whole set, but it is typically restricted to a subset. By constraining the instructions and observing the effect on the output program, one can gain insight into the design of instruction sets. In addition, superoptimized programs may be used by peephole optimizers to improve the quality of generated code, or by assembly language programmers to improve manually written code.},
 booktitle = {Proceedings of the Second International Conference on Architectual Support for Programming Languages and Operating Systems},
 pages = {122–126},
 numpages = {5},
@@ -329,7 +314,7 @@ series = {ASPLOS II}
 
 @article{peephole-gen,
 author = {Davidson, Jack W. and Fraser, Christopher W.},
-title = {{Automatic Generation of Peephole Optimizations}},
+title = {{Automatic generation of peephole optimizations}},
 year = {2004},
 issue_date = {April 2004},
 volume = {39},
@@ -337,7 +322,6 @@ number = {4},
 issn = {0362-1340},
 url = {https://doi.org/10.1145/989393.989407},
 doi = {10.1145/989393.989407},
-abstract = {This paper describes a system that automatically generates peephole optimizations. A general peephole optimizer driven by a machine description produces optimizations at compile-compile time for a fast, pattern-directed, compile-time optimizer. They form part of a compiler that simplifies retargeting by substituting peephole optimization for case analysis.},
 journal = {SIGPLAN Not.},
 month = {apr},
 pages = {104–111},
@@ -355,12 +339,11 @@ numpages = {8}
 
 @inproceedings{sccl,
 author = {Cai, Zixian and Liu, Zhengyang and Maleki, Saeed and Musuvathi, Madanlal and Mytkowicz, Todd and Nelson, Jacob and Saarikivi, Olli},
-title = {{Synthesizing Optimal Collective Algorithms}},
+title = {{Synthesizing optimal collective algorithms}},
 year = {2021},
 isbn = {9781450382946},
 url = {https://doi.org/10.1145/3437801.3441620},
 doi = {10.1145/3437801.3441620},
-abstract = {Collective communication algorithms are an important component of distributed computation. Indeed, in the case of deep-learning, collective communication is the Amdahl's bottleneck of data-parallel training.This paper introduces SCCL (for Synthesized Collective Communication Library), a systematic approach to synthesizing collective communication algorithms that are explicitly tailored to a particular hardware topology. SCCL synthesizes algorithms along the Pareto-frontier spanning from latency-optimal to bandwidth-optimal implementations of a collective. The paper demonstrates how to encode the synthesis problem as a quantifier-free SMT formula which can be discharged to a theorem prover. We show how our carefully built encoding enables SCCL to scale.We synthesize novel latency and bandwidth optimal algorithms not seen in the literature on two popular hardware topologies. We also show how SCCL efficiently lowers algorithms to implementations on two hardware architectures (NVIDIA and AMD) and demonstrate competitive performance with hand optimized collective communication libraries.},
 booktitle = {Proceedings of the 26th ACM SIGPLAN Symposium on Principles and Practice of Parallel Programming},
 pages = {62–75},
 numpages = {14},
@@ -371,14 +354,13 @@ series = {PPoPP '21}
 
 @inproceedings{sketch,
 author = {Solar-Lezama, Armando},
-title = {{The Sketching Approach to Program Synthesis}},
+title = {{The sketching approach to program synthesis}},
 year = {2009},
 isbn = {9783642106712},
 publisher = {Springer-Verlag},
 address = {Berlin, Heidelberg},
 url = {https://doi.org/10.1007/978-3-642-10672-9_3},
 doi = {10.1007/978-3-642-10672-9_3},
-abstract = {Sketching is a new form of localized software synthesis that aims to bridge the gap between a programmer's high-level insights about a problem and the computer's ability to manage low-level details. In sketching, the programmer uses partial programs to describe the desired implementation <em>strategy</em> , and leaves the low-level details of the implementation to an automated synthesis procedure. This paper describes the sketching approach to program synthesis, including the details of the <emphasis type="SmallCaps">Sketch</emphasis> language and synthesizer. The paper will then describe some of the techniques that make synthesis from sketches possible, and will close with a brief discussion of open problems in programmer guided synthesis.},
 booktitle = {Proceedings of the 7th Asian Symposium on Programming Languages and Systems},
 pages = {4–13},
 numpages = {10},
@@ -388,12 +370,11 @@ series = {APLAS '09}
 
 @inproceedings{equalitysat,
 author = {Tate, Ross and Stepp, Michael and Tatlock, Zachary and Lerner, Sorin},
-title = {{Equality Saturation: A New Approach to Optimization}},
+title = {{Equality saturation: A new approach to optimization}},
 year = {2009},
 isbn = {9781605583792},
 url = {https://doi.org/10.1145/1480881.1480915},
 doi = {10.1145/1480881.1480915},
-abstract = {Optimizations in a traditional compiler are applied sequentially, with each optimization destructively modifying the program to produce a transformed program that is then passed to the next optimization. We present a new approach for structuring the optimization phase of a compiler. In our approach, optimizations take the form of equality analyses that add equality information to a common intermediate representation. The optimizer works by repeatedly applying these analyses to infer equivalences between program fragments, thus saturating the intermediate representation with equalities. Once saturated, the intermediate representation encodes multiple optimized versions of the input program. At this point, a profitability heuristic picks the final optimized program from the various programs represented in the saturated representation. Our proposed way of structuring optimizers has a variety of benefits over previous approaches: our approach obviates the need to worry about optimization ordering, enables the use of a global optimization heuristic that selects among fully optimized programs, and can be used to perform translation validation, even on compilers other than our own. We present our approach, formalize it, and describe our choice of intermediate representation. We also present experimental results showing that our approach is practical in terms of time and space overhead, is effective at discovering intricate optimization opportunities, and is effective at performing translation validation for a realistic optimizer.},
 booktitle = {Proceedings of the 36th Annual ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages},
 pages = {264–276},
 numpages = {13},
@@ -407,7 +388,6 @@ series = {POPL '09}
 @inproceedings{z3,
   title={Z3: An efficient SMT solver},
   author={De Moura, Leonardo and Bj{\o}rner, Nikolaj},
-  booktitle={Tools and Algorithms for the Construction and Analysis of Systems: 14th International Conference, TACAS 2008, Held as Part of the Joint European Conferences on Theory and Practice of Software, ETAPS 2008, Budapest, Hungary, March 29-April 6, 2008. Proceedings 14},
   pages={337--340},
   year={2008},
   organization={Springer}
@@ -443,7 +423,7 @@ series = {POPL '09}
 }
 
  @article{woodruff2023rewriting,
-  title={Rewriting History: Repurposing Domain-Specific CGRAs},
+  title={Rewriting history: Repurposing domain-specific CGRAs},
   author={Woodruff, Jackson and Koehler, Thomas and Brauckmann, Alexander and Cummins, Chris and Ainsworth, Sam and O'Boyle, Michael FP},
   journal={arXiv preprint arXiv:2309.09112},
   year={2023}
@@ -493,7 +473,7 @@ year = "1996",
 issn = "0167-8191",
 doi = "https://doi.org/10.1016/0167-8191(96)00024-5",
 url = "http://www.sciencedirect.com/science/article/pii/0167819196000245",
-author = "William Gropp and Ewing Lusk and Nathan Doss and Anthony Skjellum",
+author = "Gropp, William and Lusk, Ewing and Doss, Nathan and Skjellum, Anthony",
 keywords = "Message passing interface, Parallel programming environment, Benchmark, Performance, Portability, MPI-2"
 }
 
@@ -618,7 +598,7 @@ keywords = "Message passing interface, Parallel programming environment, Benchma
 
 @InProceedings{wang2020blink,
 author = {Wang, Guanhua and Venkataraman, Shivaram and Phanishayee, Amar and Thelin, Jorgen and Devanur, Nikhil and Stoica, Ion},
-title = {Blink: Fast and Generic Collectives for Distributed ML},
+title = {Blink: Fast and generic collectives for distributed ML},
 booktitle = {Conference on Machine Learning and Systems (MLSys 2020)},
 year = {2020},
 month = {March}
@@ -657,8 +637,8 @@ month = {March}
 }
 
 @INPROCEEDINGS{gdrcopy,
-  author={R. {Shi} and S. {Potluri} and K. {Hamidouche} and J. {Perkins} and M. {Li} and D. {Rossetti} and D. K. D. K. {Panda}},
-  booktitle={2014 21st International Conference on High Performance Computing (HiPC)},
+  author={Shi, Rong and Potluri, Sreeram and Hamidouche, Khaled and Perkins, Jonathan and Li, Mingzhe and Rossetti, Davide and Panda, Dhabaleswar K. D K},
+  booktitle={21st International Conference on High Performance Computing (HiPC)},
   title={Designing efficient small message transfer mechanism for inter-node {MPI} communication on {InfiniBand} {GPU} clusters},
   year={2014},
   volume={},
@@ -670,7 +650,7 @@ month = {March}
 
 @misc{alex2018horovod,
     title={Horovod: fast and easy distributed deep learning in TensorFlow},
-    author={Alexander Sergeev and Mike Del Balso},
+    author={Sergeev, Alexander and Del Balso, Mike},
     year={2018},
     eprint={1802.05799},
     archivePrefix={arXiv},
@@ -690,7 +670,7 @@ month = {March}
  author = {Luo, Liang and West, Peter and Nelson, Jacob and Krishnamurthy, Arvind and Ceze, Luis},
  booktitle = {Proceedings of Machine Learning and Systems 2020},
  pages = {82--97},
- title = {PLink: Discovering and Exploiting Locality for Accelerated Distributed Training on the public Cloud},
+ title = {PLink: Discovering and exploiting locality for accelerated distributed training on the public cloud},
  year = {2020}
 }
 
@@ -707,18 +687,18 @@ month = {March}
 
 
 @article{nvlink2,
-  author={J. {Choquette} and O. {Giroux} and D. {Foley}},
+  author={Choquette, Jack and Giroux, Olivier and Foley, Denis},
   journal={IEEE Micro},
-  title={Volta: Performance and Programmability},
+  title={Volta: Performance and programmability},
   year={2018},
   volume={38},
   number={2},
   pages={42-52},}
 
 @ARTICLE{alphabeta,
-	author={A. {Li} and S. L. {Song} and J. {Chen} and J. {Li} and X. {Liu} and N. R. {Tallent} and K. J. {Barker}},
+	author={Li, Ang and Song, Shuaiwen Leon and Chen, Jieyang and Li, Jiajia and Liu, Xu and Tallent, Nathan R. and Barker, Kevin J.},
 	journal={IEEE Transactions on Parallel and Distributed Systems},
-	title={Evaluating Modern GPU Interconnect: PCIe, NVLink, NV-SLI, NVSwitch and GPUDirect},
+	title={Evaluating modern GPU interconnect: PCIe, NVLink, NV-SLI, NVSwitch and GPUDirect},
 	year={2020},
 	volume={31},
 	number={1},
@@ -736,8 +716,8 @@ month = {March}
 }
 
  @InProceedings{OpenMPI,
-  author =	 {Joshua Hursey and Ethan Mallove and Jeffrey M. Squyres and Andrew Lumsdaine},
-  title =	 {An Extensible Framework for Distributed Testing of MPI Implementations},
+  author =	 {Hursey, Joshua and Mallove, Ethan and Squyres, Jeffrey M. and Lumsdaine, Andrew},
+  title =	 {An extensible Ffamework for distributed testing of MPI implementations},
   booktitle =    {Proceedings, Euro PVM/MPI},
   year =         2007,
   address =      {Paris, France},
@@ -746,14 +726,13 @@ month = {March}
 
 @inproceedings{spec2017,
 author = {Bucek, James and Lange, Klaus-Dieter and v. Kistowski, J\'{o}akim},
-title = {SPEC CPU2017: Next-Generation Compute Benchmark},
+title = {SPEC CPU2017: Next-Generation compute benchmark},
 year = {2018},
 isbn = {9781450356299},
 publisher = {Association for Computing Machinery},
 address = {New York, NY, USA},
 url = {https://doi.org/10.1145/3185768.3185771},
 doi = {10.1145/3185768.3185771},
-abstract = {Description of the new features of the SPEC CPU2017 industry standard benchmark and its metric calculations.},
 booktitle = {Companion of the 2018 ACM/SPEC International Conference on Performance Engineering},
 pages = {41–42},
 numpages = {2},
@@ -763,9 +742,9 @@ series = {ICPE '18}
 }
 
 @article{nvlink1,
-  author={D. {Foley} and J. {Danskin}},
+  author={Foley, Denis and Danskin, John},
   journal={IEEE Micro},
-  title={Ultra-Performance Pascal GPU and NVLink Interconnect},
+  title={Ultra-performance pascal GPU and NVLink interconnect},
   year={2017},
   volume={37},
   number={2},
@@ -773,109 +752,109 @@ series = {ICPE '18}
   }
 
 @misc{intelmanual,
-author = "{{Intel}}",
-title = {{Intel 64 and IA-32 Architectures Software Developer Manuals}},
+author = "{Intel}",
+title = {Intel 64 and IA-32 architectures software developer manuals},
 howpublished = {\url{https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html}},
 year={2024},
-note = {Accessed: 05/22/2024}
+note = {Accessed: 02/19/2025}
 }
 
 @misc{killundef,
-author = "{{LLVM Developers}}",
+author = "{LLVM Developers}",
 title = {RFC: Killing undef and spreading poison},
 howpublished = {\url{https://lists.llvm.org/pipermail/llvm-dev/2016-December/107840.html}},
 year = 2016,
-note = {Accessed: 05/22/2024}
+note = {Accessed: 02/19/2025}
 }
 
 @misc{llvmmca,
   author = "{LLVM Developers}",
   year = 2024,
-  title = {{LLVM Machine Code Analyzer}},
+  title = {LLVM machine code analyzer},
   howpublished = {\url{https://llvm.org/docs/CommandGuide/llvm-mca.html}},
-  note = {Accessed: 05/22/2024}
+  note = {Accessed: 02/19/2025}
 }
 
 
 @misc{MemorySSA,
-author = "{{{LLVM Developers}}}",
-title = {{MemorySSA}},
+author = "{LLVM Developers}",
+title = {MemorySSA},
 howpublished = {\url{https://llvm.org/docs/MemorySSA.html}},
 year = 2024,
-note = {Accessed: 05/22/2024}
+note = {Accessed: 02/19/2025}
 }
 
 
 @misc{loopinfo,
-author = "{{{{LLVM Developers}}}}",
-title = {{LLVM Loop Terminology (and Canonical Forms)}},
+author = "{LLVM Developers}",
+title = {LLVM loop terminology (and canonical forms)},
 howpublished = {\url{https://llvm.org/docs/LoopTerminology.html}},
 year = 2024,
-note = {Accessed: 05/22/2024}
+note = {Accessed: 02/19/2025}
 }
 
 @misc{hexagon,
   author = {{Qualcomm Technologies}},
-  title = {{Hexagon DSP SDK}},
+  title = {Hexagon DSP SDK},
   howpublished = {\url{https://developer.qualcomm.com/software/hexagon-dsp-sdk}},
   year = 2024,
-  note = {Accessed: 05/22/2024}
+  note = {Accessed: 02/19/2025}
 }
 
 @misc{orc,
-  author = "{{{{{LLVM Developers}}}}}",
-  title = {{ORC Design and Implementation}},
+  author = "{LLVM Developers}",
+  title = {ORC design and implementation},
   howpublished = {\url{https://llvm.org/docs/ORCv2.html}},
   year = 2024,
-  note = {Accessed: 05/22/2024}
+  note = {Accessed: 02/19/2025}
 }
 
 @misc{InstCombine,
-  author = "{{{{{{LLVM Developers}}}}}}",
-  title = {{InstCombine Contributor Guide}},
+  author = "{LLVM Developers}",
+  title = {{InstCombine contributor guide}},
   howpublished = {\url{https://llvm.org/docs/InstCombineContributorGuide.html}},
   year = 2024,
-  note = {Accessed: 05/22/2024}
+  note = {Accessed: 02/19/2025}
 }
 
 @misc{llvmvectorizers,
-  author = "LLVM Developers",
-  title = {{Auto-Vectorization in LLVM}},
+  author = "{LLVM Developers}",
+  title = {{Auto-vectorization in LLVM}},
   howpublished = {\url{https://llvm.org/docs/Vectorizers.html}},
   year = 2024,
-  note = {Accessed: 05/22/2024}
+  note = {Accessed: 02/19/2025}
 }
 
 @misc{tti,
-  author = "{{LLVM Developers}}",
-  title = {{TargetTransformInfo Class Reference}},
+  author = "{LLVM Developers}",
+  title = {TargetTransformInfo class reference},
   howpublished = {\url{https://llvm.org/doxygen/classllvm\_1\_1TargetTransformInfo.html}},
   year = 2024,
-  note = {Accessed: 05/22/2024}
+  note = {Accessed: 02/19/2025}
 }
 
 @misc{neon,
   author = "{ARM}",
-  title = {{ARM NEON Architecture}},
+  title = {ARM NEON architecture},
   howpublished = {\url{https://developer.arm.com/Architectures/Neon}},
   year = 2024,
-  note = {Accessed: 05/22/2024}
+  note = {Accessed: 02/19/2025}
 }
 
 
 @misc{intelguide,
   author = "{Intel}",
-  title = {{Intel Intrinsics Guide}},
+  title = {Intel intrinsics guide},
   howpublished = {\url{https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html}},
   year = 2024,
-  note = {Accessed: 05/22/2024}
+  note = {Accessed: 02/19/2025}
 }
 
 
 
 @misc{cascadelake,
   author = "{Intel}",
-  title = {{Cascade Lake: Overview}},
+  title = {Cascade Lake: Overview},
   howpublished = {\url{https://www.intel.com/content/www/us/en/products/platforms/details/cascade-lake.html}},
   year = 2024,
   note = {Accessed: 02/19/2025}
@@ -883,7 +862,7 @@ note = {Accessed: 05/22/2024}
 
 @misc{zen3,
   author = "{Advanced Micro Devices}",
-  title = {{AMD Zen Core Architecture}},
+  title = {AMD Zen core architecture},
   howpublished = {\url{https://www.amd.com/en/technologies/zen-core.html}},
   year = 2024,
   note = {Accessed: 02/19/2025}
@@ -891,7 +870,7 @@ note = {Accessed: 05/22/2024}
 
 @misc{mi50,
 author = "{Advanced Micro Devices}",
-title = {{AMD Radeon Instinct MI50 Accelerator Specifications}},
+title = {AMD Radeon Instinct MI50 accelerator specifications},
 howpublished = {\url{https://www.amd.com/en/support/downloads/drivers.html/accelerators/instinct/instinct-mi-series/instinct-mi50.html}},
 year = 2024,
 note = {Accessed: 02/19/2025}
@@ -899,7 +878,7 @@ note = {Accessed: 02/19/2025}
 
 @misc{rccl,
 author = "{Advanced Micro Devices}",
-title = {{ROCm Communication Collectives Library}},
+title = {{ROCm communication collectives library}},
 howpublished = {\url{https://github.com/ROCmSoftwarePlatform/rccl}},
 year = 2024,
 note = {Accessed: 02/19/2025}
@@ -907,23 +886,23 @@ note = {Accessed: 02/19/2025}
 
 @misc{tpu,
 author = "{Google}",
-title = {{Google Cloud Tensor Processing Units}},
+title = {{Google cloud tensor processing units}},
 howpublished = {\url{https://cloud.google.com/tpu}},
 year = 2024,
 note = {Accessed: 02/19/2025}
 }
 
 @misc{graphcore,
-author = {{Graphcore}},
-title = {{Graphcore Intelligence Processing Unit}},
+author = {Graphcore},
+title = {{Graphcore intelligence processing unit}},
 howpublished = {\url{https://www.graphcore.ai/products/ipu}},
 year = 2024,
-note = {Accessed: 02/19/202}
+note = {Accessed: 02/19/2025}
 }
 
 @misc{gloo,
 author = {{Facebook}},
-title = {{Gloo Collective Communications Library}},
+title = {{Gloo collective communications library}},
 howpublished = {\url{https://github.com/facebookincubator/gloo}},
 year = 2024,
 note = {Accessed: 02/19/2025}
@@ -939,7 +918,7 @@ note = {Accessed: 02/19/2025}
 
 @misc{nccl,
 author = {{NVIDIA}},
-title = {{NVIDIA Collective Communications Library}},
+title = {{NVIDIA collective communications library}},
 howpublished = {\url{https://github.com/NVIDIA/nccl}},
 year= 2024,
 note = {Accessed: 02/19/2025}
@@ -949,7 +928,7 @@ note = {Accessed: 02/19/2025}
 
 @article{minotaur,
 author = {Liu, Zhengyang and Mada, Stefan and Regehr, John},
-title = {Minotaur: A SIMD-Oriented Synthesizing Superoptimizer},
+title = {Minotaur: A SIMD-Oriented synthesizing superoptimizer},
 year = {2024},
 issue_date = {October 2024},
 publisher = {Association for Computing Machinery},
@@ -958,7 +937,6 @@ volume = {8},
 number = {OOPSLA2},
 url = {https://doi.org/10.1145/3689766},
 doi = {10.1145/3689766},
-abstract = {A superoptimizing compiler—-one that performs a meaningful search of the program space as part of the optimization process—-can find optimization opportunities that are missed by even the best existing optimizing compilers. We created Minotaur: a superoptimizer for LLVM that uses program synthesis to improve its code generation, focusing on integer and floating-point SIMD code. On an Intel Cascade Lake processor, Minotaur achieves an average speedup of 7.3\% on the GNU Multiple Precision library (GMP)’s benchmark suite, with a maximum speedup of 13\%. On SPEC CPU 2017, our superoptimizer produces an average speedup of 1.5\%, with a maximum speedup of 4.5\% for 638.imagick. Every optimization produced by Minotaur has been formally verified, and several optimizations that it has discovered have been implemented in LLVM as a result of our work.},
 journal = {Proc. ACM Program. Lang.},
 month = oct,
 articleno = {326},
