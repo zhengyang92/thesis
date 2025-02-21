@@ -80,25 +80,6 @@ keep compile times manageable (compared to, e.g., SPEC CPU 2017,
 which is much larger).
 
 
-\begin{figure}[bp]
-  \centering
-  \subfloat[Unique cuts extracted\label{fig:loop-expression}]{
-    \includegraphics[width=0.32\linewidth]{figures/cuts.pdf}
-  }
-  \hfill
-  \subfloat[Unique opts. synthesized\label{fig:loop-optimization}]{
-    \includegraphics[width=0.32\linewidth]{figures/synthesized.pdf}
-  }
-  \hfill
-  \subfloat[Compilation time\label{fig:loop-buildtime}]{
-    \includegraphics[width=0.32\linewidth]{figures/comptime.pdf}
-  }
-  \caption{Evaluating the effect of varying $B$, the depth bound for
-    cut extraction.}
-  \label{fig:loop}
-\end{figure}
-
-
 We then ran \minotaur{} on these functions with all depth bounds from
 0--7, measuring the number of unique cuts that were extracted, the
 number of optimizations found, and the compilation time.
@@ -119,6 +100,24 @@ causes many solver timeouts.
 %
 Finally, the total compile time increases smoothly with the depth
 bound, eventually leveling off as most solver queries time out.
+
+\begin{figure}[tbp]
+  \centering
+  \subfloat[Unique cuts extracted\label{fig:loop-expression}]{
+    \includegraphics[width=0.32\linewidth]{figures/cuts.pdf}
+  }
+  \hfill
+  \subfloat[Unique opts. synthesized\label{fig:loop-optimization}]{
+    \includegraphics[width=0.32\linewidth]{figures/synthesized.pdf}
+  }
+  \hfill
+  \subfloat[Compilation time\label{fig:loop-buildtime}]{
+    \includegraphics[width=0.32\linewidth]{figures/comptime.pdf}
+  }
+  \caption{Evaluating the effect of varying $B$, the depth bound for
+    cut extraction.}
+  \label{fig:loop}
+\end{figure}
 
 
 For the experiments in the rest of the evaluation section, we chose
@@ -152,7 +151,7 @@ As shown in Table~\ref{tab:ablation}, integer vector optimizations
 produce the most rewrites, and also produce the majority of the
 observed speedup.
 
-\begin{table}[bp]
+\begin{table}[tbp]
   \centering
   \caption{Results of an ablation study based on optimization categories.}
   \begin{tabular}{ r | r r r r r r}
