@@ -280,16 +280,18 @@ step $s$. This defines a {\em run} defined as a  sequence
 $V_0,V_1,\dotsc,V_{\steps}$ such that $V_0 = \pre$ and for all $0 \leq
 s < \steps$, $V_{s+1}$ reflects the chunks present at a given node
 after accounting for the sends at step $s$:
+
 %$V_{\steps -1} \subseteq \post$
 $$ V_{s+1} = V_{s} \cup \{(c,n') \mid (c, n) \in V_{s} \wedge (c, n,
-n', s) \in \sends\} $$
+n', s) \in \sends\}. $$
 
 This candidate solution is a valid $k$-synchronous algorithm for the
 instance if $V_{\steps} \subseteq \post$ and the following bandwidth
 constraint hold
+
 \begin{align*}
     &\begin{aligned}
-        \forall &s\in\range{\steps},\,(L,b)\in\bw \qst, |\{(c,n,n',s)\in \sends \setwhere (n,n')\in L\}|\leq b \cdot r_s
+        \forall &s\in\range{\steps},\,(L,b)\in\bw \qst, |\{(c,n,n',s)\in \sends \setwhere (n,n')\in L\}|\leq b \cdot r_s.
     \end{aligned}
 \end{align*}
 %\todo{introduce in the order of correctness constraints and bandwidth
@@ -620,7 +622,7 @@ $$ \steps \cdot \alpha + \frac{\rounds}{\chunk} \cdot L \cdot \beta. $$
 %steps, and reduce the bandwidth cost either by increasing the number
 %of chunks or decreasing the number of rounds.
 
-\subsection{Pareto-optimal Algorithms}
+\subsection{Pareto-Optimal Algorithms}
 \label{sec:pareto:optimal}
 The discussion above shows that for a given topology and a collective
 with an input size $L$, the cost of a $k$-synchronous algorithm can be
@@ -638,6 +640,29 @@ Pareto-optimal as they can be "wasteful" in the other parameter.
 Pareto-optimal algorithms form a {\em Pareto-frontier} with different
 algorithms in the frontier being better than others for a given input
 size $L$ based on the $\alpha$ and $\beta$ parameters of the topology.
+
+
+\begin{algorithm}[b]
+	\caption{Synthesizing pareto-optimal algorithms}
+    \label{alg:pareto}
+    \begin{algorithmic}[1]
+        \Procedure{Pareto-Synthesize}{$k, \mathit{Coll}, \size, \bw$}
+        \State $a_l = \mathit{Diameter(\size, \bw)}$ \State $b_l =
+        \mathit{InvBisectionBandwidth(\size, \bw)}$ \State $(\pre,
+        \post) = \mathit{Lookup(Coll)}$
+        \Comment{Table~\ref{tbl:collectives}} \For
+        {$\steps=a_l,a_l+1\ldots$} \State $A = \{(\rounds,\chunk) \mid
+        \steps \leq \rounds \leq \steps+k \wedge
+        \frac{\rounds}{\chunk} \geq b_l\}$ \For {$(R,\chunk) \in A$ in
+        ascending order of $\frac{R}{\chunk}$} \State
+        $\gchunk=\toglobal(\mathit{Coll},\chunk)$ \If
+        {$\mathit{SMT(\gchunk, \steps, \rounds, \size, \bw, \pre,
+        \post) = SAT}$} \State Report synthesized algorithm
+        $(\steps,\rounds,\chunk)$ \If {$\frac{\rounds}{\chunk} = b_l$}
+        \State {\bf return} \EndIf \State {\bf break} \EndIf \EndFor
+        \EndFor \EndProcedure
+	\end{algorithmic}
+\end{algorithm}
 
 Algorithm~\ref{alg:pareto} systematically synthesizes Pareto-optimal
 $k$-synchronous algorithms. The inputs are the parameter $k$, the name
@@ -670,24 +695,3 @@ similar~(Section~\ref{sec:reduction}).
 %because it increases the latency.}
 
 
-\begin{algorithm}
-	\caption{Synthesizing Pareto-Optimal Algorithms}
-    \label{alg:pareto}
-    \begin{algorithmic}[1]
-        \Procedure{Pareto-Synthesize}{$k, \mathit{Coll}, \size, \bw$}
-        \State $a_l = \mathit{Diameter(\size, \bw)}$ \State $b_l =
-        \mathit{InvBisectionBandwidth(\size, \bw)}$ \State $(\pre,
-        \post) = \mathit{Lookup(Coll)}$
-        \Comment{Table~\ref{tbl:collectives}} \For
-        {$\steps=a_l,a_l+1\ldots$} \State $A = \{(\rounds,\chunk) \mid
-        \steps \leq \rounds \leq \steps+k \wedge
-        \frac{\rounds}{\chunk} \geq b_l\}$ \For {$(R,\chunk) \in A$ in
-        ascending order of $\frac{R}{\chunk}$} \State
-        $\gchunk=\toglobal(\mathit{Coll},\chunk)$ \If
-        {$\mathit{SMT(\gchunk, \steps, \rounds, \size, \bw, \pre,
-        \post) = SAT}$} \State Report synthesized algorithm
-        $(\steps,\rounds,\chunk)$ \If {$\frac{\rounds}{\chunk} = b_l$}
-        \State {\bf return} \EndIf \State {\bf break} \EndIf \EndFor
-        \EndFor \EndProcedure
-	\end{algorithmic}
-\end{algorithm}
