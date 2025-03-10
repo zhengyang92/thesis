@@ -194,6 +194,47 @@ boost on the AMD machine.
 %
 We also disabled simultaneous multithreading on both machines.
 
+\begin{table}[b]
+  \centering
+  \caption{\minotaur's effect on compilation time on Intel Cascade Lake.}
+  \begin{tabular}{r | r r r | r r }
+    %\cline{2-11}
+    \toprule
+    & \multicolumn{3}{c|}{Compile time (minutes)} & \multicolumn{2}{c}{Stats} \\
+    %\hline
+    Benchmarks & Cold & Warm & Clang & \# Cuts & \# Optimizations \\
+    \hline
+    SPEC CPU 2017 & 2,337 & 3 & 3 & 109,177 & 2,683  \\
+    %\hline
+    gmp-6.2.1 & 440 &  1 &  1 & 9,170 & 336 \\
+    %\hline
+    libYUV & 2,196 &  1 &  1 & 6,849 & 334  \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:compiletimeintel}
+\end{table}
+
+\begin{table}[b]
+  \centering
+  \caption{\minotaur's effect on compilation time on AMD Zen 3.}
+  \begin{tabular}{r | r r r | r r}
+    \toprule
+
+    %\cline{2-11}
+    & \multicolumn{3}{c|}{Compile time (minutes)} & \multicolumn{2}{c}{Stats} \\
+    %\hline
+    Benchmarks & Cold & Warm & Clang & \# Cuts & \# Optimizations \\
+    \hline
+    SPEC CPU 2017 & 2,580 & 3 & 3 & 114,612 & 2,820 \\
+    %\hline
+    gmp-6.2.1 &  445 & 1 & 1 & 9,265 & 387\\
+    %\hline
+    libYUV  & 2,193 & 1 & 1 & 6,809 & 357 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:compiletimeamd}
+\end{table}
+
 
 We invoked LLVM with the \texttt{-march=native} compilation flag to
 ask it to take maximum advantage of processor features; we left other
@@ -205,6 +246,9 @@ We set the timeout for Z3~\cite{z3} queries to one minute.
 %
 Finally, for each instruction that it tries to optimize, \minotaur{} gives
 up if no solution is found within five minutes.
+
+
+
 
 
 \subsubsection{Benchmark selection}
@@ -252,47 +296,6 @@ Queries with 256-bit vectors are also less likely to timeout in Z3 than
 are queries with 512-bit vectors.
 
 
-
-\begin{table}[t]
-  \centering
-  \caption{\minotaur's effect on compilation time on Intel Cascade Lake.}
-  \begin{tabular}{r | r r r | r r }
-    %\cline{2-11}
-    \toprule
-    & \multicolumn{3}{c|}{Compile time (minutes)} & \multicolumn{2}{c}{Stats} \\
-    %\hline
-    Benchmarks & Cold & Warm & Clang & \# Cuts & \# Optimizations \\
-    \hline
-    SPEC CPU 2017 & 2,337 & 3 & 3 & 109,177 & 2,683  \\
-    %\hline
-    gmp-6.2.1 & 440 &  1 &  1 & 9,170 & 336 \\
-    %\hline
-    libYUV & 2,196 &  1 &  1 & 6,849 & 334  \\
-    \bottomrule
-  \end{tabular}
-  \label{tab:compiletimeintel}
-\end{table}
-
-\begin{table}[t]
-  \centering
-  \caption{\minotaur's effect on compilation time on AMD Zen 3.}
-  \begin{tabular}{r | r r r | r r}
-    \toprule
-
-    %\cline{2-11}
-    & \multicolumn{3}{c|}{Compile time (minutes)} & \multicolumn{2}{c}{Stats} \\
-    %\hline
-    Benchmarks & Cold & Warm & Clang & \# Cuts & \# Optimizations \\
-    \hline
-    SPEC CPU 2017 & 2,580 & 3 & 3 & 114,612 & 2,820 \\
-    %\hline
-    gmp-6.2.1 &  445 & 1 & 1 & 9,265 & 387\\
-    %\hline
-    libYUV  & 2,193 & 1 & 1 & 6,809 & 357 \\
-    \bottomrule
-  \end{tabular}
-  \label{tab:compiletimeamd}
-\end{table}
 
 
 \subsubsection{Optimizing GMP with \minotaur{}}
